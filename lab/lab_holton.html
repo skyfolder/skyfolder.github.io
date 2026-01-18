@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab: James Holton</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap'); body { font-family: 'Noto Sans KR', sans-serif; }</style>
+</head>
+<body class="bg-indigo-50 text-slate-800">
+    <nav class="bg-white border-b border-indigo-100 h-14 flex items-center px-4 sticky top-0 z-50">
+        <a href="labs.html" class="flex items-center gap-2 text-slate-600 hover:text-indigo-600 font-bold">
+            <i class="fa-solid fa-arrow-left"></i> 랩 목록
+        </a>
+    </nav>
+
+    <div class="max-w-4xl mx-auto p-6">
+        <header class="mb-8 text-center">
+            <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Dynamic Meteorology</span>
+            <h1 class="text-3xl font-black mt-3 mb-2 text-slate-900">제임스 홀튼 (James Holton)</h1>
+            <p class="text-slate-600">성층권의 규칙적인 심장 박동, 준 2년 주기 진동(QBO)의 메커니즘을 설명했습니다.</p>
+        </header>
+
+        <div class="bg-white rounded-2xl shadow-xl border border-indigo-200 p-6 flex flex-col md:flex-row gap-8">
+            <div class="w-full md:w-2/3">
+                <div class="bg-slate-900 rounded-lg overflow-hidden relative h-80 border-2 border-indigo-900">
+                    <canvas id="qboCanvas" class="w-full h-full block"></canvas>
+                    
+                    <div class="absolute left-2 top-2 text-white text-xs font-mono">Altitude (hPa)</div>
+                    <div class="absolute right-2 bottom-2 text-white text-xs font-mono">Time (Years) &rarr;</div>
+                    <div class="absolute left-2 top-10 text-slate-400 text-[10px]">10 hPa</div>
+                    <div class="absolute left-2 bottom-10 text-slate-400 text-[10px]">100 hPa</div>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/3 flex flex-col justify-center space-y-4">
+                <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-4 h-4 bg-red-500 rounded"></div>
+                        <span class="text-sm font-bold">서풍 (Westerly)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-blue-500 rounded"></div>
+                        <span class="text-sm font-bold">동풍 (Easterly)</span>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    적도 성층권에서는 동풍과 서풍이 약 26~28개월 주기로 번갈아 가며 나타납니다. 이 바람의 띠는 위에서 아래로 하강하는 특징이 있습니다.
+                </p>
+                <div class="text-xs text-slate-400 text-center">
+                    Holton-Lindzen 이론: 중력파가 운동량을 전달합니다.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('qboCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            width = canvas.width = canvas.parentElement.offsetWidth;
+            height = canvas.height = canvas.parentElement.offsetHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let time = 0;
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+
+            // QBO 패턴 그리기 (Time-Height section)
+            // x축: 시간, y축: 고도
+            // 파동이 위에서 아래로 내려오는 것처럼 보이게 하려면 위상(Phase)을 조절
+            
+            const cellSize = 5;
+            const cols = Math.ceil(width / cellSize);
+            const rows = Math.ceil(height / cellSize);
+
+            for(let x=0; x<cols; x++) {
+                for(let y=0; y<rows; y++) {
+                    // 고도(y)가 낮을수록(값이 클수록) 위상이 늦게 도착함 -> y값에 따라 위상 지연
+                    // 시간(time)이 흐르면 전체가 오른쪽으로 이동 (히스토리 뷰처럼)
+                    
+                    // 정규화된 좌표
+                    const normY = y / rows; // 0(top) ~ 1(bottom)
+                    const normX = x / cols;
+
+                    // 파동 함수: sin(시간 - 고도에 따른 지연)
+                    // time 변수가 x축으로 흐르는 효과를 줌
+                    const val = Math.sin((normX * 10) - (normY * 5) + time);
+
+                    if (val > 0) {
+                        ctx.fillStyle = `rgba(239, 68, 68, ${val})`; // Red (Westerly)
+                    } else {
+                        ctx.fillStyle = `rgba(59, 130, 246, ${Math.abs(val)})`; // Blue (Easterly)
+                    }
+                    
+                    ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                }
+            }
+            
+            // 시간 흐름 (오른쪽에서 왼쪽으로 흐르게 하거나, 패턴 자체가 움직이게)
+            time += 0.05; 
+            
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+</body>
+</html>
