@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab: Akio Arakawa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap'); body { font-family: 'Noto Sans KR', sans-serif; }</style>
+</head>
+<body class="bg-emerald-50 text-slate-800">
+    <nav class="bg-white border-b border-emerald-200 h-14 flex items-center px-4 sticky top-0 z-50">
+        <a href="labs.html" class="flex items-center gap-2 text-slate-600 hover:text-emerald-600 font-bold">
+            <i class="fa-solid fa-arrow-left"></i> 랩 목록
+        </a>
+    </nav>
+
+    <div class="max-w-4xl mx-auto p-6">
+        <header class="mb-8 text-center">
+            <span class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Numerical Weather Prediction</span>
+            <h1 class="text-3xl font-black mt-3 mb-2 text-slate-900">아라카와 아키오 (Akio Arakawa)</h1>
+            <p class="text-slate-600">수치 예보 모델의 기초인 "아라카와 격자(Arakawa Grid)" 시스템을 고안했습니다.</p>
+        </header>
+
+        <div class="bg-white rounded-2xl shadow-lg border border-emerald-200 p-8">
+            <div class="flex justify-center gap-4 mb-8">
+                <button onclick="setGrid('A')" class="grid-btn px-4 py-2 rounded-lg font-bold bg-emerald-100 text-emerald-700 hover:bg-emerald-200 ring-2 ring-transparent focus:ring-emerald-500">Grid A</button>
+                <button onclick="setGrid('B')" class="grid-btn px-4 py-2 rounded-lg font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 ring-2 ring-transparent focus:ring-emerald-500">Grid B</button>
+                <button onclick="setGrid('C')" class="grid-btn px-4 py-2 rounded-lg font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 ring-2 ring-transparent focus:ring-emerald-500">Grid C</button>
+                <button onclick="setGrid('D')" class="grid-btn px-4 py-2 rounded-lg font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 ring-2 ring-transparent focus:ring-emerald-500">Grid D</button>
+                <button onclick="setGrid('E')" class="grid-btn px-4 py-2 rounded-lg font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 ring-2 ring-transparent focus:ring-emerald-500">Grid E</button>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 items-start">
+                <div class="w-full md:w-1/2 aspect-square bg-white border-2 border-slate-800 relative rounded-lg shadow-sm" id="gridContainer">
+                    </div>
+                
+                <div class="w-full md:w-1/2 space-y-4">
+                    <h3 class="text-xl font-bold text-slate-800" id="gridTitle">Arakawa Grid A</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed" id="gridDesc">
+                        가장 기본적인 형태입니다. 모든 변수(압력, 바람 u, 바람 v)가 같은 지점에서 정의됩니다.
+                    </p>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-2">
+                        <div class="flex items-center gap-3">
+                            <div class="w-4 h-4 rounded-full bg-slate-800"></div>
+                            <span class="text-sm font-bold text-slate-700">h (질량/압력)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-4 h-4 relative flex items-center justify-center">
+                                <i class="fa-solid fa-arrow-right text-red-600 font-bold"></i>
+                            </div>
+                            <span class="text-sm font-bold text-slate-700">u (동서 바람)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-4 h-4 relative flex items-center justify-center">
+                                <i class="fa-solid fa-arrow-up text-blue-600 font-bold"></i>
+                            </div>
+                            <span class="text-sm font-bold text-slate-700">v (남북 바람)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('gridContainer');
+        const title = document.getElementById('gridTitle');
+        const desc = document.getElementById('gridDesc');
+        const btns = document.querySelectorAll('.grid-btn');
+
+        function setGrid(type) {
+            // 버튼 스타일 초기화
+            btns.forEach(b => {
+                b.classList.remove('bg-emerald-100', 'text-emerald-700');
+                b.classList.add('bg-slate-100', 'text-slate-600');
+            });
+            // 선택된 버튼 스타일
+            event.target.classList.remove('bg-slate-100', 'text-slate-600');
+            event.target.classList.add('bg-emerald-100', 'text-emerald-700');
+
+            drawGrid(type);
+        }
+
+        function drawGrid(type) {
+            container.innerHTML = ''; // 초기화
+            
+            // 격자 라인 그리기 (3x3)
+            const size = 100 / 3;
+            for(let i=0; i<3; i++) {
+                for(let j=0; j<3; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'absolute border border-slate-200';
+                    cell.style.width = size + '%';
+                    cell.style.height = size + '%';
+                    cell.style.left = (j * size) + '%';
+                    cell.style.top = (i * size) + '%';
+                    container.appendChild(cell);
+                    
+                    // 각 그리드 타입별 아이콘 배치
+                    // Center of cell
+                    const cx = 50; 
+                    const cy = 50;
+                    
+                    addIcons(cell, type);
+                }
+            }
+
+            // 텍스트 업데이트
+            title.innerText = `Arakawa Grid ${type}`;
+            if(type === 'A') desc.innerText = "비엇갈림(Unstaggered) 격자입니다. 모든 변수가 같은 위치에 있어 코딩은 쉽지만, 작은 규모의 파동 계산 시 오차가 큽니다.";
+            else if(type === 'B') desc.innerText = "질량(h)은 중심에, 바람(u,v)은 모서리에 배치됩니다. 중력파 분산 특성이 좋아 초기 수치모델에서 많이 쓰였습니다.";
+            else if(type === 'C') desc.innerText = "현대 기상 모델(WRF 등)에서 가장 많이 쓰입니다. u는 좌우 벽면에, v는 상하 벽면에 직교하게 배치되어 유체 흐름 계산에 유리합니다.";
+            else if(type === 'D') desc.innerText = "C 격자와 반대입니다. u가 상하 벽면, v가 좌우 벽면에 위치합니다. 지균풍 균형을 잘 표현하지만 발산 계산에는 불리합니다.";
+            else if(type === 'E') desc.innerText = "격자를 45도 회전시킨 형태입니다. B 격자를 회전시킨 것과 유사합니다.";
+        }
+
+        function addIcons(cell, type) {
+            // Helper to create element
+            const addElem = (icon, color, top, left) => {
+                const el = document.createElement('div');
+                el.className = `absolute transform -translate-x-1/2 -translate-y-1/2 text-lg font-bold ${color}`;
+                el.innerHTML = icon;
+                el.style.top = top;
+                el.style.left = left;
+                cell.appendChild(el);
+            };
+
+            if (type === 'A') {
+                // h, u, v 모두 중앙
+                addElem('<div class="w-3 h-3 bg-slate-800 rounded-full"></div>', '', '50%', '50%');
+                addElem('<i class="fa-solid fa-arrow-right"></i>', 'text-red-600 opacity-70', '50%', '60%');
+                addElem('<i class="fa-solid fa-arrow-up"></i>', 'text-blue-600 opacity-70', '40%', '50%');
+            } else if (type === 'B') {
+                // h 중앙, uv 모서리
+                addElem('<div class="w-3 h-3 bg-slate-800 rounded-full"></div>', '', '50%', '50%');
+                // 우측 하단 모서리 (shared node simulation)
+                addElem('<i class="fa-solid fa-arrow-right"></i>', 'text-red-600', '100%', '100%');
+                addElem('<i class="fa-solid fa-arrow-up"></i>', 'text-blue-600', '100%', '100%');
+            } else if (type === 'C') {
+                // h 중앙, u 좌우벽, v 상하벽
+                addElem('<div class="w-3 h-3 bg-slate-800 rounded-full"></div>', '', '50%', '50%');
+                addElem('<i class="fa-solid fa-arrow-right"></i>', 'text-red-600', '50%', '100%'); // East Wall
+                addElem('<i class="fa-solid fa-arrow-right"></i>', 'text-red-600', '50%', '0%');   // West Wall
+                addElem('<i class="fa-solid fa-arrow-up"></i>', 'text-blue-600', '0%', '50%');    // North Wall
+                addElem('<i class="fa-solid fa-arrow-up"></i>', 'text-blue-600', '100%', '50%');  // South Wall
+            } else if (type === 'D') {
+                // h 중앙, u 상하벽, v 좌우벽
+                addElem('<div class="w-3 h-3 bg-slate-800 rounded-full"></div>', '', '50%', '50%');
+                addElem('<i class="fa-solid fa-arrow-right"></i>', 'text-red-600', '0%', '50%'); 
+                addElem('<i class="fa-solid fa-arrow-right"></i>', 'text-red-600', '100%', '50%');
+                addElem('<i class="fa-solid fa-arrow-up"></i>', 'text-blue-600', '50%', '0%');
+                addElem('<i class="fa-solid fa-arrow-up"></i>', 'text-blue-600', '50%', '100%');
+            } else if (type === 'E') {
+                // h 중앙, uv 중앙 (rotated grid logic implies h and uv alternate in diagonal pattern - simplified here visually)
+                // E그리드는 시각화가 복잡하여 B그리드의 회전 형태로 단순히 표현
+                 addElem('<div class="w-3 h-3 bg-slate-800 rounded-full"></div>', '', '50%', '50%');
+                 addElem('<i class="fa-solid fa-arrows-up-down-left-right"></i>', 'text-purple-600 text-xs', '0%', '0%');
+                 addElem('<i class="fa-solid fa-arrows-up-down-left-right"></i>', 'text-purple-600 text-xs', '100%', '100%');
+            }
+        }
+
+        // 초기 실행
+        drawGrid('A');
+    </script>
+</body>
+</html>
