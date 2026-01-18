@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab: Coriolis Effect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <nav class="bg-white border-b h-14 flex items-center px-4">
+        <a href="labs.html" class="text-slate-600 hover:text-blue-600 font-bold"><i class="fa-solid fa-arrow-left"></i> Labs</a>
+    </nav>
+    <div class="max-w-4xl mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-2">Coriolis Effect</h1>
+        <p class="text-slate-500 mb-6">회전하는 좌표계(지구)에서 물체가 이동할 때 나타나는 가상의 힘을 확인하세요.</p>
+        
+        <div class="bg-white p-4 rounded-xl shadow-md border flex flex-col items-center">
+            <canvas id="coriolisCanvas" width="400" height="400" class="bg-white rounded-full border-4 border-slate-200 mb-4"></canvas>
+            <div class="flex gap-4 items-center">
+                <button onclick="throwBall()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-bold">공 던지기 (Throw)</button>
+                <label class="text-sm"><input type="checkbox" id="rotateCheck" checked> 회전 켜기</label>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('coriolisCanvas');
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+        let ball = { x: 200, y: 200, active: false, vx: 0, vy: -2 };
+        let rotationSpeed = 0.02;
+
+        function animate() {
+            ctx.clearRect(0,0,400,400);
+            
+            // 회전판 그리기
+            ctx.save();
+            ctx.translate(200, 200);
+            if(document.getElementById('rotateCheck').checked) angle += rotationSpeed;
+            ctx.rotate(angle);
+            
+            ctx.strokeStyle = "#cbd5e1";
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(-200, 0); ctx.lineTo(200, 0); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0, -200); ctx.lineTo(0, 200); ctx.stroke();
+            ctx.fillStyle = "#f1f5f9";
+            ctx.beginPath(); ctx.arc(0,0,195,0,Math.PI*2); ctx.fill();
+            
+            // 북반구 표시 N
+            ctx.fillStyle = "#94a3b8";
+            ctx.font = "20px Arial";
+            ctx.fillText("N", -7, -170);
+            
+            ctx.restore();
+
+            // 공 그리기
+            if(ball.active) {
+                ball.x += ball.vx;
+                ball.y += ball.vy;
+
+                // 전향력 적용 (회전 시)
+                if(document.getElementById('rotateCheck').checked) {
+                    // 간단한 시각적 편향 (오른쪽으로 휘게)
+                    ball.vx += 0.05; 
+                }
+
+                ctx.fillStyle = "red";
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, 8, 0, Math.PI*2);
+                ctx.fill();
+
+                if(ball.y < 0 || ball.x > 400) ball.active = false;
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        function throwBall() {
+            ball = { x: 200, y: 200, active: true, vx: 0, vy: -2 };
+        }
+
+        animate();
+    </script>
+</body>
+</html>
