@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab: George Hadley</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <nav class="bg-white border-b h-14 flex items-center px-4">
+        <a href="labs.html" class="text-slate-600 hover:text-blue-600 font-bold"><i class="fa-solid fa-arrow-left"></i> Labs</a>
+    </nav>
+    <div class="max-w-4xl mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-2">Hadley Cell Simulation</h1>
+        <p class="text-slate-500 mb-6">적도의 따뜻한 공기가 상승하여 극으로 이동하다가 식어서 하강하는 순환을 보여줍니다.</p>
+        
+        <div class="bg-white p-4 rounded-xl shadow-md border flex flex-col items-center">
+            <canvas id="hadleyCanvas" width="600" height="300" class="bg-slate-100 rounded-lg mb-4 w-full max-w-[600px]"></canvas>
+            <div class="flex gap-2">
+                <button onclick="toggleAnimate()" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Start/Stop</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('hadleyCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let running = true;
+
+        function init() {
+            for(let i=0; i<50; i++) particles.push({
+                x: Math.random() * 300, y: 280, 
+                phase: Math.random() * Math.PI * 2
+            });
+            animate();
+        }
+
+        function drawBackground() {
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            // 지표면
+            ctx.fillStyle = "#e2e8f0";
+            ctx.fillRect(0, 280, 600, 20);
+            ctx.fillStyle = "#64748b";
+            ctx.fillText("Equator (Hot)", 20, 295);
+            ctx.fillText("30°N (Cool)", 250, 295);
+        }
+
+        function animate() {
+            if(!running) return;
+            drawBackground();
+            
+            ctx.strokeStyle = "rgba(255, 100, 0, 0.6)";
+            ctx.lineWidth = 2;
+            
+            particles.forEach(p => {
+                // 해들리 순환 흉내내기 (단순화된 타원 궤적)
+                p.phase += 0.02;
+                // x: 0~300 사이 반복, y: 상승 및 하강
+                let cycleX = 150 + 130 * Math.cos(p.phase);
+                let cycleY = 150 + 100 * Math.sin(p.phase); // 반시계 방향 등 조정 필요
+                
+                // 간단히 직접 좌표 계산 (왼쪽: 상승, 오른쪽: 하강)
+                if(p.x < 50) p.y -= 1; // 상승
+                else if(p.x > 250) p.y += 1; // 하강
+                else if(p.y < 50) p.x += 1; // 상층 이동
+                else if(p.y > 250) p.x -= 1; // 지표 이동
+
+                // 궤적 수정 (타원형 순환)
+                p.x = 150 - 120 * Math.cos(p.phase);
+                p.y = 160 - 120 * Math.sin(p.phase);
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
+                ctx.fillStyle = p.y > 200 ? "red" : "blue"; // 높이에 따라 색상 변화
+                ctx.fill();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        function toggleAnimate() {
+            running = !running;
+            if(running) animate();
+        }
+
+        init();
+    </script>
+</body>
+</html>
