@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대기과학 인터랙티브 랩</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap'); body { font-family: 'Noto Sans KR', sans-serif; }</style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <nav class="bg-white border-b border-slate-200 shadow-sm h-14 flex items-center px-4 sticky top-0 z-50">
+        <a href="index.html" class="flex items-center gap-2 text-slate-700 hover:text-blue-600 font-bold">
+            <i class="fa-solid fa-arrow-left"></i> 메인으로 돌아가기
+        </a>
+    </nav>
+
+    <header class="bg-slate-900 text-white py-12 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-blue-900/20"></div>
+        <h1 class="text-3xl md:text-4xl font-black mb-2 relative z-10">대기과학 인터랙티브 랩</h1>
+        <p class="text-slate-400 relative z-10">Atmospheric Science Interactive Labs</p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <a href="lab_lorenz.html" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center text-xl mb-4">
+                    <i class="fa-solid fa-infinity"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-purple-600 transition-colors">에드워드 로렌츠</h3>
+                <p class="text-slate-500 text-sm mb-4">나비 효과와 카오스 이론. 초기 조건의 민감성을 직접 실험해보세요.</p>
+                <div class="text-purple-600 font-semibold text-sm">실험실 입장 &rarr;</div>
+            </a>
+
+            <a href="lab_hadley.html" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center text-xl mb-4">
+                    <i class="fa-solid fa-earth-americas"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-orange-600 transition-colors">조지 해들리</h3>
+                <p class="text-slate-500 text-sm mb-4">대기 대순환의 기초. 적도와 극지방의 열 교환 모델링.</p>
+                <div class="text-orange-600 font-semibold text-sm">실험실 입장 &rarr;</div>
+            </a>
+
+            <a href="lab_coriolis.html" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-xl mb-4">
+                    <i class="fa-solid fa-arrows-spin"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-blue-600 transition-colors">가스파르 코리올리</h3>
+                <p class="text-slate-500 text-sm mb-4">회전하는 좌표계에서의 힘. 전향력의 원리를 시각화합니다.</p>
+                <div class="text-blue-600 font-semibold text-sm">실험실 입장 &rarr;</div>
+            </a>
+
+            <a href="lab_bjerknes.html" class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div class="w-12 h-12 bg-cyan-100 text-cyan-600 rounded-lg flex items-center justify-center text-xl mb-4">
+                    <i class="fa-solid fa-cloud-bolt"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 group-hover:text-cyan-600 transition-colors">빌헬름 비야크네스</h3>
+                <p class="text-slate-500 text-sm mb-4">전선 이론과 저기압 파동. 현대 기상예보의 아버지를 만나보세요.</p>
+                <div class="text-cyan-600 font-semibold text-sm">실험실 입장 &rarr;</div>
+            </a>
+
+        </div>
+    </main>
+</body>
+</html>
