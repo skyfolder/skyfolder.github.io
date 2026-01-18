@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab: Ted Fujita</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap'); body { font-family: 'Noto Sans KR', sans-serif; }</style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <nav class="bg-white border-b border-slate-200 h-14 flex items-center px-4 sticky top-0 z-50">
+        <a href="labs.html" class="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-bold">
+            <i class="fa-solid fa-arrow-left"></i> 랩 목록
+        </a>
+    </nav>
+
+    <div class="max-w-4xl mx-auto p-6">
+        <header class="mb-8 text-center">
+            <span class="bg-slate-200 text-slate-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Severe Storms</span>
+            <h1 class="text-3xl font-black mt-3 mb-2">테드 후지타 (Ted Fujita)</h1>
+            <p class="text-slate-600">"Mr. Tornado". F-Scale의 창시자이자 다운버스트(Microburst)의 발견자.</p>
+        </header>
+
+        <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-6">
+            <div class="relative h-80 bg-slate-300 rounded-xl overflow-hidden mb-6 border border-slate-400">
+                <canvas id="stormCanvas" class="w-full h-full block"></canvas>
+                <div class="absolute top-4 right-4 bg-white/80 p-2 rounded text-xs font-mono">
+                    Wind Speed: <span id="windSpeed">Low</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Fujita Scale (F-Scale)</label>
+                    <input type="range" id="fScaleSlider" min="0" max="5" value="1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-800">
+                    <div class="flex justify-between text-xs text-slate-400 mt-1 font-bold">
+                        <span>F0</span><span>F1</span><span>F2</span><span>F3</span><span>F4</span><span>F5</span>
+                    </div>
+                    <p id="damageDesc" class="mt-2 text-sm text-red-600 font-bold">F1: 중간 피해. 지붕이 벗겨짐.</p>
+                </div>
+                <div class="flex flex-col justify-end">
+                    <button onclick="triggerDownburst()" class="w-full bg-blue-700 hover:bg-blue-600 text-white py-3 rounded-lg font-bold shadow-md transition transform active:scale-95">
+                        <i class="fa-solid fa-plane-slash"></i> 다운버스트(Microburst) 실험
+                    </button>
+                    <p class="text-xs text-slate-500 mt-2 text-center">항공기 이착륙 시 치명적인 하강 기류를 시뮬레이션합니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('stormCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        
+        function resize() {
+            width = canvas.width = canvas.parentElement.offsetWidth;
+            height = canvas.height = canvas.parentElement.offsetHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let fScale = 1;
+        let isDownburst = false;
+        let particles = [];
+
+        document.getElementById('fScaleSlider').addEventListener('input', (e) => {
+            fScale = parseInt(e.target.value);
+            const desc = [
+                "F0: 경미한 피해. 나뭇가지 부러짐.",
+                "F1: 중간 피해. 지붕이 벗겨짐.",
+                "F2: 상당한 피해. 큰 나무 뿌리째 뽑힘.",
+                "F3: 심각한 피해. 벽이 무너짐.",
+                "F4: 치명적 피해. 집이 날아감.",
+                "F5: 믿을 수 없는 피해. 자동차가 미사일처럼 날아다님."
+            ];
+            document.getElementById('damageDesc').innerText = desc[fScale];
+            document.getElementById('windSpeed').innerText = (40 + fScale * 40) + " ~ " + (70 + fScale * 50) + " mph";
+        });
+
+        function triggerDownburst() {
+            isDownburst = true;
+            particles = [];
+            // 하강 기류 입자 생성
+            for(let i=0; i<100; i++) {
+                particles.push({x: width/2 + (Math.random()-0.5)*50, y: 0, vx: 0, vy: Math.random()*5 + 5, type: 'rain'});
+            }
+            setTimeout(() => { isDownburst = false; }, 3000);
+        }
+
+        function draw() {
+            ctx.fillStyle = "#94a3b8"; // slate-400 (Stormy sky)
+            ctx.fillRect(0, 0, width, height);
+            
+            // 지면
+            ctx.fillStyle = "#334155";
+            ctx.fillRect(0, height-40, width, 40);
+
+            if (isDownburst) {
+                // 다운버스트 그리기
+                ctx.strokeStyle = "#1d4ed8"; // Blue rain
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                particles.forEach((p, i) => {
+                    // 바닥에 닿으면 옆으로 퍼짐 (Outflow)
+                    if (p.y > height - 50) {
+                        p.vy = 0;
+                        p.vx = (p.x > width/2) ? 10 : -10; // 양옆으로 확산
+                    }
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p.x - p.vx, p.y - p.vy*2);
+                });
+                ctx.stroke();
+                
+                ctx.fillStyle = "white";
+                ctx.font = "bold 20px sans-serif";
+                ctx.fillText("MICROBURST IN PROGRESS!", width/2 - 130, 50);
+
+            } else {
+                // 토네이도 그리기
+                ctx.fillStyle = "rgba(30, 41, 59, 0.8)"; // Dark slate
+                ctx.beginPath();
+                let funnelWidth = 10 + (fScale * 15);
+                ctx.moveTo(width/2 - 100 - (fScale*20), 0); // 상단 좌측
+                ctx.lineTo(width/2 + 100 + (fScale*20), 0); // 상단 우측
+                
+                // 꼬불꼬불한 깔때기
+                const t = Date.now() / 200;
+                const sway = Math.sin(t) * 20;
+                
+                ctx.quadraticCurveTo(width/2 + sway, height/2, width/2 + funnelWidth + sway, height-40); // 바닥 우측
+                ctx.lineTo(width/2 - funnelWidth + sway, height-40); // 바닥 좌측
+                ctx.quadraticCurveTo(width/2 + sway, height/2, width/2 - 100 - (fScale*20), 0);
+                
+                ctx.fill();
+
+                // 잔해물 (Debris)
+                if(fScale > 0) {
+                    ctx.fillStyle = "#0f172a";
+                    for(let i=0; i<fScale*5; i++) {
+                        let r = (Date.now() / 1000 + i) % 2 * Math.PI;
+                        let dx = Math.cos(r) * (funnelWidth + 20);
+                        let dy = height - 50 - Math.abs(Math.sin(r) * 50);
+                        ctx.fillRect(width/2 + sway + dx, dy, 5, 5);
+                    }
+                }
+            }
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+</body>
+</html>
