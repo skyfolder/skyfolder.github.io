@@ -57,7 +57,10 @@ title: Publications
 
                 <div class="text-slate-600 text-sm mb-1">
                     <i class="fa-solid fa-users text-slate-400 mr-2"></i>
-                    {{ paper.authors | replace: "Park, C.", "<strong class='text-slate-900'>Park, C.</strong>" }}
+                    {{ paper.authors 
+                        | replace: "Park, C.", "<strong class='text-slate-900'>Park, C.</strong>"
+                        | replace: "C. Park", "<strong class='text-slate-900'>C. Park</strong>"
+                    }}
                 </div>
 
            <!--chp     <div class="text-slate-400 text-xs">
