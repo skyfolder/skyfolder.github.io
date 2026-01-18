@@ -1,0 +1,71 @@
+---
+layout: default
+title: Publications
+---
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+<div class="max-w-4xl mx-auto px-4 py-12">
+    
+    <div class="mb-12 text-center">
+        <h1 class="text-4xl font-bold text-slate-800 mb-4">Publications</h1>
+        <p class="text-slate-500 text-lg">
+            Selected research papers and articles.
+        </p>
+    </div>
+
+    <div class="space-y-6">
+        
+        {% assign papers = site.data.papers | sort: 'year' | reverse %}
+        
+        {% for paper in papers %}
+        <div class="group bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-300 relative overflow-hidden">
+            
+            <div class="absolute left-0 top-0 bottom-0 w-1 bg-slate-200 group-hover:bg-blue-500 transition-colors"></div>
+
+            <div class="pl-4">
+                <div class="flex items-center gap-3 mb-2 text-sm">
+                    <span class="px-2 py-1 rounded bg-slate-100 text-slate-600 font-semibold group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                        {{ paper.year }}
+                    </span>
+                    <span class="text-slate-500 font-medium italic">
+                        {{ paper.journal }}
+                    </span>
+                    {% if paper.year == 2025 %}
+                    <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-xs font-bold animate-pulse">
+                        NEW
+                    </span>
+                    {% endif %}
+                </div>
+
+                <h3 class="text-xl font-bold text-slate-800 mb-2 leading-snug group-hover:text-blue-700 transition-colors">
+                    {% if paper.link and paper.link != "#" %}
+                        <a href="{{ paper.link }}" target="_blank" rel="noopener noreferrer" class="hover:underline decoration-blue-500 underline-offset-4">
+                            {{ paper.title }} <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1 opacity-50"></i>
+                        </a>
+                    {% else %}
+                        {{ paper.title }}
+                    {% endif %}
+                </h3>
+
+                {% if paper.note and paper.note != "" %}
+                <p class="text-slate-500 text-sm mb-3">
+                    {{ paper.note }}
+                </p>
+                {% endif %}
+
+                <div class="text-slate-600 text-sm mb-1">
+                    <i class="fa-solid fa-users text-slate-400 mr-2"></i>
+                    {{ paper.authors | replace: "Park, C.", "<strong class='text-slate-900'>Park, C.</strong>" }}
+                </div>
+
+                <div class="text-slate-400 text-xs">
+                    {{ paper.vol }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
