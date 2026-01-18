@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab: Edward Lorenz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap'); body { font-family: 'Noto Sans KR', sans-serif; }</style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <nav class="bg-white border-b border-slate-200 h-14 flex items-center px-4 sticky top-0 z-50">
+        <a href="labs.html" class="flex items-center gap-2 text-slate-600 hover:text-purple-600 font-bold transition-colors">
+            <i class="fa-solid fa-arrow-left"></i> 랩 목록으로
+        </a>
+    </nav>
+
+    <div class="max-w-4xl mx-auto p-6">
+        <header class="mb-8">
+            <div class="flex items-center gap-3 mb-2">
+                <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-bold">Chaos Theory</span>
+                <span class="text-slate-400 text-sm">1963</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-black mb-2 text-slate-900">Lorenz Attractor</h1>
+            <p class="text-slate-600 leading-relaxed">
+                "초기 조건의 민감한 의존성". 아주 작은 차이가 예측 불가능한 거대한 결과의 차이를 만듭니다.<br>
+                아래 시뮬레이션에서 <span class="text-blue-600 font-bold">파란 점</span>과 <span class="text-red-600 font-bold">빨간 점</span>은 거의 같은 위치에서 시작하지만, 곧 완전히 다른 경로를 그리게 됩니다.
+            </p>
+        </header>
+        
+        <div class="bg-white p-1 rounded-2xl shadow-lg border border-slate-200">
+            <div class="bg-slate-900 rounded-xl overflow-hidden relative">
+                <canvas id="lorenzCanvas" class="w-full block cursor-crosshair"></canvas>
+                
+                <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end pointer-events-none">
+                    <div class="bg-slate-800/80 backdrop-blur text-white p-3 rounded-lg text-xs pointer-events-auto border border-slate-700">
+                        <div class="mb-1"><span class="text-slate-400">σ (Prandtl):</span> 10</div>
+                        <div class="mb-1"><span class="text-slate-400">ρ (Rayleigh):</span> 28</div>
+                        <div><span class="text-slate-400">β (Geometry):</span> 8/3</div>
+                    </div>
+                    <button onclick="resetSimulation()" class="bg-purple-600 hover:bg-purple-500 text-white px-5 py-2 rounded-lg font-bold shadow-lg pointer-events-auto transition-all active:scale-95 flex items-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i> 다시 시작
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-square-root-variable text-purple-600"></i> 지배 방정식
+                </h3>
+                <div class="font-mono text-sm bg-slate-50 p-4 rounded-lg text-slate-700 space-y-2">
+                    <p>$$ \frac{dx}{dt} = \sigma(y - x) $$</p>
+                    <p>$$ \frac{dy}{dt} = x(\rho - z) - y $$</p>
+                    <p>$$ \frac{dz}{dt} = xy - \beta z $$</p>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb text-amber-500"></i> 관전 포인트
+                </h3>
+                <ul class="text-sm text-slate-600 space-y-2 list-disc list-inside">
+                    <li>시작할 때 두 점은 하나로 보일 정도로 붙어 있습니다.</li>
+                    <li>몇 번의 회전 후 경로가 급격히 갈라집니다.</li>
+                    <li>이 모양은 마치 나비의 날개처럼 보입니다.</li>
+                    <li>결코 겹치지 않으면서 영원히 순환합니다.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('lorenzCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 캔버스 크기 설정 (반응형)
+        function resize() {
+            const parent = canvas.parentElement;
+            canvas.width = parent.clientWidth;
+            canvas.height = Math.min(600, window.innerHeight * 0.7);
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // 로렌츠 변수
+        let x1, y1, z1, x2, y2, z2;
+        const sigma = 10;
+        const rho = 28;
+        const beta = 8/3;
+        const dt = 0.008; // 시간 간격
+
+        let animationId;
+        let points1 = [];
+        let points2 = [];
+
+        function init() {
+            // 초기 조건: 두 점을 아주 가깝게 설정
+            x1 = 0.01; y1 = 0; z1 = 0;
+            x2 = 0.0101; y2 = 0; z2 = 0; // 0.0001 차이
+            
+            points1 = [];
+            points2 = [];
+            
+            // 배경 초기화
+            ctx.fillStyle = "#0f172a"; // slate-900
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function draw() {
+            // 1. 계산 (Runge-Kutta 대신 간단한 Euler 방법 사용 - 시각화용으로 충분)
+            // Point 1
+            let dx1 = (sigma * (y1 - x1)) * dt;
+            let dy1 = (x1 * (rho - z1) - y1) * dt;
+            let dz1 = (x1 * y1 - beta * z1) * dt;
+            x1 += dx1; y1 += dy1; z1 += dz1;
+
+            // Point 2
+            let dx2 = (sigma * (y2 - x2)) * dt;
+            let dy2 = (x2 * (rho - z2) - y2) * dt;
+            let dz2 = (x2 * y2 - beta * z2) * dt;
+            x2 += dx2; y2 += dy2; z2 += dz2;
+
+            // 좌표 변환 (3D -> 2D 투영)
+            // scale과 center는 캔버스 크기에 맞춰 조정
+            const scale = canvas.width / 45; 
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 1.8; // 약간 아래로
+
+            const px1 = cx + (x1 * scale);
+            const py1 = cy - (z1 * scale) + (canvas.height * 0.4); // z축을 y화면 좌표로, y축은 깊이감 표현에 사용 안함(단순화)
+            // 더 나은 시각화를 위해 x, z 평면 대신 x, y+z 변환 사용
+            // 단순 투영: x축 -> 화면 x, z축 -> 화면 y
+            
+            // 그리기 함수
+            function plot(lx, lz, color) {
+                const screenX = cx + lx * scale;
+                const screenY = cy + (-lz + rho) * scale * 0.5; // 투영 각도 조절
+                return {x: screenX, y: screenY};
+            }
+
+            const p1 = plot(x1, z1);
+            const p2 = plot(x2, z2);
+
+            points1.push(p1);
+            points2.push(p2);
+            if(points1.length > 5000) { points1.shift(); points2.shift(); } // 메모리 관리
+
+            // 2. 그리기 (잔상 효과 없이 선 그리기)
+            // 약간의 잔상 효과를 위해 전체를 흐릿하게 덮음
+            ctx.fillStyle = "rgba(15, 23, 42, 0.03)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.lineWidth = 1.5;
+            
+            // 파란 경로
+            ctx.beginPath();
+            ctx.strokeStyle = "#3b82f6"; // blue-500
+            if(points1.length > 1) {
+                ctx.moveTo(points1[points1.length-2].x, points1[points1.length-2].y);
+                ctx.lineTo(p1.x, p1.y);
+                ctx.stroke();
+            }
+
+            // 빨간 경로
+            ctx.beginPath();
+            ctx.strokeStyle = "#ef4444"; // red-500
+            if(points2.length > 1) {
+                ctx.moveTo(points2[points2.length-2].x, points2[points2.length-2].y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+            }
+
+            // 현재 위치 머리(Head) 빛나게
+            ctx.fillStyle = "white";
+            ctx.beginPath(); ctx.arc(p1.x, p1.y, 2, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(p2.x, p2.y, 2, 0, Math.PI*2); ctx.fill();
+
+            animationId = requestAnimationFrame(draw);
+        }
+
+        function resetSimulation() {
+            cancelAnimationFrame(animationId);
+            init();
+            draw();
+        }
+
+        // 시작
+        init();
+        draw();
+    </script>
+</body>
+</html>
