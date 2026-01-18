@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대기과학 인터랙티브 클래스</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8fafc;
+            scroll-behavior: smooth;
+        }
+
+        .hero-pattern {
+            background-color: #0f172a;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231e293b' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .subject-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+        }
+        .subject-card .icon-wrapper {
+            transition: all 0.3s ease;
+        }
+        .subject-card:hover .icon-wrapper {
+            transform: scale(1.1) rotate(5deg);
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm h-14">
+        <div class="max-w-7xl mx-auto px-4 h-full flex justify-between items-center">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                <div class="bg-blue-600 text-white p-1.5 rounded-lg">
+                    <i class="fa-solid fa-cloud text-sm"></i>
+                </div>
+                <span class="font-bold text-lg tracking-tight text-slate-800">Atmospheric Science Hub</span>
+            </div>
+            <div class="hidden md:flex space-x-6 text-sm font-medium text-slate-600">
+                <a href="#courses" class="hover:text-blue-600 transition">강의 목록</a>
+                <a href="#resources" class="hover:text-blue-600 transition">자료실</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative hero-pattern text-white overflow-hidden py-16">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-900/90 to-slate-900/90"></div>
+        <div class="relative max-w-7xl mx-auto px-4 text-center">
+            <h1 class="text-3xl md:text-5xl font-black mb-4">
+                대기과학 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-300">Hub</span>
+            </h1>
+            <p class="text-slate-300 text-sm md:text-base max-w-xl mx-auto">
+                이론부터 실습, 그리고 연구까지. 대기를 담다.
+            </p>
+        </div>
+    </header>
+
+    <section id="courses" class="py-10 bg-slate-50 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                
+                <a href="#" onclick="handleLinkClick(event, '대기환경과학개론')" class="subject-card group bg-white rounded-xl p-5 border border-slate-100 shadow-sm relative overflow-hidden flex flex-col h-48">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-green-50 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:bg-green-100"></div>
+                    <div class="icon-wrapper w-10 h-10 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-lg mb-3 relative z-10">
+                        <i class="fa-solid fa-seedling"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-1">대기환경과학개론</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-2 line-clamp-2">
+                        날씨, 기후, 대기 오염, 미세먼지, 온실가스 등 기초 원리 학습.
+                    </p>
+                    <div class="mt-auto text-green-600 text-xs font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center">
+                        View More <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </a>
+
+                <a href="#" onclick="handleLinkClick(event, '수리대기과학')" class="subject-card group bg-white rounded-xl p-5 border border-slate-100 shadow-sm relative overflow-hidden flex flex-col h-48">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-blue-50 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:bg-blue-100"></div>
+                    <div class="icon-wrapper w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-lg mb-3 relative z-10">
+                        <i class="fa-solid fa-square-root-variable"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-1">수리대기과학</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-2 line-clamp-2">
+                        유체역학 방정식과 열역학 법칙을 통한 대기 해석.
+                    </p>
+                    <div class="mt-auto text-blue-600 text-xs font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center">
+                        View More <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </a>
+
+                <a href="#" onclick="handleLinkClick(event, '미기상학')" class="subject-card group bg-white rounded-xl p-5 border border-slate-100 shadow-sm relative overflow-hidden flex flex-col h-48">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-sky-50 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:bg-sky-100"></div>
+                    <div class="icon-wrapper w-10 h-10 bg-sky-100 text-sky-600 rounded-lg flex items-center justify-center text-lg mb-3 relative z-10">
+                        <i class="fa-solid fa-wind"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-1">미기상학</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-2 line-clamp-2">
+                        지표면 경계층, 난류, 에너지 교환의 미세 규모 탐구.
+                    </p>
+                    <div class="mt-auto text-sky-600 text-xs font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center">
+                        View More <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </a>
+
+                <a href="#" onclick="handleLinkClick(event, '대기통계학')" class="subject-card group bg-white rounded-xl p-5 border border-slate-100 shadow-sm relative overflow-hidden flex flex-col h-48">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-indigo-50 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:bg-indigo-100"></div>
+                    <div class="icon-wrapper w-10 h-10 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center text-lg mb-3 relative z-10">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-1">대기통계학</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-2 line-clamp-2">
+                        기상 빅데이터 분석 및 확률 모델링 기법 학습.
+                    </p>
+                    <div class="mt-auto text-indigo-600 text-xs font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center">
+                        View More <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </a>
+
+                <a href="#" onclick="handleLinkClick(event, '인공지능대기과학')" class="subject-card group bg-white rounded-xl p-5 border border-slate-100 shadow-sm relative overflow-hidden flex flex-col h-48">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-purple-50 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:bg-purple-100"></div>
+                    <div class="icon-wrapper w-10 h-10 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center text-lg mb-3 relative z-10">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-1">AI 대기과학</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-2 line-clamp-2">
+                        딥러닝을 활용한 기상 예측 및 위성 영상 분석.
+                    </p>
+                    <div class="mt-auto text-purple-600 text-xs font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center">
+                        View More <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </a>
+
+                <a href="people_history.html" class="subject-card group bg-white rounded-xl p-5 border border-amber-200 ring-1 ring-amber-100 shadow-md relative overflow-hidden flex flex-col h-48">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-amber-50 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:bg-amber-100"></div>
+                    <div class="icon-wrapper w-10 h-10 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center text-lg mb-3 relative z-10">
+                        <i class="fa-solid fa-scroll"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-1">역사의 기상학자들</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-2 line-clamp-2">
+                        해들리부터 로렌츠까지, 역학 발전의 역사적 흐름.
+                    </p>
+                    <div class="mt-auto text-amber-600 text-xs font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center">
+                        바로 가기 <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </a>
+
+                <a href="#" onclick="handleLinkClick(event, '연구노트')" class="subject-card group bg-white rounded-xl p-5 border border-slate-100 shadow-sm relative overflow-hidden flex flex-col h-48">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-rose-50 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:bg-rose-100"></div>
+                    <div class="icon-wrapper w-10 h-10 bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-lg mb-3 relative z-10">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-1">연구노트</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-2 line-clamp-2">
+                        실험 과정, 아이디어 스케치, 연구 시행착오 기록.
+                    </p>
+                    <div class="mt-auto text-rose-600 text-xs font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center">
+                        View More <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </a>
+
+                <a href="publications.html" class="subject-card group bg-white rounded-xl p-5 border border-amber-200 ring-1 ring-amber-100 shadow-md relative overflow-hidden flex flex-col h-48">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-slate-100 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:bg-slate-200"></div>
+                    <div class="icon-wrapper w-10 h-10 bg-slate-100 text-slate-600 rounded-lg flex items-center justify-center text-lg mb-3 relative z-10">
+                        <i class="fa-regular fa-file-lines"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-1">연구논문</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-2 line-clamp-2">
+                        주요 저널에 게재된 학술 논문 및 리포트 아카이브.
+                    </p>
+                    <div class="mt-auto text-slate-600 text-xs font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center">
+                        View More <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+              </a>
+
+                <a href="#" onclick="handleLinkClick(event, '학회발표')" class="subject-card group bg-white rounded-xl p-5 border border-slate-100 shadow-sm relative overflow-hidden flex flex-col h-48">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-orange-50 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:bg-orange-100"></div>
+                    <div class="icon-wrapper w-10 h-10 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center text-lg mb-3 relative z-10">
+                        <i class="fa-solid fa-users-rectangle"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-1">학회발표</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-2 line-clamp-2">
+                        국내외 학술대회 포스터 및 구두 발표 자료.
+                    </p>
+                    <div class="mt-auto text-orange-600 text-xs font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center">
+                        View More <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </a>
+
+                <a href="#" onclick="handleLinkClick(event, '프로젝트')" class="subject-card group bg-white rounded-xl p-5 border border-slate-100 shadow-sm relative overflow-hidden flex flex-col h-48">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-teal-50 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:bg-teal-100"></div>
+                    <div class="icon-wrapper w-10 h-10 bg-teal-100 text-teal-600 rounded-lg flex items-center justify-center text-lg mb-3 relative z-10">
+                        <i class="fa-solid fa-diagram-project"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-1">프로젝트</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-2 line-clamp-2">
+                        진행 중이거나 완료된 연구 과제 및 산학 프로젝트.
+                    </p>
+                    <div class="mt-auto text-teal-600 text-xs font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center">
+                        View More <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </a>
+
+                <a href="#" onclick="handleLinkClick(event, '교육')" class="subject-card group bg-white rounded-xl p-5 border border-slate-100 shadow-sm relative overflow-hidden flex flex-col h-48">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-cyan-50 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:bg-cyan-100"></div>
+                    <div class="icon-wrapper w-10 h-10 bg-cyan-100 text-cyan-600 rounded-lg flex items-center justify-center text-lg mb-3 relative z-10">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-1">교육</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-2 line-clamp-2">
+                        특강, 세미나, 튜토리얼 및 교육 봉사 활동.
+                    </p>
+                    <div class="mt-auto text-cyan-600 text-xs font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center">
+                        View More <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </a>
+
+                <a href="#" onclick="handleLinkClick(event, '기타')" class="subject-card group bg-white rounded-xl p-5 border border-slate-100 shadow-sm relative overflow-hidden flex flex-col h-48">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-gray-50 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:bg-gray-100"></div>
+                    <div class="icon-wrapper w-10 h-10 bg-gray-100 text-gray-600 rounded-lg flex items-center justify-center text-lg mb-3 relative z-10">
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-1">기타</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-2 line-clamp-2">
+                        Q&A, 공지사항 및 기타 참고 자료 모음.
+                    </p>
+                    <div class="mt-auto text-gray-600 text-xs font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center">
+                        View More <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-900 text-slate-400 py-6 text-center text-xs">
+        &copy; 2024 Atmospheric Science Hub. All rights reserved.
+    </footer>
+
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-800 text-white px-6 py-4 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3 z-50">
+        <i class="fa-solid fa-circle-info text-blue-400"></i>
+        <div>
+            <h4 class="font-bold text-sm">페이지 준비 중</h4>
+            <p class="text-xs text-slate-300" id="toast-message">이 메뉴는 추후 업데이트될 예정입니다.</p>
+        </div>
+    </div>
+
+    <script>
+        function handleLinkClick(event, subjectName) {
+            event.preventDefault();
+            showToast(`${subjectName} 페이지는 현재 제작 중입니다.`);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.innerHTML = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
