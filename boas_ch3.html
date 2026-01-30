@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 3. Linear Algebra</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 3rem 5rem;
+            color: #333;
+            line-height: 1.8;
+            background-color: #fcfcfc;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: #8e44ad; /* 보라색 (선형대수 느낌) */
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            padding-left: 10px;
+            border-left: 5px solid #8e44ad;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            color: #444;
+            margin-top: 2rem;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            text-align: justify;
+            word-break: keep-all;
+        }
+
+        /* 핵심 공식 박스 */
+        .key-formula {
+            background-color: #f3e5f5; /* 연한 보라색 배경 */
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.1rem;
+            margin: 2rem 0;
+            border: 1px solid #e1bee7;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        /* 예제 박스 스타일 */
+        .example-box {
+            background-color: #fff;
+            border: 1px solid #e1e8ed;
+            border-left: 5px solid #9b59b6; 
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .example-title {
+            color: #8e44ad;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .solution-step {
+            margin-top: 1rem;
+            padding-left: 1rem;
+            border-left: 2px solid #eee;
+        }
+
+        /* 이미지 플레이스홀더 */
+        .img-placeholder {
+            width: 100%;
+            max-width: 550px;
+            height: 250px;
+            background-color: #f8f9fa;
+            border: 2px dashed #bdc3c7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+            margin: 2rem auto;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .caption {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* 행렬 강조 */
+        .matrix-display {
+            font-family: 'Times New Roman', serif;
+            background: #fafafa;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Chapter 3. 선형대수 (Linear Algebra)</h1>
+    
+    <p>
+        선형대수는 단순히 연립방정식을 푸는 기술이 아니다. 물리학, 특히 <strong>양자역학(Quantum Mechanics)</strong>에서 물리적 상태는 벡터로, 관측량은 행렬로 표현된다. 
+        이 장에서는 행렬의 기본 연산부터 시작하여, 물리학과 공학의 핵심 도구인 <strong>고유값(Eigenvalue)</strong> 문제까지 살펴본다.
+        데이터를 정리하고 공간을 변환하는 행렬의 언어를 배워보자.
+    </p>
+
+    <section>
+        <h2>1. 행렬의 곱셈과 기하학적 의미</h2>
+        <p>
+            행렬(Matrix)은 숫자를 직사각형 모양으로 배열한 것이다. 행렬의 덧셈은 쉽지만, 곱셈은 독특한 규칙을 따른다.
+            앞 행렬의 <strong>'행(Row)'</strong>과 뒤 행렬의 <strong>'열(Column)'</strong>을 순서대로 곱해서 더해야 한다.
+        </p>
+
+        <div class="img-placeholder">
+            <svg width="400" height="150" viewBox="0 0 400 150">
+                <text x="20" y="80" font-size="20">[ A ]</text>
+                <text x="80" y="80" font-size="20">×</text>
+                <text x="120" y="80" font-size="20">[ B ]</text>
+                <text x="180" y="80" font-size="20">=</text>
+                <text x="220" y="80" font-size="20">[ C ]</text>
+                
+                <rect x="10" y="40" width="60" height="20" fill="none" stroke="red" stroke-width="2"/>
+                <text x="10" y="30" font-size="12" fill="red">Row i</text>
+                
+                <rect x="130" y="40" width="20" height="60" fill="none" stroke="blue" stroke-width="2"/>
+                <text x="130" y="30" font-size="12" fill="blue">Col j</text>
+
+                <text x="250" y="80" font-size="14">C_ij = (Row i) • (Col j)</text>
+            </svg>
+            <div class="caption">[그림 1] 행렬 곱셈의 원리: 앞의 행과 뒤의 열이 만난다.</div>
+        </div>
+
+        <div class="example-box">
+            <span class="example-title">[Example 1] 행렬 곱셈 수행하기</span>
+            <p><strong>문제:</strong> 다음 두 행렬 \( A \)와 \( B \)의 곱 \( AB \)를 구하시오.</p>
+            $$ A = \begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}, \quad B = \begin{pmatrix} 0 & 1 \\ 2 & 1 \end{pmatrix} $$
+            
+            <div class="solution-step">
+                <strong>풀이:</strong> <br>
+                1. (1행) × (1열): \( 1\cdot0 + 2\cdot2 = 4 \) <br>
+                2. (1행) × (2열): \( 1\cdot1 + 2\cdot1 = 3 \) <br>
+                3. (2행) × (1열): \( 3\cdot0 + 4\cdot2 = 8 \) <br>
+                4. (2행) × (2열): \( 3\cdot1 + 4\cdot1 = 7 \) <br>
+                $$ AB = \begin{pmatrix} 4 & 3 \\ 8 & 7 \end{pmatrix} $$
+                주의할 점은 \( AB \)와 \( BA \)가 일반적으로 같지 않다는 것이다(교환 법칙 성립 안 함).
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>2. 행렬식 (Determinant)과 크래머 공식</h2>
+        <p>
+            정사각행렬을 하나의 숫자(스칼라)로 축약한 값을 <strong>행렬식(Determinant)</strong>이라고 한다. 
+            기하학적으로 2차원 행렬식은 평행사변형의 '넓이', 3차원은 평행육면체의 '부피'를 의미한다.
+            행렬식이 0이라는 것은 부피가 0, 즉 차원이 찌그러졌다는 뜻이며 역행렬이 존재하지 않음을 의미한다.
+        </p>
+
+        <div class="key-formula">
+            $$ \det \begin{pmatrix} a & b \\ c & d \end{pmatrix} = ad - bc $$
+        </div>
+
+        <div class="example-box">
+            <span class="example-title">[Example 2] 연립방정식 풀기 (Cramer's Rule)</span>
+            <p><strong>문제:</strong> 다음 연립방정식을 행렬식을 이용해 푸시오.</p>
+            $$ \begin{cases} x + 2y = 5 \\ 3x + 4y = 11 \end{cases} $$
+            
+            <div class="solution-step">
+                <strong>풀이:</strong> <br>
+                계수 행렬 \( D \), 그리고 \( x \)열을 상수항으로 바꾼 \( D_x \), \( y \)열을 바꾼 \( D_y \)를 계산한다.
+                $$ D = \left| \begin{matrix} 1 & 2 \\ 3 & 4 \end{matrix} \right| = 4 - 6 = -2 $$
+                $$ D_x = \left| \begin{matrix} 5 & 2 \\ 11 & 4 \end{matrix} \right| = 20 - 22 = -2 $$
+                $$ D_y = \left| \begin{matrix} 1 & 5 \\ 3 & 11 \end{matrix} \right| = 11 - 15 = -4 $$
+                따라서 해는:
+                $$ x = \frac{D_x}{D} = \frac{-2}{-2} = 1, \quad y = \frac{D_y}{D} = \frac{-4}{-2} = 2 $$
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>3. 고유값과 고유벡터 (Eigenvalues & Eigenvectors)</h2>
+        <p>
+            행렬 \( A \)를 어떤 벡터 \( \mathbf{v} \)에 곱했더니, 방향은 변하지 않고 크기만 \( \lambda \)배로 늘어나거나 줄어드는 경우가 있다.
+            이때 \( \lambda \)를 <strong>고유값</strong>, \( \mathbf{v} \)를 <strong>고유벡터</strong>라고 한다.
+            이 개념은 진동, 양자역학, 회전 운동 등을 분석할 때 가장 중요한 도구이다.
+        </p>
+        
+        <div class="key-formula">
+            $$ A \mathbf{v} = \lambda \mathbf{v} \quad (\text{또는 } (A - \lambda I)\mathbf{v} = 0) $$
+            $$ \det(A - \lambda I) = 0 \quad (\text{특성 방정식}) $$
+        </div>
+
+        <div class="img-placeholder">
+            <svg width="300" height="200" viewBox="0 0 300 200">
+                <line x1="50" y1="150" x2="150" y2="100" stroke="#aaa" stroke-width="2" stroke-dasharray="5,5"/>
+                <text x="100" y="90" fill="#888">v (원래 벡터)</text>
+                
+                <line x1="50" y1="150" x2="250" y2="50" stroke="#8e44ad" stroke-width="3" marker-end="url(#arrow)"/>
+                <text x="200" y="40" fill="#8e44ad" font-weight="bold">Av = λv</text>
+                
+                <text x="50" y="180" font-size="14">방향은 그대로, 길이만 λ배!</text>
+            </svg>
+            <div class="caption">[그림 2] 고유벡터의 기하학적 의미: 행렬에 의해 회전하지 않는 축</div>
+        </div>
+
+        <div class="example-box">
+            <span class="example-title">[Example 3] 고유값 구하기</span>
+            <p><strong>문제:</strong> 행렬 \( A = \begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix} \)의 고유값을 모두 구하시오.</p>
+            
+            <div class="solution-step">
+                <strong>풀이:</strong> <br>
+                1. 특성 방정식을 세운다: \( \det(A - \lambda I) = 0 \)
+                $$ \left| \begin{matrix} 1-\lambda & 2 \\ 2 & 1-\lambda \end{matrix} \right| = 0 $$
+                2. 행렬식을 계산한다:
+                $$ (1-\lambda)(1-\lambda) - 4 = 0 $$
+                $$ (1 - 2\lambda + \lambda^2) - 4 = 0 $$
+                $$ \lambda^2 - 2\lambda - 3 = 0 $$
+                3. 이차방정식을 인수분해한다:
+                $$ (\lambda - 3)(\lambda + 1) = 0 $$
+                4. 따라서 고유값은 \( \lambda = 3 \) 과 \( \lambda = -1 \) 이다.
+                <br><br>
+                (참고: \( \lambda=3 \)일 때 고유벡터는 \( (1, 1) \), \( \lambda=-1 \)일 때 고유벡터는 \( (1, -1) \)이 된다.)
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>4. 행렬의 대각화 (Diagonalization)</h2>
+        <p>
+            복잡한 행렬을 다루기 쉬운 대각 행렬(대각선 성분만 있고 나머지는 0인 행렬)로 바꾸는 과정을 대각화라고 한다.
+            고유값들을 구해서 대각선에 배치하면 그것이 바로 대각화된 행렬 \( D \)가 된다.
+            물리학에서는 이것을 "좌표축을 회전시켜 문제를 가장 단순하게 만드는 과정"이라고 이해하면 된다.
+        </p>
+        
+        <div class="key-formula">
+            $$ D = P^{-1} A P = \begin{pmatrix} \lambda_1 & 0 \\ 0 & \lambda_2 \end{pmatrix} $$
+        </div>
+
+        <p>
+            예를 들어, 앞선 [Example 3]의 행렬 \( A \)는 적절한 변환을 통해 다음과 같이 단순해진다.
+            $$ \begin{pmatrix} 3 & 0 \\ 0 & -1 \end{pmatrix} $$
+            이 상태에서는 행렬의 거듭제곱 \( A^{100} \)도 암산으로 \( 3^{100} \)과 \( (-1)^{100} \)만 계산하면 되므로 매우 강력하다.
+        </p>
+    </section>
+
+</body>
+</html>
