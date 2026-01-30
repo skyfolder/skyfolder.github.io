@@ -3,68 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter 1</title>
+    <title>수리물리학 1장: 무한급수의 세계</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     <style>
+        :root {
+            --sidebar-width: 280px;
+            --main-color: #333;
+            --accent-color: #2c3e50;
+            --link-color: #3498db;
+            --bg-color: #fcfcfc;
+            --code-bg: #f5f5f5;
+        }
+
         body {
             font-family: 'Noto Sans KR', sans-serif;
             margin: 0;
-            padding: 3rem 4rem; /* 여백 넉넉하게 */
-            color: #333;
+            padding: 0;
+            color: var(--main-color);
             line-height: 1.7;
+            background-color: var(--bg-color);
+            display: flex;
+            min-height: 100vh;
         }
-        h1 { color: #2c3e50; border-bottom: 1px solid #ddd; padding-bottom: 1rem; }
-        h2 { color: #2c3e50; margin-top: 2.5rem; }
-        .key-formula {
-            background-color: #f4f7f6;
-            padding: 1rem;
-            border-radius: 4px;
-            text-align: center;
-            border-left: 4px solid #2c3e50;
+
+        /* 사이드바 스타일 */
+        nav {
+            width: var(--sidebar-width);
+            background-color: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+            padding: 2rem 1.5rem;
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        nav h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav li {
+            margin-bottom: 0.8rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.2s;
+            display: block;
+            padding: 0.3rem 0;
+        }
+
+        nav a:hover {
+            color: var(--link-color);
+        }
+
+        /* 메인 콘텐츠 스타일 */
+        main {
+            margin-left: var(--sidebar-width);
+            padding: 3rem 4rem;
+            max-width: 900px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #ddd;
+            color: var(--accent-color);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 2rem;
+            color: #444;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            text-align: justify;
+        }
+
+        /* 강조 박스 (Example 등) */
+        .highlight-box {
+            background-color: var(--code-bg);
+            border-left: 5px solid var(--accent-color);
+            padding: 1.5rem;
             margin: 1.5rem 0;
+            border-radius: 4px;
         }
-        p { text-align: justify; }
+
+        .highlight-title {
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* 이미지 플레이스홀더 */
+        .img-container {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .img-placeholder {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            border-radius: 8px;
+            margin: 0 auto;
+            border: 1px dashed #aaa;
+        }
+
+        .caption {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        /* 리스트 스타일 */
+        ul.content-list {
+            padding-left: 1.5rem;
+        }
+        ul.content-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+            main {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <h1>Ch 1. 무한급수 (Infinite Series)</h1>
-    
-    <p>
-        물리학에서 복잡한 함수를 다항식의 합으로 근사하여 표현하는 방법을 배운다. 
-        기하급수의 수렴 조건부터 시작하여, 임의의 함수를 <strong>Taylor 급수</strong>와 <strong>Maclaurin 급수</strong>로 전개하는 것이 핵심이다.
-    </p>
+    <nav>
+        <h3>Contents</h3>
+        <ul>
+            <li><a href="#intro">1. 들어가며</a></li>
+            <li><a href="#geometric">2. 기하급수 (Geometric Series)</a></li>
+            <li><a href="#power">3. 멱급수와 수렴 구간</a></li>
+            <li><a href="#taylor">4. 테일러/매클로린 급수</a></li>
+            <li><a href="#applications">5. 급수의 응용</a></li>
+            <li><a href="#conclusion">6. 결론</a></li>
+        </ul>
+    </nav>
 
-    <h2>1. 기하급수 (Geometric Series)</h2>
-    <p>
-        가장 기본적인 급수로, 공비 $|r| < 1$ 일 때만 수렴한다.
-    </p>
-    <div class="key-formula">
-        $$ S = \frac{a}{1-r} $$
-    </div>
+    <main>
+        <h1>수리물리학 1장: 무한급수의 세계</h1>
+        <p>학부 1학년을 위한 수리물리학 입문. 복잡한 함수를 이해하는 가장 강력한 도구인 무한급수에 대해 알아본다.</p>
 
-    <h2>2. 테일러 전개 (Taylor Expansion)</h2>
-    <p>
-        어떤 매끄러운 함수 $f(x)$를 특정 지점 $x=a$ 근처에서 다항식으로 근사한다.
-    </p>
-    <div class="key-formula">
-        $$ f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!} (x-a)^n $$
-    </div>
+        <section id="intro">
+            <h2>1. 들어가며: 왜 급수를 배우는가?</h2>
+            <p>
+                물리학에서 우리는 종종 복잡한 함수나 현상을 다룬다. 하지만 아무리 복잡한 함수라도 아주 작은 구간에서는 다항식처럼 단순하게 행동한다. 
+                <strong>무한급수(Infinite Series)</strong>는 복잡한 자연 현상을 우리가 계산 가능한 단순한 항들의 합으로 쪼개서 이해하는 강력한 도구이다. 
+                이 페이지에서는 '튀어 오르는 공'과 같은 직관적인 예시를 통해 급수의 수렴과 발산, 그리고 함수를 급수로 표현하는 방법을 살펴본다.
+            </p>
+        </section>
 
-    <h3>주요 암기 급수</h3>
-    <ul>
-        <li>$e^x = 1 + x + \frac{x^2}{2!} + \dots$</li>
-        <li>$\sin x = x - \frac{x^3}{3!} + \dots$</li>
-        <li>$\cos x = 1 - \frac{x^2}{2!} + \dots$</li>
-    </ul>
+        <section id="geometric">
+            <h2>2. 기하급수 (The Geometric Series)</h2>
+            
+            <div class="highlight-box">
+                <span class="highlight-title">[Example 1] 튀어 오르는 공의 역설</span>
+                <p>가장 먼저 다룰 것은 <strong>기하급수(등비급수)</strong>이다. 다음과 같은 물리적 상황을 상상해 보자.</p>
+                
+                <div class="img-container">
+                    <div class="img-placeholder">
+                        [그림 1: 공의 궤적] <br>
+                        (높이 1에서 시작하여 2/3씩 줄어드는 궤적 그림)
+                    </div>
+                    <div class="caption">그림 1: 공이 튕길 때마다 높이가 줄어드는 모습</div>
+                </div>
 
-    <h2>3. 수렴 판정법</h2>
-    <p>
-        급수가 수렴하는지 발산하는지 판정하기 위해 비율 판정법(Ratio Test) 등을 사용한다.
-        $$ \rho = \lim_{n \to \infty} \left| \frac{a_{n+1}}{a_n} \right| $$
-        만약 $\rho < 1$이면 급수는 수렴한다.
-    </p>
-    </body>
+                <ul class="content-list">
+                    <li>높이 1m에서 공을 떨어뜨린다.</li>
+                    <li>공이 바닥에 닿을 때마다 원래 높이의 \(2/3\)만큼 다시 튀어 오른다.</li>
+                    <li>시간이 지나면 공의 튀어 오르는 높이는 점점 줄어들 것이다.</li>
+                </ul>
+            </div>
+
+            <p>이때, 공이 멈출 때까지 위아래로 움직인 <strong>총 거리</strong>는 얼마일까? 공은 무한히 많이 튀어 오르지만, 총 이동 거리는 무한하지 않다. 이를 수식으로 쓰면 다음과 같다.</p>
+
+            $$1 + 2\left(\frac{2}{3}\right) + 2\left(\frac{4}{9}\right) + 2\left(\frac{8}{27}\right) + \dots$$
+
+            <h3>핵심 공식과 수렴 조건</h3>
+            <p>기하급수의 합을 구하는 공식은 매우 단순하지만 강력하다. 첫째 항이 \(a\)이고 공비(ratio)가 \(r\)일 때, \(n\)이 무한대로 간다면 합 \(S\)는 다음과 같다.</p>
+
+            $$S = \frac{a}{1-r} \quad (\text{단, } |r| < 1)$$
+            
+            <p>위의 공 예제에서는 \(|r| < 1\)이므로 공이 움직인 총 거리가 유한한 값(5미터)임을 알 수 있다. 물리학에서는 유한한 값으로 수렴하는 급수가 물리적으로 의미 있는 해를 주는 경우가 많다.</p>
+        </section>
+
+        <section id="power">
+            <h2>3. 멱급수와 수렴 구간 (Power Series)</h2>
+            <p>이제 숫자의 합을 넘어, \(x\)라는 변수가 포함된 <strong>멱급수</strong>로 확장해 본다. 멱급수는 \(x\)의 차수가 높아지는 다항식들의 합으로 함수를 표현하는 방법이다.</p>
+
+            $$c_0 + c_1 x + c_2 x^2 + c_3 x^3 + \dots = \sum_{n=0}^{\infty} c_n x^n$$
+
+            <div class="img-container">
+                <div class="img-placeholder">
+                    [그림 2: 사인 함수의 근사] <br>
+                    (검은 실선 sin(x)와 근사 다항식들의 비교 그래프)
+                </div>
+                <div class="caption">그림 2: 항을 더할수록 원래 함수와 비슷해지는 다항식</div>
+            </div>
+
+            <p>
+                그림에서 볼 수 있듯, 항을 더할수록 다항식 그래프가 원래의 \(\sin(x)\) 곡선과 점점 더 똑같아진다. 
+                하지만 모든 \(x\)에 대해 급수가 원래 함수와 같은 것은 아니다. 멱급수도 <strong>수렴 구간(Interval of Convergence)</strong> 내에서만 의미가 있다.
+            </p>
+        </section>
+
+        <section id="taylor">
+            <h2>4. 테일러 급수와 매클로린 급수</h2>
+            <p>어떤 함수 \(f(x)\)를 다항식의 합으로 바꾸는 일반적인 레시피가 바로 <strong>테일러 전개</strong>이다. 특히 \(x=0\) 근처에서 전개한 것을 <strong>매클로린 급수</strong>라고 한다.</p>
+            
+            <div class="highlight-box">
+                <span class="highlight-title">물리학자의 필수 암기 목록</span>
+                <p>복잡한 문제를 만났을 때 이 급수들로 치환하면 문제가 놀랍도록 간단해진다.</p>
+                <ul class="content-list">
+                    <li>\(\sin x = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \dots\) (모든 \(x\) 수렴)</li>
+                    <li>\(\cos x = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \dots\) (모든 \(x\) 수렴)</li>
+                    <li>\(e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \dots\) (모든 \(x\) 수렴)</li>
+                    <li>\(\ln(1+x) = x - \frac{x^2}{2} + \frac{x^3}{3} - \dots\) (\(-1 < x \le 1\))</li>
+                    <li>\((1+x)^p = 1 + px + \frac{p(p-1)}{2!}x^2 + \dots\) (이항 급수, \(|x| < 1\))</li>
+                </ul>
+            </div>
+            <p>이 식들은 단순히 수학적 공식이 아니다. 예를 들어, 진자의 운동에서 각도 \(\theta\)가 작을 때 \(\sin \theta \approx \theta\)라고 쓰는 것은 테일러 급수의 첫 번째 항만 취하고 나머지를 무시한 근사법이다.</p>
+        </section>
+
+        <section id="applications">
+            <h2>5. 급수의 응용 (Applications)</h2>
+            
+            <h3>[Example 2] 극한값 구하기 (vs 로피탈의 정리)</h3>
+            <p>
+                극한을 구할 때 로피탈의 정리를 많이 쓰지만, 급수 전개를 이용하면 미분 없이도 직관적으로 극한값을 구할 수 있다.
+                예를 들어, \(\lim_{x \to 0} \frac{\sin x - x}{x^3}\)를 생각해 보자.
+            </p>
+            <p>
+                이 식에 \(\sin x\)의 급수 전개 \(x - x^3/6 + \dots\)를 대입하면 분자는 다음과 같이 간단해진다.
+            </p>
+            $$\sin x - x = (x - \frac{x^3}{6} + \dots) - x = -\frac{x^3}{6} + \dots$$
+            <p>따라서 전체 식은 \(-1/6\)이 된다. 복잡한 미분 과정을 거치지 않고도 가장 낮은 차수의 항(leading term)만 비교하면 답이 보인다.</p>
+
+            <h3>[Example 3] 적분이 불가능한 함수의 계산</h3>
+            <p>\(\int \sin(x^2) dx\)와 같이 부정적분을 초등 함수로 표현할 수 없는 경우에도 급수는 해결책을 준다. \(\sin x\)의 급수 식에서 \(x\) 자리에 \(x^2\)을 넣으면,</p>
+            $$\sin(x^2) = x^2 - \frac{x^6}{3!} + \frac{x^{10}}{5!} - \dots$$
+            <p>이제 이 다항식을 항별로 적분하면 정밀한 근삿값을 쉽게 계산할 수 있다.</p>
+        </section>
+
+        <section id="conclusion">
+            <h2>6. 결론: 근사는 과학의 언어이다</h2>
+            <p>
+                이 장에서 배운 무한급수는 단순한 계산 테크닉이 아니다. <strong>"복잡한 것을 단순한 것들의 합으로 표현한다"</strong>는 아이디어는 물리학 전체를 관통한다.
+                우리는 \(x\)가 작을 때 고차항을 무시하여 복잡한 비선형 문제를 선형 문제로 바꾼다.
+            </p>
+            <p>
+                이제 여러분은 어떤 함수를 보더라도 그것을 무한히 뻗어 나가는 다항식의 합으로 바라볼 수 있는 눈을 가지게 되었다. 
+            </p>
+            <hr>
+            <p style="font-size: 0.8rem; color: #888;">참고 문헌: Boas, Mathematical Methods in the Physical Sciences, Chapter 1.</p>
+        </section>
+
+    </main>
+
+</body>
 </html>
