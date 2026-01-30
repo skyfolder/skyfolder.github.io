@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대기과학을 위한 수리물리학: 벡터 해석</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --sidebar-width: 280px;
+            --main-color: #333;
+            --accent-color: #2c3e50; /* 짙은 남색 (대기과학 느낌) */
+            --link-color: #3498db;
+            --bg-color: #fcfcfc;
+            --code-bg: #f5f5f5;
+            --box-border: #8fbbd9;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--main-color);
+            line-height: 1.7;
+            background-color: var(--bg-color);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 사이드바 스타일 */
+        nav {
+            width: var(--sidebar-width);
+            background-color: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+            padding: 2rem 1.5rem;
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        nav h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav li {
+            margin-bottom: 0.8rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.2s;
+            display: block;
+            padding: 0.3rem 0;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: var(--link-color);
+            background-color: #e9ecef;
+            border-radius: 4px;
+            padding-left: 5px;
+        }
+
+        /* 메인 콘텐츠 스타일 */
+        main {
+            margin-left: var(--sidebar-width);
+            padding: 3rem 4rem;
+            max-width: 900px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+            letter-spacing: -0.5px;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #ddd;
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            color: #444;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            text-align: justify;
+            word-break: keep-all;
+        }
+
+        /* 강조 박스 (Atmospheric Examples) */
+        .atmos-box {
+            background-color: #eef7fc;
+            border-left: 5px solid var(--box-border);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .atmos-title {
+            font-weight: 700;
+            color: #2980b9;
+            margin-bottom: 0.5rem;
+            display: block;
+            font-size: 1.05rem;
+        }
+
+        /* 이미지 플레이스홀더 */
+        .img-container {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .img-placeholder {
+            width: 100%;
+            max-width: 650px;
+            height: 320px;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            border-radius: 8px;
+            margin: 0 auto;
+            border: 1px dashed #999;
+            flex-direction: column;
+            padding: 1rem;
+        }
+        
+        .img-placeholder span {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            color: #888;
+        }
+
+        .caption {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.8rem;
+            font-style: italic;
+        }
+
+        /* 리스트 스타일 */
+        ul.content-list {
+            padding-left: 1.5rem;
+        }
+        ul.content-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* 수식 강조 */
+        .math-block {
+            background: var(--code-bg);
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+                padding: 1rem;
+            }
+            main {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <h3>Atmospheric Math Methods</h3>
+        <ul>
+            <li><a href="#intro">1. 서론: 바람과 벡터</a></li>
+            <li><a href="#gradient">2. Gradient와 기압 경도력</a></li>
+            <li><a href="#divergence">3. Divergence와 기상 시스템</a></li>
+            <li><a href="#curl">4. Curl과 와도(Vorticity)</a></li>
+            <li><a href="#applications">5. 연속 방정식 (Continuity Eq)</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>대기과학을 위한 벡터 해석 (Vector Analysis)</h1>
+        <p>
+            본 페이지는 대기과학과 학부 2학년이 대기 역학(Atmospheric Dynamics)을 수강하기 전 필수적으로 알아야 할 
+            <strong>Boas 수리물리학 6장(Vector Analysis)</strong>의 핵심 내용을 정리한 것이다. 
+            단순한 수학적 정의를 넘어, 실제 대기 현상(바람, 저기압, 태풍 등)과 연결하여 설명한다.
+        </p>
+
+        <section id="intro">
+            <h2>1. 서론: 왜 대기과학에서 벡터인가?</h2>
+            <p>
+                대기는 끊임없이 움직이는 유체이다. 우리가 매일 접하는 '일기 예보'의 바람(Wind)은 크기(풍속)와 방향(풍향)을 동시에 가진 물리량, 
+                즉 <strong>벡터(Vector)</strong>이다. 
+            </p>
+            <p>
+                Boas 6장에서 다루는 스칼라(Scalar) 장과 벡터(Vector) 장의 개념은 대기과학에서 다음과 같이 매칭된다.
+            </p>
+            <ul class="content-list">
+                <li><strong>스칼라 필드 (Scalar Field):</strong> 기온($T$), 기압($P$), 습도($q$). 공간의 각 지점마다 하나의 값만 가진다.</li>
+                <li><strong>벡터 필드 (Vector Field):</strong> 바람($\vec{V} = u\hat{i} + v\hat{j} + w\hat{k}$). 공간의 각 지점마다 방향과 크기가 있다.</li>
+            </ul>
+        </section>
+
+        <section id="gradient">
+            <h2>2. Gradient ($\nabla$)와 기압 경도력</h2>
+            <p>
+                스칼라 함수 $\phi(x, y, z)$의 Gradient(기울기)는 벡터이며, 함수가 가장 급격하게 증가하는 방향을 가리킨다.
+            </p>
+            <div class="math-block">
+                $$ \nabla \phi = \frac{\partial \phi}{\partial x}\hat{i} + \frac{\partial \phi}{\partial y}\hat{j} + \frac{\partial \phi}{\partial z}\hat{k} $$
+            </div>
+            
+            <div class="atmos-box">
+                <span class="atmos-title">[Atmospheric Application] 기압 경도력 (Pressure Gradient Force)</span>
+                <p>
+                    일기도에서 등압선(Isobar)을 산의 등고선이라고 생각해보자. 기압 $P$가 스칼라 필드라면, $\nabla P$는 기압이 가장 빨리 높아지는 방향(고기압 중심)을 향한다.
+                </p>
+                <div class="img-container">
+                    <div class="img-placeholder">
+                        <svg width="100" height="100" viewBox="0 0 100 100" style="margin-bottom:10px;">
+                             <circle cx="50" cy="50" r="40" stroke="#888" stroke-width="2" fill="none"/>
+                             <circle cx="50" cy="50" r="25" stroke="#888" stroke-width="2" fill="none"/>
+                             <text x="45" y="55" fill="#333" font-weight="bold">H</text>
+                             <path d="M50 50 L80 50" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        </svg>
+                        [그림 1: 고기압과 기압 경도력] <br>
+                        $\nabla P$는 고기압 중심을 향하지만, <br>
+                        바람을 일으키는 힘(PGF)은 $-\nabla P$ 방향(고→저)으로 작용한다.
+                    </div>
+                    <div class="caption">그림 1: 자연은 불균형을 해소하려 한다. 공기는 기압이 높은 곳에서 낮은 곳으로 움직인다.</div>
+                </div>
+                <p>
+                    대기 역학에서 바람을 일으키는 근본적인 힘인 기압 경도력(PGF)은 다음과 같이 정의된다.
+                    $$ \vec{F}_{PGF} = -\frac{1}{\rho} \nabla P $$
+                    여기서 마이너스(-) 부호는 바람이 기압이 <strong>높은 곳에서 낮은 곳으로</strong>(Gradient의 반대 방향으로) 불기 때문이다.
+                </p>
+            </div>
+        </section>
+
+        <section id="divergence">
+            <h2>3. Divergence ($\nabla \cdot \vec{V}$)와 기상 시스템</h2>
+            <p>
+                벡터장의 발산(Divergence)은 유체가 특정 지점에서 퍼져 나가는지(Source), 모여드는지(Sink)를 나타낸다.
+            </p>
+            <div class="math-block">
+                $$ \nabla \cdot \vec{V} = \frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} + \frac{\partial w}{\partial z} $$
+            </div>
+
+            <div class="atmos-box">
+                <span class="atmos-title">[Atmospheric Application] 고기압과 저기압의 연직 운동</span>
+                <p>
+                    지상 일기도에서 고기압과 저기압을 판단할 때 Divergence는 핵심적인 도구이다.
+                </p>
+                <ul class="content-list">
+                    <li><strong>발산 (Divergence, $\nabla \cdot \vec{V} > 0$):</strong> 공기가 밖으로 퍼져 나간다. 지상에서 공기가 빠져나가면, 부족한 공기를 채우기 위해 상층에서 공기가 내려온다(<strong>하강 기류</strong>). $\rightarrow$ 구름 소멸, 맑은 날씨 (고기압).</li>
+                    <li><strong>수렴 (Convergence, $\nabla \cdot \vec{V} < 0$):</strong> 공기가 중심으로 모여든다. 모인 공기는 갈 곳이 없어 위로 솟구친다(<strong>상승 기류</strong>). $\rightarrow$ 구름 생성, 비/눈 (저기압).</li>
+                </ul>
+                <div class="img-container">
+                    <div class="img-placeholder">
+                        [그림 2: 수렴과 상승 기류] <br>
+                        (지상 저기압 중심으로 바람이 모여들어 회오리치며 상승하는 3D 모식도)
+                    </div>
+                    <div class="caption">그림 2: 저기압 중심에서의 수렴(Convergence)은 악기상을 유발하는 상승 기류를 만든다.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="curl">
+            <h2>4. Curl ($\nabla \times \vec{V}$)과 와도(Vorticity)</h2>
+            <p>
+                Curl은 벡터장의 회전 성분을 나타낸다. 대기과학에서는 이를 <strong>와도(Vorticity, $\zeta$)</strong>라고 부르며, 태풍이나 저기압의 강도를 측정하는 척도이다.
+            </p>
+            <div class="math-block">
+                $$ \zeta = \mathbf{k} \cdot (\nabla \times \vec{V}) = \frac{\partial v}{\partial x} - \frac{\partial u}{\partial y} $$
+            </div>
+            <p>
+                북반구에서 저기압은 반시계 방향으로 회전한다. 이때 Curl을 계산해보면 양수($+$) 값을 가진다. 반대로 고기압(시계 방향 회전)은 음수($-$)의 와도를 가진다.
+                (Boas 6장 11절에서 강체 회전의 Curl이 각속도의 2배($2\omega$)가 됨을 상기하라.)
+            </p>
+        </section>
+
+        <section id="applications">
+            <h2>5. 연속 방정식 (Continuity Equation)</h2>
+            <p>
+                Boas 6장 10절에 나오는 <strong>연속 방정식</strong>은 질량 보존 법칙의 수학적 표현이다. 대기과학에서도 공기 질량은 생성되거나 파괴되지 않으므로 이 식은 매우 중요하다.
+            </p>
+            <div class="math-block">
+                $$ \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{V}) = 0 $$
+            </div>
+            <p>
+                만약 공기가 '비압축성(Incompressible)'이라고 가정한다면(밀도 $\rho$가 일정), 식은 다음과 같이 간단해진다.
+            </p>
+            $$ \nabla \cdot \vec{V} = 0 $$
+            <p>
+                이 식은 <strong>"들어온 만큼 나가야 한다"</strong>는 것을 의미한다. 예를 들어, 수평 방향으로 바람이 수렴한다면($\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} < 0$), 반드시 연직 방향으로는 발산(상승 기류, $\frac{\partial w}{\partial z} > 0$)해야 함을 수식적으로 증명해준다.
+            </p>
+        </section>
+
+        <hr style="margin-top: 3rem; border: 0; border-top: 1px solid #eee;">
+        <footer style="text-align: center; color: #888; font-size: 0.85rem; padding: 2rem 0;">
+            <p>참고 문헌: Boas, Mathematical Methods in the Physical Sciences, Chapter 6 Vector Analysis.</p>
+            <p>Adapted for Atmospheric Science Students.</p>
+        </footer>
+
+    </main>
+
+</body>
+</html>
