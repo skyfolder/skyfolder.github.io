@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 3rem 4rem; /* 여백 넉넉하게 */
+            color: #333;
+            line-height: 1.7;
+        }
+        h1 { color: #2c3e50; border-bottom: 1px solid #ddd; padding-bottom: 1rem; }
+        h2 { color: #2c3e50; margin-top: 2.5rem; }
+        .key-formula {
+            background-color: #f4f7f6;
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+            border-left: 4px solid #2c3e50;
+            margin: 1.5rem 0;
+        }
+        p { text-align: justify; }
+    </style>
+</head>
+<body>
+
+    <h1>Ch 1. 무한급수 (Infinite Series)</h1>
+    
+    <p>
+        물리학에서 복잡한 함수를 다항식의 합으로 근사하여 표현하는 방법을 배운다. 
+        기하급수의 수렴 조건부터 시작하여, 임의의 함수를 <strong>Taylor 급수</strong>와 <strong>Maclaurin 급수</strong>로 전개하는 것이 핵심이다.
+    </p>
+
+    <h2>1. 기하급수 (Geometric Series)</h2>
+    <p>
+        가장 기본적인 급수로, 공비 $|r| < 1$ 일 때만 수렴한다.
+    </p>
+    <div class="key-formula">
+        $$ S = \frac{a}{1-r} $$
+    </div>
+
+    <h2>2. 테일러 전개 (Taylor Expansion)</h2>
+    <p>
+        어떤 매끄러운 함수 $f(x)$를 특정 지점 $x=a$ 근처에서 다항식으로 근사한다.
+    </p>
+    <div class="key-formula">
+        $$ f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!} (x-a)^n $$
+    </div>
+
+    <h3>주요 암기 급수</h3>
+    <ul>
+        <li>$e^x = 1 + x + \frac{x^2}{2!} + \dots$</li>
+        <li>$\sin x = x - \frac{x^3}{3!} + \dots$</li>
+        <li>$\cos x = 1 - \frac{x^2}{2!} + \dots$</li>
+    </ul>
+
+    <h2>3. 수렴 판정법</h2>
+    <p>
+        급수가 수렴하는지 발산하는지 판정하기 위해 비율 판정법(Ratio Test) 등을 사용한다.
+        $$ \rho = \lim_{n \to \infty} \left| \frac{a_{n+1}}{a_n} \right| $$
+        만약 $\rho < 1$이면 급수는 수렴한다.
+    </p>
+    </body>
+</html>
