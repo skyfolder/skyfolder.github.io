@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 4. Partial Differentiation</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 3rem 5rem;
+            color: #333;
+            line-height: 1.8;
+            background-color: #fcfcfc;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: #16a085; /* 청록색 (미적분학 느낌) */
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            padding-left: 10px;
+            border-left: 5px solid #16a085;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            color: #444;
+            margin-top: 2rem;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            text-align: justify;
+            word-break: keep-all;
+        }
+
+        /* 핵심 공식 박스 */
+        .key-formula {
+            background-color: #e0f2f1; /* 연한 청록색 배경 */
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.1rem;
+            margin: 2rem 0;
+            border: 1px solid #b2dfdb;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        /* 예제 박스 스타일 */
+        .example-box {
+            background-color: #fff;
+            border: 1px solid #e1e8ed;
+            border-left: 5px solid #1abc9c; 
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .example-title {
+            color: #16a085;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .solution-step {
+            margin-top: 1rem;
+            padding-left: 1rem;
+            border-left: 2px solid #eee;
+        }
+
+        /* 이미지 플레이스홀더 */
+        .img-placeholder {
+            width: 100%;
+            max-width: 550px;
+            height: 280px;
+            background-color: #f8f9fa;
+            border: 2px dashed #bdc3c7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+            margin: 2rem auto;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .caption {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Chapter 4. 편미분 (Partial Differentiation)</h1>
+    
+    <p>
+        우리가 사는 세상은 변수가 하나뿐인 \( y=f(x) \)의 세계가 아니다. 
+        기온은 위도, 경도, 고도에 따라 변하고, 기체의 압력은 부피와 온도에 따라 변한다.
+        이처럼 <strong>여러 변수에 의존하는 함수</strong>의 변화율을 다루는 것이 바로 편미분이다.
+        이 장에서는 산의 기울기를 구하는 법부터, 제약 조건이 있는 상황에서 최적의 값을 찾는 라그랑주 승수법까지 알아본다.
+    </p>
+
+    <section>
+        <h2>1. 편미분이란? (Partial Derivatives)</h2>
+        <p>
+            함수 \( z = f(x, y) \)가 있을 때, \( x \)가 변할 때 \( z \)는 얼마나 변할까? 
+            이때 중요한 규칙은 <strong>"내가 관심 없는 다른 변수(\( y \))는 상수 취급한다"</strong>는 것이다.
+            기하학적으로는 3차원 곡면을 칼로 자른 단면의 기울기를 의미한다.
+        </p>
+
+        <div class="img-placeholder">
+            <svg width="400" height="200" viewBox="0 0 400 200">
+                <path d="M 50 150 Q 200 50 350 150" fill="none" stroke="#ccc" stroke-width="2"/>
+                <path d="M 50 150 Q 200 250 350 150" fill="none" stroke="#ccc" stroke-width="2"/>
+                
+                <line x1="150" y1="120" x2="250" y2="80" stroke="#e74c3c" stroke-width="2"/>
+                <text x="260" y="80" fill="#e74c3c" font-size="12">x방향 기울기 (∂z/∂x)</text>
+                
+                <line x1="200" y1="100" x2="200" y2="180" stroke="#3498db" stroke-width="2"/>
+                <text x="210" y="170" fill="#3498db" font-size="12">y방향 기울기 (∂z/∂y)</text>
+                
+                <circle cx="200" cy="100" r="4" fill="#333"/>
+                <text x="180" y="90" font-size="12">Point P</text>
+            </svg>
+            <div class="caption">[그림 1] 한 점에서의 기울기는 방향에 따라 다르다.</div>
+        </div>
+
+        <div class="key-formula">
+            $$ \frac{\partial z}{\partial x} : y\text{를 상수로 보고 미분}, \quad \frac{\partial z}{\partial y} : x\text{를 상수로 보고 미분} $$
+        </div>
+
+        <div class="example-box">
+            <span class="example-title">[Example 1] 편미분 계산</span>
+            <p><strong>문제:</strong> \( z = x^2 y + \sin(xy) \) 일 때, \( \frac{\partial z}{\partial x} \)를 구하시오.</p>
+            
+            <div class="solution-step">
+                <strong>풀이:</strong> <br>
+                \( y \)는 숫자(상수)라고 생각하고 \( x \)에 대해서만 미분한다.
+                <ul>
+                    <li>\( x^2 y \) 미분: \( y \)는 계수처럼 그대로 두고 \( x^2 \)만 미분 \(\to 2xy\)</li>
+                    <li>\( \sin(xy) \) 미분: 겉미분 \( \cos(xy) \) × 속미분 \( (xy)' \). 이때 \( (xy)' \)는 \( y \)가 상수이므로 \( y \)가 된다. \(\to y \cos(xy)\)</li>
+                </ul>
+                $$ \therefore \frac{\partial z}{\partial x} = 2xy + y \cos(xy) $$
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>2. 전미분과 근사값 (Total Differentials)</h2>
+        <p>
+            \( x \)와 \( y \)가 동시에 아주 조금 변할 때(\( dx, dy \)), 전체 함수값 \( z \)는 얼마나 변할까(\( dz \))?
+            각 방향의 변화량을 더해주면 된다. 이것을 <strong>전미분(Total Differential)</strong>이라 하며, 물리 실험에서 오차를 계산하거나 근사값을 구할 때 매우 유용하다.
+        </p>
+
+        <div class="key-formula">
+            $$ dz = \frac{\partial z}{\partial x}dx + \frac{\partial z}{\partial y}dy $$
+        </div>
+
+        <div class="example-box">
+            <span class="example-title">[Example 2] 부피 변화 근사하기</span>
+            <p><strong>문제:</strong> 원기둥의 반지름 \( r \)이 1% 증가하고, 높이 \( h \)가 2% 감소했다면 부피 \( V \)는 약 몇 % 변하는가?</p>
+            
+            <div class="solution-step">
+                <strong>풀이:</strong> <br>
+                1. 원기둥 부피 공식: \( V = \pi r^2 h \) <br>
+                2. 전미분 공식을 쓴다:
+                $$ dV = \frac{\partial V}{\partial r}dr + \frac{\partial V}{\partial h}dh $$
+                $$ dV = (2\pi r h)dr + (\pi r^2)dh $$
+                3. 양변을 \( V \)로 나누어 퍼센트 변화율을 본다:
+                $$ \frac{dV}{V} = \frac{2\pi r h \, dr}{\pi r^2 h} + \frac{\pi r^2 \, dh}{\pi r^2 h} = 2\frac{dr}{r} + \frac{dh}{h} $$
+                4. 문제에서 \( dr/r = 0.01 \) (1% 증가), \( dh/h = -0.02 \) (2% 감소) 이므로:
+                $$ \frac{dV}{V} = 2(0.01) + (-0.02) = 0 $$
+                따라서 부피는 거의 변하지 않는다(약 0% 변화).
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>3. 연쇄 법칙 (Chain Rule)</h2>
+        <p>
+            변수가 꼬리에 꼬리를 무는 경우이다. 예를 들어 기온 \( T \)는 위치 \( (x, y) \)에 따라 다르고, 위치는 시간 \( t \)에 따라 변한다면?
+            미분을 양파 껍질 벗기듯 연결해서 계산해야 한다. 이를 시각화하기 위해 <strong>변수 나무(Tree Diagram)</strong>를 그리면 실수를 줄일 수 있다.
+        </p>
+        
+        <div class="key-formula">
+            $$ \frac{dz}{dt} = \frac{\partial z}{\partial x}\frac{dx}{dt} + \frac{\partial z}{\partial y}\frac{dy}{dt} $$
+        </div>
+
+        <div class="img-placeholder">
+            <svg width="200" height="150" viewBox="0 0 200 150">
+                <circle cx="100" cy="20" r="15" fill="#ecf0f1" stroke="#333"/>
+                <text x="95" y="25">z</text>
+                
+                <line x1="90" y1="30" x2="50" y2="70" stroke="#333"/>
+                <line x1="110" y1="30" x2="150" y2="70" stroke="#333"/>
+                
+                <circle cx="50" cy="80" r="15" fill="#ecf0f1" stroke="#333"/>
+                <text x="45" y="85">x</text>
+                <circle cx="150" cy="80" r="15" fill="#ecf0f1" stroke="#333"/>
+                <text x="145" y="85">y</text>
+                
+                <line x1="50" y1="95" x2="100" y2="130" stroke="#333"/>
+                <line x1="150" y1="95" x2="100" y2="130" stroke="#333"/>
+                
+                <circle cx="100" cy="135" r="15" fill="#ecf0f1" stroke="#333"/>
+                <text x="95" y="140">t</text>
+                
+                <text x="40" y="55" font-size="10">∂z/∂x</text>
+                <text x="130" y="55" font-size="10">∂z/∂y</text>
+            </svg>
+            <div class="caption">[그림 2] 변수 의존도 다이어그램: 모든 경로를 더한다.</div>
+        </div>
+    </section>
+
+    <section>
+        <h2>4. 라그랑주 승수법 (Lagrange Multipliers)</h2>
+        <p>
+            4장의 하이라이트이다. 산 정상(최댓값)을 찾고 싶은데, "등산로(제약 조건)를 벗어나면 안 된다"는 규칙이 있다면 어떻게 해야 할까?
+            그냥 미분해서 0이 되는 곳을 찾는 것만으로는 부족하다. 이때 등산로의 접선과 산의 등고선이 <strong>접하는(평행한) 지점</strong>이 바로 우리가 찾는 곳이다.
+        </p>
+
+        <div class="key-formula">
+            $$ \nabla f = \lambda \nabla g $$
+            $$ (\text{함수 } f\text{의 기울기 벡터}) = \lambda \times (\text{제약조건 } g\text{의 기울기 벡터}) $$
+        </div>
+
+        <div class="example-box">
+            <span class="example-title">[Example 3] 둘레가 일정할 때 최대 넓이</span>
+            <p><strong>문제:</strong> 둘레가 \( L \)로 일정한 직사각형 중 넓이가 최대인 것은?</p>
+            
+            <div class="solution-step">
+                <strong>풀이:</strong> <br>
+                1. <strong>함수(Maximize):</strong> 넓이 \( f(x, y) = xy \) <br>
+                2. <strong>제약 조건(Constraint):</strong> 둘레 \( 2x + 2y = L \quad \Rightarrow \quad g(x, y) = x + y = L/2 \) <br>
+                3. <strong>라그랑주 식 세우기:</strong> \( \nabla f = \lambda \nabla g \)
+                $$ \frac{\partial f}{\partial x} = \lambda \frac{\partial g}{\partial x} \Rightarrow y = \lambda (1) $$
+                $$ \frac{\partial f}{\partial y} = \lambda \frac{\partial g}{\partial y} \Rightarrow x = \lambda (1) $$
+                4. 두 식을 연립하면 \( x = \lambda, y = \lambda \) 이므로 \( x = y \)이다.
+                5. 제약 조건에 대입하면 \( x + x = L/2 \Rightarrow x = L/4 \).
+                즉, 가로와 세로가 같은 <strong>정사각형</strong>일 때 넓이가 최대가 된다.
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
