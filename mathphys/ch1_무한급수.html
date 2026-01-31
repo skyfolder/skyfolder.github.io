@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>무한급수와 멱급수 – 대기과학 응용 교재</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #2c3e50; /* 짙은 남색 */
+      --accent-color: #3498db;  /* 밝은 파란색 (대기 느낌) */
+      --bg-color: #f8f9fa;      /* 밝은 회색 배경 */
+      --card-bg: #ffffff;       /* 카드 배경 */
+      --box-bg: #eaf2f8;        /* 예제 박스 배경 */
+      --border-radius: 8px;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: var(--bg-color);
+      color: #333;
+      line-height: 1.7;
+      margin: 0;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: var(--card-bg);
+      padding: 60px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    /* Typography */
+    h1 {
+      font-size: 2.2rem;
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 20px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      color: var(--primary-color);
+      margin-top: 50px;
+      margin-bottom: 20px;
+      border-left: 5px solid var(--accent-color);
+      padding-left: 15px;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      color: #555;
+      margin-top: 30px;
+      font-weight: 600;
+    }
+
+    p {
+      margin-bottom: 16px;
+      word-break: keep-all;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    /* Citation Style */
+    .citation {
+      font-size: 0.7em;
+      color: #999;
+      vertical-align: super;
+      margin-left: 2px;
+      font-weight: normal;
+    }
+
+    /* Example Box Styling */
+    .example-box {
+      background-color: var(--box-bg);
+      border-left: 5px solid #2980b9;
+      padding: 20px 25px;
+      border-radius: 4px;
+      margin: 25px 0;
+    }
+    
+    .example-title {
+      font-weight: 700;
+      color: #1a5276;
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+
+    /* Divider */
+    hr {
+      border: 0;
+      height: 1px;
+      background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
+      margin: 50px 0;
+    }
+
+    /* Lists */
+    ul, ol {
+      padding-left: 25px;
+    }
+
+    /* Math Optimization */
+    .MathJax {
+      font-size: 1.1em !important;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <h1>무한급수와 멱급수, 그리고 대기과학</h1>
+  <p>
+    본 자료는 Boas의 <i>Chapter 1 (무한급수, 멱급수)</i> 내용을 바탕으로 합니다.<span class="citation">[1]</span>
+    이 장을 대기과학(특히 대기역학·대기열역학·수치예보)과 연관된 예제와 설명을 추가하여, 학부 2학년 수준의 수업 교재로 재구성하는 것을 목표로 합니다.<span class="citation">[1]</span>
+  </p>
+
+  <hr>
+
+  <h2>1. 수열과 급수, 그리고 대기과학에서의 의미</h2>
+
+  <h3>1.1 수열과 급수의 기본 개념</h3>
+  <ul>
+    <li><b>수열</b>은 \(a_1, a_2, a_3, \dots\)처럼 순서가 있는 수의 나열입니다.<span class="citation">[1]</span></li>
+    <li><b>무한급수</b>는 이 수열을 “더하겠다”라고 표시한 \(a_1 + a_2 + a_3 + \dots\) 형태입니다.<span class="citation">[1]</span></li>
+  </ul>
+  
+  <p>예를 들어,</p>
+  <ul>
+    <li>\(2, 4, 8, 16, \dots\) 는 수열입니다.<span class="citation">[1]</span></li>
+    <li>\(2 + 4 + 8 + 16 + \dots\) 는 이 수열로 만든 급수입니다.<span class="citation">[1]</span></li>
+  </ul>
+
+  <p>대기과학에서 수열·급수가 중요한 이유는 다음과 같습니다.</p>
+  <ul>
+    <li>수치모형에서는 시간격자 \(\Delta t\)마다 상태(온도, 풍속 등)를 갱신하는데, 이때 예보오차·잔차가 단계 \(n\)에 따라 \(a_n\)처럼 쌓이는 모습을 무한급수 형태로 생각할 수 있습니다.</li>
+    <li>푸리에 급수, 멱급수는 파동(대기 중 Rossby 파, 중력파 등) 해석과 선형화 근사에 자주 사용됩니다.<span class="citation">[1]</span></li>
+  </ul>
+
+  <hr>
+
+  <h2>2. 기하급수와 대기 예제</h2>
+
+  <h3>2.1 기하수열과 기하급수</h3>
+  <p>
+    기하수열은 첫항 \(a\), 공비 \(r\)에 대해 다음과 같은 형태를 갖는 수열입니다.<span class="citation">[1]</span>
+    \[ a,\ ar,\ ar^2,\ ar^3,\dots \]
+  </p>
+  <p>앞의 \(n\)개를 더한 <b>부분합</b>은 \(S_n = a + ar + \dots + ar^{n-1}\) 이고, Boas에서 유도하듯이 다음 공식을 따릅니다.<span class="citation">[1]</span>
+    \[ S_n = \frac{a(1-r^n)}{1-r} \]
+  </p>
+  <p>
+    이때 \(|r| < 1\)이면 \(r^n \to 0\)이므로 기하급수는 수렴합니다.<span class="citation">[1]</span>
+    \[ S = \lim_{n\to\infty} S_n = \frac{a}{1-r} \]
+  </p>
+
+  <h3>2.2 대기오염(혼합·제거) 예제: 기하급수</h3>
+  
+  <div class="example-box">
+    <span class="example-title">예제 1: 도시 대기 오염물질 정화 과정</span>
+    <p>어떤 단순 도시 상자모형(box model)을 생각하자. 하루에 전체 오염물질의 일정 비율이 제거되고, 나머지는 다음 날로 넘어간다고 가정한다.</p>
+    <ul>
+      <li>첫날 대기 중 질량농도 기준 총 오염물질 양을 \(A_0\)라 하자.</li>
+      <li>하루 동안 건식침적과 습식침강 등으로 전체의 \(40\%\)가 제거된다고 하자.</li>
+      <li>따라서 남은 양은 \(0.6A_0\)이다.</li>
+      <li>둘째 날도 같은 비율 \(40\%\)가 제거되면, 둘째 날 제거량은 \(0.4 \times 0.6A_0 = 0.24A_0\)이다.</li>
+    </ul>
+    <p>이 과정을 무한히 반복한다고 가정하면, \(n\)번째 날 제거되는 양은 \(a_n = 0.4 \times (0.6)^{n-1}A_0\) 이다. 그러면 전체 제거량의 합은 다음과 같다.</p>
+    \[ \sum_{n=1}^{\infty} a_n = A_0 \sum_{n=1}^{\infty} 0.4(0.6)^{n-1} \]
+    <p>기하급수 공식에 따라</p>
+    \[ \sum_{n=1}^{\infty} 0.4(0.6)^{n-1} = \frac{0.4}{1-0.6} = 1 \]
+    <p>이므로 전체 제거량 합은 \(A_0\)가 된다. 즉, 이 단순 모형 안에서는 “충분히 긴 시간”이 지나면 초기 오염물질이 결국 모두 제거된다는 결론이다.<span class="citation">[1]</span></p>
+  </div>
+
+  <h3>2.3 “반감” 과정과 기하급수: 대기 중 방사성 가스</h3>
+  <div class="example-box">
+    <span class="example-title">예제 2: 방사성 가스의 붕괴와 누적 방출량</span>
+    <p>대기 중 짧은 수명의 방사성 추적자(예: 라돈의 붕괴생성물)를 생각한다. 간단히, 하루가 지날 때마다 남은 양의 \(30\%\)가 붕괴해 사라지고, \(70\%\)가 다음 날로 넘어간다고 하자.</p>
+    <ul>
+      <li>초기 양: \(A_0\)</li>
+      <li>\(n\)번째 날 붕괴된 양: \(0.3 \times 0.7^{n-1} A_0\)</li>
+    </ul>
+    <p>전체 붕괴량(= 누적 제거량)은</p>
+    \[ \sum_{n=1}^{\infty} 0.3 \cdot 0.7^{n-1} A_0 \]
+    <p>이고, 기하급수 공식을 적용하면 \( \frac{0.3A_0}{1-0.7} = A_0 \) 가 되어, 결국 모든 양이 붕괴함을 알 수 있다.<span class="citation">[1]</span></p>
+  </div>
+
+  <hr>
+
+  <h2>3. 수렴과 발산, 그리고 에너지·질량 보존 관점</h2>
+
+  <h3>3.1 수렴과 발산의 정의</h3>
+  <p>Boas에서는 부분합 \(S_n\)이 어떤 유한한 값 \(S\)에 가까워지면 그 급수를 <b>수렴(converge)</b>한다고 정의하며, 그렇지 않으면 <b>발산(diverge)</b>한다고 합니다.<span class="citation">[1]</span></p>
+
+  <h3>3.2 대기에너지의 “무한 모드”와 발산 개념</h3>
+  
+  <p>대기역학에서 에너지 스펙트럼을 생각하면, 각 파수 \(k\)에 대해 에너지 \(E_k\)가 존재하고, 전체 에너지는 이상화하면 \(\sum_{k=1}^{\infty} E_k\) 형태입니다.</p>
+  <p>실제 대기에서는 고파수(짧은 파장) 쪽으로 갈수록 에너지가 충분히 빨리 감소하기 때문에 이 합이 유한하다고 보는 것이 타당합니다. Boas의 \(p\)-급수 판정이 그 수학적 근거가 됩니다.</p>
+
+  <div class="example-box">
+    <span class="example-title">예제 3: 이상 에너지 스펙트럼과 \(p\)-급수</span>
+    <p>어떤 단순 모형에서 파수 \(k\)에 대한 에너지가 \(E_k = E_0/k^2\)로 감소한다고 가정하자. 그러면 총 에너지는</p>
+    \[ \sum_{k=1}^{\infty} \frac{E_0}{k^2} = E_0 \sum_{k=1}^{\infty} \frac{1}{k^2} \]
+    <p>Boas의 판정에 따르면 \(\sum 1/k^p\)는 \(p>1\)일 때 수렴한다. 여기서는 \(p=2>1\)이므로 전체 에너지는 유한하다. 반면 \(E_k \sim 1/k\)라면 조화급수가 되어 발산하므로 물리적으로 타당하지 않다.<span class="citation">[1]</span></p>
+  </div>
+
+  <hr>
+
+  <h2>4. 수렴 판정법과 대기 수치모형의 안정성</h2>
+  <p>
+    Boas 5–7절의 판정법(예비판정, 적분판정, 비판정 등)은 대기과학에서 다음과 같이 해석될 수 있습니다.<span class="citation">[1]</span>
+  </p>
+
+  <h3>4.1 예비 판정: 항이 0으로 가지 않으면 발산</h3>
+  <div class="example-box">
+    <span class="example-title">예제 4: 수치모델의 시간적분 오차 누적</span>
+    <p>일차원 수치모델에서 시간단계 \(n\)에서의 스킴 오차가 \(e_n = c\Delta t\) 처럼 일정한 값(예: 편향)이라 하자. 총 누적오차는</p>
+    \[ \sum_{n=1}^{\infty} c\Delta t \]
+    <p>항이 0으로 가지 않으므로(\(\lim a_n \neq 0\)), 예비판정에 의해 이 급수는 무조건 발산한다. 즉, 작은 편향이라도 장기예측에서는 무한한 오차를 만든다.</p>
+  </div>
+
+  <h3>4.2 적분판정과 대기 혼합층 내 수직분포</h3>
+  <div class="example-box">
+    <span class="example-title">예제 5: 혼합층 상단에서의 농도 꼬리</span>
+    <p>혼합층 상단 위로 갈수록 미량기체 농도가 \(C(z) = C_0/(1+z^2)\)로 감소한다고 하자. 전체 '꼬리' 부분의 기여도가 유한한지 확인하기 위해 적분판정을 사용한다.</p>
+    \[ \int_{1}^{\infty} \frac{dx}{1 + (x\Delta z)^2} \]
+    <p>위 적분은 \(\arctan\) 함수로 수렴하므로, 급수 역시 수렴하며 총 기여는 유한하다.<span class="citation">[1]</span></p>
+  </div>
+
+  <h3>4.3 비판정과 테일러 전개</h3>
+  <p>비판정은 \(\rho = \lim_{n\to\infty}|a_{n+1}/a_n|\)을 계산하여 수렴성을 판단합니다. 대기과학에서는 "작은 매개변수" 가정 시 몇 번째 항까지 근사할지 판단하는 데 유용합니다.</p>
+
+  <div class="example-box">
+    <span class="example-title">예제 7: 소각 근사를 이용한 Geostrophic 풍의 방향 오차</span>
+    <p>지균풍 평형에서 실제 바람과 등압선의 각도 \(\theta\)가 작을 때, \(\sin\theta \approx \theta\) 근사를 사용한다.</p>
+    \[ \sin\theta = \theta - \frac{\theta^3}{3!} + \dots \]
+    <p>\(\theta = 10^\circ \approx 0.1745\) rad일 때, 3차항의 오차는 \(|\theta^3/6| \approx 0.0009\) 수준이다. 교대급수 판정에 따라 실제 오차는 이 다음 항보다 작으므로, 1차 근사만으로도 충분히 정확함을 알 수 있다.<span class="citation">[1]</span></p>
+  </div>
+
+  <hr>
+
+  <h2>5. 멱급수와 대기역학/열역학에서의 테일러 전개</h2>
+  <p>Boas 10–13절은 멱급수와 테일러 급수를 다룹니다. 대기과학에서는 <b>상태방정식의 선형화</b>와 <b>β-평면 근사</b>가 대표적인 응용 사례입니다.</p>
+
+  <h3>5.1 멱급수의 기본</h3>
+  
+  <p>
+    자주 쓰이는 기초 급수:<span class="citation">[1]</span>
+    <ul>
+      <li>\(e^x = \sum_{n=0}^\infty \frac{x^n}{n!}\)</li>
+      <li>\(\ln(1+x) = x - \frac{x^2}{2} + \frac{x^3}{3} - \dots \quad (-1 < x \le 1)\)</li>
+    </ul>
+  </p>
+
+  <h3>5.2 β-평면 근사: \(\sin\phi\)의 테일러 전개</h3>
+  <p>코리올리 매개변수 \(f(\phi) = 2\Omega \sin\phi\)를 기준 위도 \(\phi_0\) 근처(\(\phi = \phi_0 + \delta\))에서 전개하면 다음과 같습니다.</p>
+  \[ \sin(\phi_0 + \delta) \approx \sin\phi_0 + \cos\phi_0 \cdot \delta \]
+  <p>따라서,</p>
+  \[ f(\phi) \approx f_0 + \beta y \quad \left(\text{단, } \beta = \frac{2\Omega\cos\phi_0}{R}\right) \]
+  <p>이는 멱급수 전개를 물리적 상황에 적용한 전형적인 예시입니다.</p>
+
+  <h3>5.3 대기열역학에서의 선형화: \(\ln(1+x)\) 전개</h3>
+  <div class="example-box">
+    <span class="example-title">예제 8: 기체상태방정식 선형화</span>
+    <p>건조 대기 상태방정식 \(p = \rho R T\)를 기준 상태 근처에서 선형화해 보자. \(\ln(1+x) \approx x\) 근사를 사용하면:</p>
+    \[ \ln\left(1+\frac{p'}{p_0}\right) \approx \frac{p'}{p_0} \]
+    <p>최종적으로 다음과 같은 선형 섭동 방정식을 얻는다.</p>
+    \[ \frac{p'}{p_0} \approx \frac{\rho'}{\rho_0} + \frac{T'}{T_0} \]
+  </div>
+
+  <hr>
+
+  <h2>6. 정리: Boas Chapter 1의 대기과학 수업 활용 방안</h2>
+  <div style="background-color: #f1f8e9; border: 1px solid #c5e1a5; padding: 20px; border-radius: 8px;">
+    <ol>
+      <li><b>기하급수:</b> 대기오염 상자모형의 정화 과정, 방사성 추적자의 붕괴.</li>
+      <li><b>수렴·발산:</b> 대기 에너지 스펙트럼의 유한성, 수치모형 오차 누적.</li>
+      <li><b>수렴 판정법:</b> 적분판정(수직 농도 분포), 비판정(근사 항의 개수 결정).</li>
+      <li><b>멱급수·테일러급수:</b> β-평면 근사, 상태방정식 선형화.</li>
+      <li><b>오차 평가:</b> 교대급수 오차 상한을 통한 수치 근사의 신뢰범위 제시.</li>
+    </ol>
+  </div>
+
+</div>
+
+</body>
+</html>
