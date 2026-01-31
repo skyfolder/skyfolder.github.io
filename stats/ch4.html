@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3장 확률의 기본 개념과 대기과학</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* 기본 리셋 및 폰트 설정 */
+    :root {
+      --primary-color: #2c3e50; /* 짙은 남색 */
+      --accent-color: #3498db;  /* 밝은 파랑 */
+      --bg-color: #f4f6f8;      /* 배경색 */
+      --box-bg: #ffffff;        /* 컨텐츠 박스 배경 */
+      --code-bg: #f1f3f5;       /* 코드 블록 배경 */
+      --example-bg: #e8f4fc;    /* 예제 박스 배경 */
+      --border-color: #dfe6e9;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: var(--bg-color);
+      color: #333;
+      line-height: 1.7;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 레이아웃 컨테이너 */
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      background-color: var(--box-bg);
+      padding: 60px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    /* 제목 스타일 */
+    h1 {
+      font-size: 2.2rem;
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 40px;
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 20px;
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      color: var(--primary-color);
+      margin-top: 50px;
+      margin-bottom: 20px;
+      border-left: 5px solid var(--accent-color);
+      padding-left: 15px;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      color: #444;
+      margin-top: 35px;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    h4 {
+      font-size: 1.1rem;
+      color: var(--primary-color);
+      margin-top: 15px;
+      margin-bottom: 10px;
+    }
+
+    /* 본문 텍스트 */
+    p {
+      margin-bottom: 15px;
+      word-break: keep-all;
+    }
+
+    /* 리스트 스타일 */
+    ul, ol {
+      margin-bottom: 20px;
+      padding-left: 25px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    /* 코드 블록 스타일 */
+    pre {
+      background-color: var(--code-bg);
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 0.95rem;
+      color: #d63384; /* 코드 포인트 컬러 */
+    }
+
+    code {
+      font-family: 'Consolas', 'Monaco', monospace;
+      background-color: var(--code-bg);
+      padding: 2px 5px;
+      border-radius: 4px;
+      color: #d63384;
+    }
+    
+    pre code {
+      color: #333; /* pre 안의 코드는 일반 색상 */
+      background-color: transparent;
+      padding: 0;
+    }
+
+    /* 구분선 */
+    hr {
+      border: 0;
+      height: 1px;
+      background: var(--border-color);
+      margin: 50px 0;
+    }
+
+    /* 학습 목표 박스 */
+    .objective-box {
+      background-color: #fff9db;
+      border: 1px solid #ffeaa7;
+      padding: 20px 30px;
+      border-radius: 8px;
+      margin-bottom: 40px;
+    }
+    .objective-box h2 {
+      margin-top: 0;
+      font-size: 1.3rem;
+      border-left: none;
+      padding-left: 0;
+      color: #d35400;
+    }
+
+    /* 예제 박스 스타일링 */
+    .example-box {
+      background-color: var(--example-bg);
+      padding: 25px;
+      border-radius: 8px;
+      border-left: 5px solid #2980b9;
+      margin: 30px 0;
+    }
+    
+    .example-box h3 {
+      margin-top: 0;
+      color: #0c5460;
+      font-size: 1.2rem;
+    }
+
+    .solution-title {
+      font-weight: bold;
+      color: #2c3e50;
+      margin-top: 20px;
+      display: inline-block;
+      border-bottom: 1px dashed #999;
+    }
+
+    /* 반응형 디자인 */
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+        margin: 20px;
+      }
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>3장. 확률의 기본 개념과 대기과학</h1>
+
+  <div class="objective-box">
+    <h2>🎯 학습 목표</h2>
+    <ul>
+      <li>수학적 확률과 통계적 확률의 차이를 이해한다.</li>
+      <li>확률, 표본 공간, 근원사건의 개념을 이해한다.</li>
+      <li>파이썬으로 무작위 주사위 숫자를 발생시킬 수 있다.</li>
+      <li>인공지능과 대기과학(날씨 예보 등)에서 확률이 어떻게 쓰이는지 이해한다.</li>
+    </ul>
+  </div>
+
+  <h2>3.1 수학적 확률과 통계적 확률</h2>
+
+  <h3>3.1.1 수학적 확률</h3>
+  <p>수학적 확률(mathematical probability)은 “이론적으로 계산해서 얻는 확률”입니다. 모든 근원사건이 서로 동일하게 일어날 가능성이 있다고 가정할 때,</p>
+  <pre>P(A) = (사건 A가 일어나는 경우의 수) / (모든 경우의 수)</pre>
+  <p>로 정의합니다.</p>
+  <ul>
+    <li>
+      <strong>예 1:</strong> 공정한 동전을 한 번 던질 때 앞면이 나올 확률<br>
+      표본 공간: {H, T}, 경우의 수: 2, 앞면(H) 경우의 수: 1 → P(H) = 1/2.
+    </li>
+    <li>
+      <strong>예 2:</strong> 공정한 주사위를 던져 3이 나올 확률<br>
+      표본 공간: {1,2,3,4,5,6}, 경우의 수: 6, 3이 나오는 근원사건: 1개 → P(3) = 1/6.
+    </li>
+  </ul>
+
+  <h3>3.1.2 통계적 확률</h3>
+  <p>통계적 확률(statistical probability)은 “실제로 많은 시행을 반복하여 얻은 결과의 상대도수”를 확률로 해석하는 개념입니다.</p>
+  <p>시행 횟수를 <code>n</code>, 그 중 사건 A가 일어난 횟수를 <code>f(A)</code>라고 하면 상대도수는 <code>f(A)/n</code> 이고, <code>n</code>을 매우 크게 하면 이 값이 일정한 값에 가까워진다고 봅니다.</p>
+  <p>예: 빨간 공 3개, 파란 공 2개(총 5개)가 들어 있는 주머니에서 공 하나를 꺼내는 실험을 10만 번 반복한다.</p>
+  <ul>
+    <li>파란 공이 나온 횟수를 f(파랑), 전체 시행 수를 n이라 하면 f(파랑)/n 이 통계적 확률이다.</li>
+    <li>시행 횟수가 충분히 크면 이 값은 이론적 비율 2/5에 점점 가까워진다.</li>
+  </ul>
+
+  <h3>3.1.3 주관적 확률</h3>
+  <p>주관적 확률은 사건이 일어날 가능성을 개인의 믿음이나 경험에 근거해 평가한 확률입니다.</p>
+  <p>예를 들어, 로또 1등 당첨 확률은 이론적으로 매우 낮지만, 어떤 사람은 “이번에는 느낌이 좋다”고 생각해 주관적으로 더 높게 느끼기도 합니다.</p>
+
+  <div class="example-box">
+    <h3>예제 3‑1. 대기 관측과 확률의 종류</h3>
+    <p>다음 상황들을 수학적 확률, 통계적 확률, 주관적 확률 중 어디에 해당하는지 구분하라.</p>
+    <ol>
+      <li>이상기후가 없는 정상적인 기후를 가정하고, 오늘 서울에 비가 올 “이론적” 확률을 기후 통계(30년 평균)를 이용해 계산한다.</li>
+      <li>지난 20년 동안 여름철(6–8월) 강수일(강수량 ≥ 0.1 mm) 빈도를 세어 “여름철 하루에 비가 오는 확률”을 구한다.</li>
+      <li>기상청 예보는 40% 강수 확률을 발표했지만, 본인은 “오늘은 꼭 비가 올 것 같다”고 생각한다.</li>
+    </ol>
+    <div class="solution-title">풀이</div>
+    <p>1. 과거 기후통계를 이용해 비가 올 가능성을 모델로 계산하므로, 이론적·모형 기반 <strong>“수학적 확률”</strong>에 더 가깝다.</p>
+    <p>2. 실제 관측자료에서 비가 온 날의 상대도수를 계산하므로 <strong>“통계적 확률”</strong>이다.</p>
+    <p>3. 개인의 감과 경험에 의존하는 판단이므로 <strong>“주관적 확률”</strong>이다.</p>
+  </div>
+
+  <hr>
+
+  <h2>3.2 확률의 기본 용어와 정의</h2>
+
+  <h3>3.2.1 시행, 경우의 수, 표본 공간, 사건</h3>
+  <ul>
+    <li><strong>시행(trial):</strong> 반복 가능한 실험이나 관측 과정이다. 예: 동전 던지기, 주사위 던지기, 하루 동안 서울의 강수 여부 관측 등.</li>
+    <li><strong>경우의 수(number of cases):</strong> 가능한 결과의 가짓수이다. 예: 주사위 한 번 던지기 → 6가지 경우(1–6).</li>
+    <li><strong>표본 공간(sample space, S 또는 Ω):</strong> 시행의 모든 가능한 결과들의 집합이다.
+      <ul>
+        <li>주사위 1회 던지기: S = {1,2,3,4,5,6}.</li>
+        <li>동전 1회 던지기: S = {H,T}.</li>
+        <li>하루 강수 여부: S = {비, 비 안 옴}.</li>
+      </ul>
+    </li>
+    <li><strong>사건(event):</strong> 표본 공간의 부분집합으로, 관심 있는 결과들의 집합이다.
+      <ul>
+        <li>예: 주사위 눈이 홀수인 사건 A = {1,3,5}.</li>
+        <li>예: “오늘 비가 오는 사건” B = {비}.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>3.2.2 근원사건</h3>
+  <p>근원사건(elementary outcome)은 더 이상 쪼갤 수 없는 가장 단순한 사건입니다.</p>
+  <ul>
+    <li>주사위 1회 던지기의 근원사건: {1}, {2}, {3}, {4}, {5}, {6} 총 6개이다.</li>
+    <li>동전 1회 던지기의 근원사건: {H}, {T} 두 개이다.</li>
+    <li>“주사위 눈이 1 또는 2”는 {1}, {2} 두 근원사건의 합사건이다.</li>
+  </ul>
+
+  <div class="example-box">
+    <h3>예제 3‑2. 대기 관측에서 표본 공간과 사건</h3>
+    <ol>
+      <li>하루 동안 서울에서 “강수 여부”만 관측한다고 하자. 이 시행의 표본 공간을 쓰고, “강수가 있는 사건”과 “강수가 없는 사건”을 각각 정의하라.</li>
+      <li>여름철 하루 동안 “강수 유형”을 {비, 소나기, 폭우, 무강수} 네 가지로 구분해서 기록한다고 할 때, 표본 공간과 “폭우 사건”을 정의하라.</li>
+    </ol>
+    <div class="solution-title">풀이</div>
+    <p>1. 표본 공간 S = {강수, 무강수}이다. “강수가 있는 사건”은 A = {강수}, “강수가 없는 사건”은 A<sup>c</sup> = {무강수}이다.</p>
+    <p>2. 표본 공간 S = {비, 소나기, 폭우, 무강수}이다. “폭우 사건”은 B = {폭우}이다.</p>
+  </div>
+
+  <hr>
+
+  <h2>3.3 사건의 집합 연산과 여사건 
+
+[Image of Venn diagram set operations]
+</h2>
+
+  <h3>3.3.1 사건의 종류와 벤다이어그램</h3>
+  <ul>
+    <li><strong>합사건(union):</strong> A ∪ B. A 또는 B가 일어나는 사건이다.</li>
+    <li><strong>곱사건(intersection):</strong> A ∩ B. A와 B가 동시에 일어나는 사건이다.</li>
+    <li><strong>여사건(complement):</strong> A<sup>c</sup>. 사건 A가 일어나지 않는 사건이다.</li>
+    <li><strong>배반사건(mutually exclusive):</strong> A ∩ B = ∅ 인 경우 두 사건은 동시에 일어나지 않는다.</li>
+  </ul>
+  <p>벤다이어그램(Venn diagram)을 사용하면 집합 관계를 시각적으로 표현할 수 있습니다.</p>
+
+  <h3>3.3.2 여사건의 확률</h3>
+  <p>사건 A의 여사건 A<sup>c</sup>에 대한 확률은 다음과 같습니다.</p>
+  <pre>P(A<sup>c</sup>) = 1 − P(A)</pre>
+  <p>예: 주사위에서 3이 나올 사건 A의 확률은 P(A)=1/6이다. 여사건 A<sup>c</sup>(3이 나오지 않을 사건)의 확률은</p>
+  <pre>P(A<sup>c</sup>) = 1 − 1/6 = 5/6 ≈ 0.8333</pre>
+  <p>이 값은 “주사위를 많이 던지면 약 10번 중 8번 정도는 3이 나오지 않는다”는 의미입니다.</p>
+
+  <div class="example-box">
+    <h3>예제 3‑3. 여사건과 대기 확률</h3>
+    <p>어느 지역 7월 동안 “하루 평균기온이 30도 이상인 날”의 비율이 0.2라고 하자.</p>
+    <ol>
+      <li>사건 A를 “하루 평균기온이 30도 이상인 날”이라고 할 때, P(A)와 P(A<sup>c</sup>)를 구하라.</li>
+      <li>7월 31일 중 무작위로 하루를 택했을 때, “30도 미만일 확률”을 해석하라.</li>
+    </ol>
+    <div class="solution-title">풀이</div>
+    <p>1. P(A)=0.2, 따라서 P(A<sup>c</sup>)=1−0.2=0.8이다.</p>
+    <p>2. “30도 미만일 확률 0.8”은 7월을 충분히 오래 관측하면, 평균적으로 10일 중 8일은 30도 미만이라는 의미이다.</p>
+  </div>
+
+  <hr>
+
+  <h2>3.4 수학적 확률의 정의와 성질</h2>
+
+  <h3>3.4.1 수학적 확률의 정의</h3>
+  <p>모든 근원사건이 동일한 가능성을 가진다면, 표본공간 S의 크기를 |S|=N, 사건 A의 근원사건 수를 |A|=k라 할 때 수학적 확률은 다음과 같습니다.</p>
+  <pre>P(A) = |A| / |S|</pre>
+  <p>이때 항상 0 ≤ P(A) ≤ 1 이며, 모든 가능한 사건을 서로 배반이고 합이 S가 되게 분해했을 때 그 확률의 합은 1입니다.</p>
+  <p>예: 주사위 1회 던지기에서 S = {1,2,3,4,5,6}이고, 각 눈이 나올 확률은 P(1)=…=P(6)=1/6, ΣP(i)=1 이다.</p>
+
+  <div class="example-box">
+    <h3>예제 3‑4. 주사위 2개와 합의 확률 </h3>
+    <p>공정한 주사위 2개를 동시에 던질 때, 두 눈의 합이 6이 될 확률을 구하라.</p>
+    <div class="solution-title">풀이</div>
+    <ol>
+      <li>표본공간 크기: 첫 번째 주사위 6가지, 두 번째 주사위 6가지 → 전체 경우의 수 36이다.</li>
+      <li>합이 6이 되는 경우의 목록: (1,5), (2,4), (3,3), (4,2), (5,1) → 5가지이다.</li>
+      <li>따라서 P(합=6) = 5/36 ≈ 0.1389 이다.</li>
+    </ol>
+  </div>
+
+  <div class="example-box">
+    <h3>예제 3‑5. “폭우 없는 날”의 확률</h3>
+    <p>어느 여름철 한 지역의 통계에서, 하루를 “폭우일(일강수량 ≥ 80 mm)” 또는 “비폭우일”로 나누었을 때 폭우일 비율이 0.05라고 한다.</p>
+    <ol>
+      <li>폭우 사건 A의 확률 P(A)와 여사건 A<sup>c</sup>의 확률을 구하라.</li>
+      <li>20일을 무작위로 택했을 때, 평균적으로 폭우일은 몇 일 정도 기대되는지 구하라.</li>
+    </ol>
+    <div class="solution-title">풀이</div>
+    <p>1. P(A)=0.05, 따라서 P(A<sup>c</sup>)=1−0.05=0.95이다.</p>
+    <p>2. 기대 폭우일 수는 20 × 0.05 = 1일 정도이다. 즉, 20일에 한 번꼴로 폭우가 있을 것으로 기대할 수 있다.</p>
+  </div>
+
+  <hr>
+
+  <h2>3.5 파이썬으로 무작위 수와 주사위 만들기</h2>
+
+  <h3>3.5.1 난수와 무작위성</h3>
+  <p>난수(random number)는 예측할 수 없는 패턴을 가진 수열처럼 보이는 수입니다. 파이썬에서는 난수 함수를 이용해 모의실험(시뮬레이션)을 할 수 있습니다.</p>
+  <ul>
+    <li><code>random.random()</code> : 0 이상 1 미만의 실수 난수를 발생시키는 함수이다.</li>
+    <li><code>numpy.random.random()</code> : NumPy 패키지의 난수 함수로, 0–1 사이 난수를 배열 형태로도 생성할 수 있다.</li>
+    <li><code>numpy.random.randint(a, b)</code> : [a, b) 범위의 정수 난수를 발생시킨다(주사위 눈 등).</li>
+    <li><code>random.choice(리스트)</code> : 리스트에서 임의의 원소를 하나 선택한다.</li>
+  </ul>
+
+  <div class="example-box">
+    <h3>예제 3‑6. 파이썬으로 주사위 1개 모의실험</h3>
+    <p>1에서 6까지 숫자를 갖는 공정한 주사위를 파이썬으로 10번 던져 보고, 나온 눈을 출력하는 코드를 작성하라.</p>
+    <div class="solution-title">풀이(코드 개념)</div>
+    <pre><code>import numpy as np
+
+n = 10  # 시행 횟수
+rolls = np.random.randint(1, 7, size=n)  # 1~6 사이 난수 n개 생성
+print(rolls)</code></pre>
+    <p><code>np.random.randint(1, 7, size=n)</code>은 1 이상 7 미만, 즉 1–6 범위의 정수 난수를 n개 생성한다.</p>
+  </div>
+
+  <div class="example-box">
+    <h3>예제 3‑7. 주사위 2개 합 분포 시뮬레이션 
+
+[Image of normal distribution histogram]
+</h3>
+    <p>주사위 2개를 동시에 던져 눈의 합을 기록하는 실험을 100,000번 수행하고, 합이 2–12인 값들의 상대도수를 계산하는 모의실험 코드를 구상하라.</p>
+    <div class="solution-title">풀이(개념)</div>
+    <pre><code>import numpy as np
+
+N = 100000     # 시행 횟수
+No_Dice = 2    # 주사위 개수
+sums = np.zeros(13, dtype=int)  # 합(0~12 중, 실제로 2~12 사용)
+
+for _ in range(N):
+    rolls = np.random.randint(1, 7, size=No_Dice)
+    total = np.sum(rolls)
+    sums[total] += 1
+
+prob = sums / N  # 상대도수
+print(prob[2:13])  # 합 2~12의 추정 확률</code></pre>
+    <p>이 실험에서 이론적으로 합이 7일 확률은 1/6 ≈ 0.1667인데, 모의실험에서도 이 값에 많이 근접하는 결과가 나온다.</p>
+  </div>
+
+  <hr>
+
+  <h2>3.6 인공지능과 대기과학에서의 확률</h2>
+
+  <h3>3.6.1 확률을 이용한 날씨 예측</h3>
+  <p>기상청은 전 세계 및 국내 관측망에서 수집한 자료 등을 사용해 수치예보모델을 돌리고, 그 출력과 과거 통계를 결합하여 “강수 확률 30%”와 같은 예보를 제공합니다. 이는 통계적 확률과 모형 기반 확률을 결합한 형태로 볼 수 있습니다.</p>
+  <ul>
+    <li>예: “내일 서울에 비가 올 확률 40%”
+      <ul>
+        <li>수치모델이 예측한 비구름의 위치·강도</li>
+        <li>과거에 비슷한 패턴에서 실제 비가 왔던 빈도</li>
+      </ul>
+      등을 이용해 확률을 산정한다.
+    </li>
+  </ul>
+
+  <div class="example-box">
+    <h3>예제 3‑8. 강수 확률 해석</h3>
+    <p>“내일 서울 강수 확률 30%”라는 예보를 다음 두 관점에서 해석하라.</p>
+    <ol>
+      <li>“같은 기상 조건을 가진 내일이 100번 반복된다면 그 중 약 30번 비가 온다.”</li>
+      <li>“서울의 지역 전체 중 30% 영역에서 비가 올 것이다.”</li>
+    </ol>
+    <div class="solution-title">풀이(개념)</div>
+    <p>기상청의 강수 확률은 “같은 조건이 여러 번 반복될 때 비가 오는 상대도수”에 대한 통계적·모형적 해석에 더 가깝다. 따라서 1번 해석이 표준적인 의미에 가깝다.</p>
+  </div>
+
+  <h3>3.6.2 베이즈 확률과 스팸 메일, 이미지 분류</h3>
+  <p>자료에 따라 사건의 확률을 갱신하는 베이즈 정리(Bayesian probability)는 스팸메일 필터링, 이미지 분류 등에서 핵심적으로 쓰입니다.</p>
+  <ul>
+    <li><strong>스팸 메일 예:</strong> “MONEY”라는 단어가 포함되었을 때, 스팸일 확률과 정상메일일 확률을 비교하여 더 큰 쪽으로 분류한다.</li>
+    <li><strong>이미지 분류 예:</strong> 강아지/고양이 사진을 학습한 후, 새로운 이미지를 입력하면 “강아지일 확률 0.87, 고양이일 확률 0.13”처럼 확률로 판단한다.</li>
+  </ul>
+
+  <div class="example-box">
+    <h3>예제 3‑9. “황사일” 베이즈 분류 아이디어 
+
+[Image of Baye's theorem formula]
+</h3>
+    <p>어느 도시에서 과거 자료를 분석해 보니,</p>
+    <ul>
+      <li>전체 일수 중 황사일 비율: 10%</li>
+      <li>황사일에는 미세먼지(PM10) 농도가 150 µg/m³ 이상일 확률: 0.8</li>
+      <li>비황사일에는 PM10이 150 이상일 확률: 0.1</li>
+    </ul>
+    <p>오늘 PM10 농도가 150 이상 측정되었다고 할 때, “오늘이 황사일일 확률”이 비황사일 확률보다 큰지, 개념적으로 설명하라.</p>
+    <div class="solution-title">풀이(개념)</div>
+    <p>관측된 정보 “PM10 ≥ 150”를 조건으로 했을 때, 황사일과 비황사일 각각의 조건부 확률을 비교하는 베이즈 정리 상황이다. 황사일에서 높은 농도가 나타날 가능성(0.8)이 비황사일에서의 가능성(0.1)보다 크므로, 관측값이 150 이상이면 “황사일일 확률”이 상당히 커진다.</p>
+  </div>
+
+  <hr>
+
+  <h2>3.7 유전자 알고리즘, 챗GPT, 확률</h2>
+  <p>유전자 알고리즘은 선택, 교차(crossover), 돌연변이(mutation)에 모두 확률을 사용하여 탐색을 진행하는 휴리스틱 최적화 기법입니다.</p>
+  <p>챗GPT와 같은 대규모 언어모델(LLM)은 다음에 올 단어를 다양한 후보 중에서 확률적으로 선택함으로써 자연스러운 문장을 생성합니다.</p>
+  <ul>
+    <li>“나는 오늘” 다음에 “학교에”, “집에서”, “카페로” 등이 올 확률을 계산하고, 그 중 확률이 높은 단어를 선택한다.</li>
+    <li>이때 확률값은 대규모 텍스트 데이터에서 학습된 통계적 패턴에 기반한다.</li>
+  </ul>
+
+  <div class="example-box">
+    <h3>예제 3‑10. “다음 단어” 확률 해석</h3>
+    <p>“오늘 서울 하늘은” 다음에 나올 수 있는 단어로 “맑다”, “흐리다”, “비가”, “황사가” 네 후보가 있다고 하자. 어떤 언어모델이 다음과 같은 확률을 계산했다고 한다.</p>
+    <ul>
+      <li>P(맑다) = 0.4</li>
+      <li>P(흐리다) = 0.3</li>
+      <li>P(비가) = 0.2</li>
+      <li>P(황사가) = 0.1</li>
+    </ul>
+    <ol>
+      <li>이 네 값의 합이 1이 되는 이유를 설명하라.</li>
+      <li>모델이 자연스럽게 문장을 완성한다면 어떤 단어를 선택할 가능성이 가장 큰지 말하라.</li>
+    </ol>
+    <div class="solution-title">풀이</div>
+    <p>1. 네 후보 중 하나가 반드시 선택되어야 하므로, 이들 사건의 확률 합은 1이 되어야 한다.</p>
+    <p>2. 확률이 가장 큰 “맑다”가 선택될 가능성이 가장 크다.</p>
+  </div>
+
+</div>
+
+</body>
+</html>
