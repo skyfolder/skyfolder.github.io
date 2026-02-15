@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대기관측 및 분석 1 | Atmospheric Observation & Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:ital,wght@0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0A1628;--deep:#065A82;--teal:#1C7293;--accent:#14B8A6;--light:#E8F4F8;--off:#F0F7FA;--white:#fff;--text:#1E293B;--muted:#64748B;--warm:#F59E0B;--card:rgba(255,255,255,0.85);--glass:rgba(255,255,255,0.12)}
+html{scroll-behavior:smooth}body{font-family:'Noto Sans KR',sans-serif;color:var(--text);background:var(--off);line-height:1.7}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--deep) 50%,var(--teal) 100%);min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 50%,rgba(20,184,166,0.15) 0%,transparent 50%);animation:g 8s ease-in-out infinite alternate}
+@keyframes g{0%{transform:translate(0,0)}100%{transform:translate(5%,3%)}}
+.hero-content{position:relative;z-index:1;padding:2rem}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,6vw,4.5rem);color:var(--white);margin-bottom:.5rem;letter-spacing:-1px}
+.hero .sub{font-size:clamp(1rem,2.5vw,1.4rem);color:var(--accent);font-style:italic;margin-bottom:1.5rem;font-family:'Playfair Display',serif}
+.hero .info{color:rgba(255,255,255,.6);font-size:.95rem;margin-bottom:2rem}.hero .info strong{color:var(--white)}
+.hero .sh{color:var(--accent);font-size:.85rem;animation:b 2s infinite}@keyframes b{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+.sn{position:sticky;top:0;z-index:100;background:rgba(10,22,40,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(20,184,166,.2)}
+.sn-i{max-width:1200px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none}.sn-i::-webkit-scrollbar{display:none}
+.nl{padding:.85rem 1.2rem;color:rgba(255,255,255,.6);text-decoration:none;font-size:.8rem;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;transition:.3s}
+.nl:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.s{padding:5rem 1.5rem;max-width:1100px;margin:0 auto}
+.sh2{margin-bottom:3rem;position:relative}
+.snum{font-family:'Playfair Display',serif;font-size:4rem;font-weight:700;color:var(--accent);opacity:.2;line-height:1;position:absolute;top:-1.5rem;left:-.5rem}
+.st{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.5rem);color:var(--navy);position:relative;padding-left:.2rem}
+.ste{font-size:1rem;color:var(--teal);font-style:italic;font-family:'Playfair Display',serif;margin-top:.3rem}
+.sd{width:60px;height:3px;background:var(--accent);margin-top:1rem;border-radius:2px}
+.cg{display:grid;gap:1.5rem}.c2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}.c3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.c{background:var(--card);border-radius:12px;padding:1.8rem;border:1px solid rgba(6,90,130,.08);transition:transform .3s,box-shadow .3s;position:relative;overflow:hidden}
+.c:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(6,90,130,.12)}
+.ca{position:absolute;top:0;left:0;width:100%;height:4px;border-radius:12px 12px 0 0}
+.ca.t{background:var(--teal)}.ca.a{background:var(--accent)}.ca.d{background:var(--deep)}.ca.w{background:var(--warm)}
+.c h3{font-size:1.15rem;color:var(--deep);margin-bottom:.6rem;font-weight:700}
+.c p{font-size:.9rem;color:var(--muted);line-height:1.6}
+.tag{display:inline-block;background:var(--light);color:var(--teal);padding:.2rem .6rem;border-radius:20px;font-size:.75rem;font-weight:500;margin-top:.6rem}
+.sv{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--teal);font-weight:700}.sl{font-size:.85rem;color:var(--muted)}
+.tl{position:relative;padding-left:3rem}.tl::before{content:'';position:absolute;left:1rem;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--accent),var(--deep))}
+.ti{position:relative;margin-bottom:2rem;padding-left:1.5rem}.ti::before{content:'';position:absolute;left:-2.35rem;top:.4rem;width:12px;height:12px;border-radius:50%;background:var(--teal);border:3px solid var(--off);z-index:1}
+.ty{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--accent);font-weight:700}.td{font-size:.9rem;color:var(--text);margin-top:.2rem}
+.tb{width:100%;border-collapse:collapse;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.tb thead{background:var(--navy)}.tb th{color:var(--white);padding:.9rem 1.2rem;text-align:left;font-weight:500;font-size:.85rem}
+.tb td{padding:.8rem 1.2rem;border-bottom:1px solid rgba(6,90,130,.06);font-size:.9rem}.tb tbody tr{background:var(--white);transition:.2s}
+.tb tbody tr:nth-child(even){background:var(--light)}.tb tbody tr:hover{background:rgba(20,184,166,.08)}
+.step{display:flex;gap:1.2rem;align-items:flex-start;margin-bottom:1.5rem}
+.step-n{width:40px;height:40px;border-radius:50%;background:var(--teal);color:var(--white);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:1.1rem;flex-shrink:0}
+.step h4{font-size:1rem;color:var(--deep);margin-bottom:.2rem}.step p{font-size:.88rem;color:var(--muted)}
+.sp{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}@media(max-width:768px){.sp{grid-template-columns:1fr}.c3{grid-template-columns:1fr}}
+.hb{background:linear-gradient(135deg,var(--deep),var(--teal));border-radius:12px;padding:2rem;color:var(--white);margin:2rem 0}.hb h3{color:var(--accent);margin-bottom:.5rem;font-size:1.2rem}.hb p{color:rgba(255,255,255,.85);font-size:.9rem}
+.wb{background:rgba(245,158,11,.08);border-left:4px solid var(--warm);border-radius:0 8px 8px 0;padding:1rem 1.5rem;margin:1.5rem 0}.wb p{font-size:.9rem}
+.ei{background:var(--white);border-radius:10px;padding:1.5rem;margin-bottom:1rem;border-left:4px solid var(--warm);box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.ei h4{color:var(--deep);font-size:1rem;margin-bottom:.3rem}.ei p{color:var(--muted);font-size:.88rem}
+footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:3rem 1.5rem;font-size:.85rem}footer strong{color:var(--accent)}
+.fu{opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}.fu.v{opacity:1;transform:translateY(0)}
+.ws{background:var(--white);max-width:100%;padding:5rem calc((100% - 1100px)/2 + 1.5rem)}
+.h3s{font-size:1.2rem;color:var(--deep);margin-bottom:1.5rem}
+.h3m{font-size:1.1rem;color:var(--deep);margin:3rem 0 1.5rem}
+</style>
+</head>
+<body>
+
+<section class="hero" id="top">
+<div class="hero-content">
+<h1>대기관측 및 분석 1</h1>
+<p class="sub">Atmospheric Observation & Analysis</p>
+<!-- <p class="info"><strong>부산대학교 대기환경과학과</strong> · 박창현 (Dr. Changhyoun Park) · 2013 Spring</p> --> 
+<p class="info"><strong> Pusan National Univ. </strong> · Dr. Changhyoun Park </p>
+<p class="sh">↓ 아래로 스크롤</p>
+</div>
+</section>
+
+<nav class="sn"><div class="sn-i">
+<a class="nl" href="#s1">01 강의소개</a><a class="nl" href="#s2">02 관측역사</a><a class="nl" href="#s3">03 위성관측</a><a class="nl" href="#s4">04 센서</a><a class="nl" href="#s5">05 CO₂</a><a class="nl" href="#s6">06 시료채취</a><a class="nl" href="#s7">07 보고서</a><a class="nl" href="#s8">08 현장실습</a>
+</div></nav>
+
+<!-- 01 강의소개 -->
+<div class="s" id="s1">
+<div class="sh2 fu"><span class="snum">01</span><h2 class="st">강의 소개 및 수업 안내</h2><p class="ste">Course Introduction & Guidelines</p><div class="sd"></div></div>
+<h3 class="h3s fu">수업 스케줄</h3>
+<div class="cg c2 fu">
+<div class="c"><div class="ca t"></div><h3>3월 — 이론 중심</h3><p>관측 기본 이론 및 원리, 연구윤리 교육</p></div>
+<div class="c"><div class="ca d"></div><h3>4월 — 견학·실험</h3><p>기상청 견학 발표, 온도계 실험 실습</p></div>
+<div class="c"><div class="ca a"></div><h3>5월 — 필드 실습</h3><p>필드 관측, 데이터 분석 및 발표</p></div>
+<div class="c"><div class="ca w"></div><h3>6월 — 심화학습</h3><p>관측 심화학습, 최종 발표</p></div>
+</div>
+<h3 class="h3s fu" style="margin-top:3rem">평가 기준 | Evaluation</h3>
+<div class="sp fu">
+<div class="c" style="text-align:center"><div class="ca t"></div><h3 style="margin-top:.5rem">이론 (Theory)</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem">
+<div><div class="sv">15%</div><div class="sl">출석/태도</div></div>
+<div><div class="sv">20%</div><div class="sl">과제</div></div>
+<div><div class="sv">30%</div><div class="sl">발표</div></div>
+<div><div class="sv">35%</div><div class="sl">기말고사</div></div>
+</div></div>
+<div class="c" style="text-align:center"><div class="ca d"></div><h3 style="margin-top:.5rem">실습 (Practice)</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:1rem">
+<div><div class="sv">30%</div><div class="sl">출석·참여</div></div>
+<div><div class="sv">40%</div><div class="sl">보고서</div></div>
+<div><div class="sv">30%</div><div class="sl">발표</div></div>
+</div></div>
+</div>
+<div class="wb fu"><p>※ 중간고사 없음. 발표 내용은 기말고사에 포함됩니다.</p></div>
+<h3 class="h3s fu" style="margin-top:2rem">연구윤리 | Research Ethics</h3>
+<div class="fu">
+<div class="ei"><h4>표절 (Plagiarism)</h4><p>타인의 아이디어, 연구내용·결과 등을 정당한 승인 또는 인용 없이 도용하는 행위</p></div>
+<div class="ei"><h4>위조 (Fabrication)</h4><p>존재하지 않는 데이터 또는 연구결과 등을 허위로 만들어 내는 행위</p></div>
+<div class="ei"><h4>변조 (Falsification)</h4><p>연구 재료·장비·과정 등을 인위적으로 조작하거나 데이터를 임의로 변형·삭제하는 행위</p></div>
+</div>
+</div>
+
+<!-- 02 관측역사 -->
+<div class="ws" id="s2">
+<div class="sh2 fu"><span class="snum">02</span><h2 class="st">관측의 역사</h2><p class="ste">History of Atmospheric Measurements</p><div class="sd"></div></div>
+<div class="sp fu">
+<div class="tl">
+<div class="ti"><div class="ty">1441</div><div class="td">측우기 발명 (조선 세종)</div></div>
+<div class="ti"><div class="ty">1593</div><div class="td">갈릴레이의 온도계 발명</div></div>
+<div class="ti"><div class="ty">1643</div><div class="td">토리첼리의 기압계 발명</div></div>
+<div class="ti"><div class="ty">1714</div><div class="td">화씨 온도계 (Fahrenheit)</div></div>
+<div class="ti"><div class="ty">1749</div><div class="td">Alexander Wilson — 연 이용 고층 관측</div></div>
+<div class="ti"><div class="ty">1783</div><div class="td">수소 기구 유인비행 성공</div></div>
+<div class="ti"><div class="ty">1803</div><div class="td">Howard — 구름 10종 분류</div></div>
+</div>
+<div class="tl">
+<div class="ti"><div class="ty">1845</div><div class="td">Robinson 풍속계 (4-cup Anemometer)</div></div>
+<div class="ti"><div class="ty">1922</div><div class="td">Richardson — 수치예보 시작</div></div>
+<div class="ti"><div class="ty">1927</div><div class="td">Moltchanoff — Radiosonde 발명</div></div>
+<div class="ti"><div class="ty">1941</div><div class="td">기상 레이더 개발</div></div>
+<div class="ti"><div class="ty">1950</div><div class="td">세계기상기구 (WMO) 발족</div></div>
+<div class="ti"><div class="ty">1960</div><div class="td">최초 기상위성 TIROS-1 발사</div></div>
+<div class="ti"><div class="ty">1967</div><div class="td">전지구적 기상관측망 일기예보 시작</div></div>
+</div>
+</div>
+</div>
+
+<!-- 03 위성관측 -->
+<div class="s" id="s3">
+<div class="sh2 fu"><span class="snum">03</span><h2 class="st">위성 관측 시스템</h2><p class="ste">Satellite Observation Systems</p><div class="sd"></div></div>
+<p class="fu" style="color:var(--muted);margin-bottom:2rem">NASA의 <strong style="color:var(--deep)">Earth Observing System (EOS)</strong>은 다양한 위성으로 대기·해양·지표를 관측합니다. <strong style="color:var(--deep)">A-Train</strong>은 7개 위성이 수 분 간격으로 배열된 위성 군집입니다.</p>
+<div class="cg c3 fu">
+<div class="c"><div class="ca t"></div><h3>Terra</h3><p>지표·대기 복사 관측</p><span class="tag">EOS flagship</span></div>
+<div class="c"><div class="ca a"></div><h3>Aqua</h3><p>수문 순환 관측</p><span class="tag">A-Train</span></div>
+<div class="c"><div class="ca d"></div><h3>Aura</h3><p>대기 화학 성분 관측</p><span class="tag">A-Train</span></div>
+<div class="c"><div class="ca w"></div><h3>CloudSat</h3><p>구름 구조 레이더 관측</p><span class="tag">A-Train</span></div>
+<div class="c"><div class="ca t"></div><h3>CALIPSO</h3><p>에어로졸·구름 라이다 관측</p><span class="tag">A-Train</span></div>
+<div class="c"><div class="ca a"></div><h3>TRMM</h3><p>열대 강수량 관측</p><span class="tag">Tropical</span></div>
+</div>
+<h3 class="h3m fu">Aura 관측 장비</h3>
+<div class="fu" style="overflow-x:auto"><table class="tb">
+<thead><tr><th>장비명</th><th>정식 명칭</th><th>관측 대상</th></tr></thead>
+<tbody>
+<tr><td><strong>HIRDLS</strong></td><td>High Resolution Dynamics Limb Sounder</td><td>O₃, H₂O, CH₄, N₂O, CFCs — 적외선</td></tr>
+<tr><td><strong>MLS</strong></td><td>Microwave Limb Sounder</td><td>O₃, ClO, BrO, H₂O — 마이크로파</td></tr>
+<tr><td><strong>OMI</strong></td><td>Ozone Monitoring Instrument</td><td>O₃, SO₂, NO₂, 에어로졸 — UV·가시광</td></tr>
+<tr><td><strong>TES</strong></td><td>Tropospheric Emission Spectrometer</td><td>대류권 O₃, CO, CH₄ — 적외선</td></tr>
+</tbody></table></div>
+</div>
+
+<!-- 04 센서 -->
+<div class="ws" id="s4">
+<div class="sh2 fu"><span class="snum">04</span><h2 class="st">기온·습도 센서</h2><p class="ste">Temperature & Relative Humidity Sensors</p><div class="sd"></div></div>
+<div class="cg c3 fu" style="margin-bottom:2rem">
+<div class="c" style="text-align:center"><div class="ca t"></div><h3>Temperature</h3><p>기온</p></div>
+<div class="c" style="text-align:center"><div class="ca a"></div><h3>Relative Humidity</h3><p>상대습도</p></div>
+<div class="c" style="text-align:center"><div class="ca d"></div><h3>Pressure</h3><p>기압</p></div>
+<div class="c" style="text-align:center"><div class="ca w"></div><h3>WS / WD</h3><p>풍속 / 풍향</p></div>
+<div class="c" style="text-align:center"><div class="ca t"></div><h3>Radiation</h3><p>복사</p></div>
+<div class="c" style="text-align:center"><div class="ca a"></div><h3>Soil Moisture</h3><p>토양수분</p></div>
+</div>
+<h3 class="h3m fu">HMP50 Probe 사양</h3>
+<div class="fu" style="overflow-x:auto"><table class="tb">
+<thead><tr><th>항목</th><th>사양</th></tr></thead>
+<tbody>
+<tr><td>작동 온도</td><td>-40°C ~ +60°C</td></tr>
+<tr><td>Probe 길이 / 직경</td><td>7.1 cm / 1.2 cm</td></tr>
+<tr><td>필터</td><td>0.2 μm Teflon membrane</td></tr>
+<tr><td>전력 소모</td><td>&lt; 2 mA</td></tr>
+<tr><td>공급 전압</td><td>7 ~ 28 VDC</td></tr>
+<tr><td>안정화 시간</td><td>전원 인가 후 1초</td></tr>
+</tbody></table></div>
+<div class="sp fu" style="margin-top:2rem">
+<div class="c"><div class="ca t"></div><h3>온도 센서</h3><p>센서: 1000 Ω PRT, DIN 43760B<br>측정: -40°C ~ +60°C<br>출력: 0 ~ 1.0 VDC<br>정확도: ±0.5°C (0~40°C)</p></div>
+<div class="c"><div class="ca d"></div><h3>습도 센서</h3><p>측정: 0 ~ 98% (비응결)<br>출력: 0 ~ 1.0 VDC<br>정확도: ±3% (0~90% RH)<br>±5% (90~98% RH)</p></div>
+</div>
+<div class="wb fu"><p><strong>⚠ 배선 순서:</strong> ① Blue (접지) → ② Black (온도) → ③ White (습도) → ④ Clear (Shield) → ⑤ Brown (전원, 마지막)</p></div>
+</div>
+
+<!-- 05 CO2 -->
+<div class="s" id="s5">
+<div class="sh2 fu"><span class="snum">05</span><h2 class="st">CO₂ 관측 원리</h2><p class="ste">CO₂ Measurement Principles (NDIR)</p><div class="sd"></div></div>
+<div class="cg c2 fu">
+<div class="c"><div class="ca t"></div><h3>구조 및 결합</h3><p>선형 분자 (O=C=O), 결합각 180°</p></div>
+<div class="c"><div class="ca a"></div><h3>물리적 성질</h3><p>무색·무취 기체, 밀도 1.98 kg/m³</p></div>
+<div class="c"><div class="ca d"></div><h3>화학 반응</h3><p>수용액에서 탄산(H₂CO₃) 생성</p></div>
+<div class="c"><div class="ca w"></div><h3>지구과학적 중요성</h3><p>온실기체, 탄소순환, 기후변화 핵심</p></div>
+</div>
+<div class="hb fu"><h3>NDIR CO₂ Sensor</h3><p>Non-Dispersive Infrared — 적외선 흡수 원리로 CO₂ 농도를 측정합니다.</p></div>
+<div class="fu">
+<div class="step"><div class="step-n">1</div><div><h4>IR 광원 방출</h4><p>적외선 램프에서 빛이 튜브를 통과, CO₂ 파장의 IR만 흡수</p></div></div>
+<div class="step"><div class="step-n">2</div><div><h4>Optical Filter 통과</h4><p>CO₂ 흡수 파장만 투과하는 필터 통과</p></div></div>
+<div class="step"><div class="step-n">3</div><div><h4>IR Detector 측정</h4><p>흡수되지 않은 나머지 빛의 양 측정</p></div></div>
+<div class="step"><div class="step-n">4</div><div><h4>농도 산출</h4><p>방출 IR - 수신 IR 차이 → CO₂ 농도 비례 계산</p></div></div>
+</div>
+<h3 class="h3m fu">분광법 | Spectroscopy</h3>
+<div class="fu" style="overflow-x:auto"><table class="tb">
+<thead><tr><th>분광법</th><th>파장대</th><th>에너지</th></tr></thead>
+<tbody>
+<tr><td><strong>Rotational</strong> 회전</td><td>Millimeter-wave</td><td>낮음</td></tr>
+<tr><td><strong>Vibrational</strong> 진동</td><td>Infrared (μm)</td><td>중간</td></tr>
+<tr><td><strong>Electronic</strong> 전자</td><td>UV-Visible</td><td>높음</td></tr>
+</tbody></table></div>
+</div>
+
+<!-- 06 시료채취 -->
+<div class="ws" id="s6">
+<div class="sh2 fu"><span class="snum">06</span><h2 class="st">대기 시료 채취</h2><p class="ste">Ambient Air Sampling</p><div class="sd"></div></div>
+<div class="hb fu"><h3>기본 요건</h3><p>특정 장소·시간의 대기를 대표하는 시료를 채취하여 질량/부피 농도로 평가할 수 있어야 하며, 시료의 화학적·물리적 특성을 원치 않는 방식으로 변화시키지 않아야 합니다.</p></div>
+<h3 class="h3s fu">시료 채취 시스템 구성</h3>
+<div class="cg c2 fu">
+<div class="c"><div class="ca t"></div><h3>Inlet Manifold (유입구)</h3><p>방우 설계, 유리/Teflon/스텐 재질</p></div>
+<div class="c"><div class="ca a"></div><h3>Collection Medium (수집 매체)</h3><p>흡착제, 필터, 챔버</p></div>
+<div class="c"><div class="ca d"></div><h3>Air Mover (공기 이동장치)</h3><p>진공 펌프</p></div>
+<div class="c"><div class="ca w"></div><h3>Flow Meter (유량 측정기)</h3><p>질량유량계, 로타미터</p></div>
+</div>
+<h3 class="h3m fu">채취 기법 | Sampling Techniques</h3>
+<div class="cg fu" style="gap:1rem">
+<div class="c"><div class="ca t"></div><h3>기체 오염물질</h3><p>비반응성 재질 사용 (유리, Teflon). 체류시간 최소화로 반응성 물질 손실 방지. 수집 매체: 액체/고체 흡착제, 진공 플라스크, Cryogenic trap.</p></div>
+<div class="c"><div class="ca d"></div><h3>입자상 오염물질</h3><p>질량 농도, 입경, 화학 조성 고려. PM₂.₅, PM₁₀ 규격. 연소, 비산먼지, 기체-입자 전환 과정 구분.</p></div>
+<div class="c"><div class="ca a"></div><h3>수동 (Passive) 채취</h3><p>펌프 없이 채취 (Dustfall bucket). 100년+ 사용 방법. 장점: 이동성, 편의성, 신뢰성, 저비용.</p></div>
+</div>
+</div>
+
+<!-- 07 보고서 -->
+<div class="s" id="s7">
+<div class="sh2 fu"><span class="snum">07</span><h2 class="st">실험보고서 작성법</h2><p class="ste">Lab Report Writing Guide</p><div class="sd"></div></div>
+<div class="fu" style="overflow-x:auto"><table class="tb">
+<thead><tr><th>#</th><th>항목</th><th>설명</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>제목</td><td>구체적인 실험 주제</td></tr>
+<tr><td>2</td><td>일시 / 날씨 / 장소</td><td>기본 정보 기입</td></tr>
+<tr><td>3</td><td>실험목적</td><td>명확한 목표 기술</td></tr>
+<tr><td>4</td><td>실험내용</td><td>방법, 순서, 그림 포함</td></tr>
+<tr><td>5</td><td>실험결과</td><td>표와 그림으로 표현</td></tr>
+<tr><td>6</td><td>토론·정리·결론</td><td>서술형 + 문제점 분석</td></tr>
+<tr><td>7</td><td>참고문헌</td><td>인용 서적·자료 목록</td></tr>
+</tbody></table></div>
+<h3 class="h3m fu">작성 시 주의사항</h3>
+<div class="fu">
+<div class="wb"><p>서술형보다 <strong>표와 그림</strong>을 활용하여 일목요연하게 정리할 것</p></div>
+<div class="wb"><p>구어체 사용 금지: '몇 °C가 나왔다' → <strong>'몇 °C로 측정되었다'</strong></p></div>
+<div class="wb"><p>실험 노트에 <strong>측정치·결과를 반드시 기입</strong> (성공·실패 모두)</p></div>
+<div class="wb"><p>토론·결론은 개인적 생각이 아닌 <strong>실험 목적에 따른 구체적 결론</strong>을 기술</p></div>
+</div>
+<h3 class="h3m fu">논문의 구조 | Paper Structure</h3>
+<div class="cg c3 fu">
+<div class="c"><div class="ca t"></div><h3>Abstract</h3><p>연구 요약</p></div>
+<div class="c"><div class="ca a"></div><h3>Introduction</h3><p>연구 배경·목적</p></div>
+<div class="c"><div class="ca d"></div><h3>Method</h3><p>연구 방법</p></div>
+<div class="c"><div class="ca w"></div><h3>Results</h3><p>연구 결과</p></div>
+<div class="c"><div class="ca t"></div><h3>Discussion</h3><p>논의·고찰</p></div>
+<div class="c"><div class="ca a"></div><h3>References</h3><p>참고문헌</p></div>
+</div>
+</div>
+
+<!-- 08 현장실습 -->
+<div class="ws" id="s8">
+<div class="sh2 fu"><span class="snum">08</span><h2 class="st">현장 실습 안내</h2><p class="ste">Field Practice & Observation</p><div class="sd"></div></div>
+<div class="sp fu">
+<div class="c"><div class="ca t"></div><h3>기상 1호 방선</h3><p>장소: 부산항 제5부두<br>인원: 14명<br><br>기상 관측선(기상1호)에서 해양기상 관측 장비와 관측 방법을 직접 체험하는 현장학습</p></div>
+<div class="c"><div class="ca d"></div><h3>현장 사진 과제</h3><p>기상·대기환경 관련 사진 6장 촬영<br><br>각 사진마다: 이름, 장소, 시간, 이론적 설명, 감성적 감상 요약<br><br><em style="color:var(--warm)">※ 하늘 사진(구름·노을)은 1장만 허용</em></p></div>
+</div>
+<h3 class="h3m fu">한국 기상·해양 관측 기지</h3>
+<div class="fu" style="overflow-x:auto"><table class="tb">
+<thead><tr><th>기지명</th><th>설치 연도</th><th>상태</th></tr></thead>
+<tbody>
+<tr><td>이어도 해양과학기지</td><td>2003년</td><td>운영 중</td></tr>
+<tr><td>황해중부 부이</td><td>2007년</td><td>운영 중</td></tr>
+<tr><td>가거초 해양과학기지</td><td>2009년</td><td>운영 중</td></tr>
+<tr><td>독도 해양과학기지</td><td>2013년</td><td>준공 예정</td></tr>
+<tr><td>백령도 기지</td><td>2015년</td><td>계획</td></tr>
+</tbody></table></div>
+</div>
+
+<footer>
+<p><strong>대기관측 및 분석 1</strong> </p>
+<p style="margin-top:.5rem">박창현 (Dr. Changhyoun Park) · 2013 Spring Semester</p>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('v')})},{threshold:.1});
+document.querySelectorAll('.fu').forEach(el=>obs.observe(el));
+// Active nav
+const sections=document.querySelectorAll('[id^="s"]');
+const links=document.querySelectorAll('.nl');
+window.addEventListener('scroll',()=>{
+  let c='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-200)c=s.id});
+  links.forEach(l=>{l.style.color=l.getAttribute('href')==='#'+c?'#14B8A6':'rgba(255,255,255,.6)';l.style.borderBottomColor=l.getAttribute('href')==='#'+c?'#14B8A6':'transparent'});
+});
+</script>
+</body>
+</html>
