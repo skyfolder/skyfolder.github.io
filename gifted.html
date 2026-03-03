@@ -173,7 +173,7 @@
             contentDiv.className = `content ${year === defaultYear ? 'active' : ''}`;
             contentDiv.id = `content-${year}`;
             
-            // 내부 HTML 구조 (보고서 문체인 '이다/한다' 적용)
+            // 내부 HTML 구조
             contentDiv.innerHTML = `
                 <h3>${year}년도 프로젝트 초록</h3>
                 <div class="abstract">
@@ -192,15 +192,12 @@
 
         // 탭 전환 함수
         function openTab(selectedYear, clickedTab) {
-            // 모든 탭 버튼의 active 클래스 제거
             const allTabs = document.querySelectorAll('.tab');
             allTabs.forEach(tab => tab.classList.remove('active'));
             
-            // 모든 콘텐츠의 active 클래스 제거
             const allContents = document.querySelectorAll('.content');
             allContents.forEach(content => content.classList.remove('active'));
 
-            // 클릭된 탭과 해당 콘텐츠만 active 클래스 추가
             clickedTab.classList.add('active');
             document.getElementById(`content-${selectedYear}`).classList.add('active');
         }
