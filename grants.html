@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>연구 펀드 수주 실적</title>
+<style>
+    .fund-container {
+        max-width: 800px;
+        margin: 0 auto;
+        font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+    }
+
+    .fund-title-main {
+        font-size: 1.5rem;
+        color: #333;
+        border-bottom: 2px solid #2c3e50;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+    .fund-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .fund-item {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        padding: 20px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .fund-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .fund-year {
+        flex: 0 0 80px;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #2980b9;
+    }
+
+    .fund-content {
+        flex: 1 1 300px;
+        padding: 0 20px;
+        border-left: 2px solid #e9ecef;
+    }
+
+    .fund-topic {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0 0 8px 0;
+        line-height: 1.4;
+    }
+
+    .fund-agency {
+        font-size: 0.9rem;
+        color: #6c757d;
+        display: inline-block;
+        background: #e2e3e5;
+        padding: 3px 8px;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+
+    .fund-amount {
+        flex: 0 0 120px;
+        text-align: right;
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #e74c3c;
+    }
+
+    /* 모바일 환경을 위한 반응형 처리 */
+    @media (max-width: 600px) {
+        .fund-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .fund-year {
+            margin-bottom: 10px;
+            flex: none;
+        }
+        .fund-content {
+            border-left: none;
+            padding: 0;
+            margin-bottom: 15px;
+            flex: none;
+            width: 100%;
+        }
+        .fund-amount {
+            text-align: left;
+            flex: none;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="fund-container">
+    <h2 class="fund-title-main">주요 연구 펀드 수주 실적</h2>
+    
+    <ul class="fund-list">
+        <li class="fund-item">
+            <div class="fund-year">2026</div>
+            <div class="fund-content">
+                <h3 class="fund-topic">도심항공교통(UAM) 안전 운항을 위한 300m 고도 난류(EDR) 예측 모델 개발</h3>
+                <span class="fund-agency">국토교통부</span>
+            </div>
+            <div class="fund-amount">150,000,000원</div>
+        </li>
+
+        <li class="fund-item">
+            <div class="fund-year">2024</div>
+            <div class="fund-content">
+                <h3 class="fund-topic">ASIA-AQ 캠페인 기반 보성 지역 지상-항공 관측 데이터 입체 분석</h3>
+                <span class="fund-agency">한국연구재단(NRF)</span>
+            </div>
+            <div class="fund-amount">85,000,000원</div>
+        </li>
+
+        <li class="fund-item">
+            <div class="fund-year">2022</div>
+            <div class="fund-content">
+                <h3 class="fund-topic">미기상학 기반 지표-대기 상호작용 및 온실가스 플럭스 관측망 고도화</h3>
+                <span class="fund-agency">기상청</span>
+            </div>
+            <div class="fund-amount">120,000,000원</div>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>
