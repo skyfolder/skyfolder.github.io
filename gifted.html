@@ -101,29 +101,46 @@
         }
 
         .abstract {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             line-height: 1.8;
             font-size: 15px;
             text-align: justify;
         }
 
+        /* 이미지 갤러리 영역 - 가로 크기 10cm 고정 */
+        .image-gallery {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        .image-gallery img {
+            width: 10cm; /* 가로 크기 10cm 고정 */
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
         /* 다운로드 버튼 영역 */
         .downloads {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             flex-wrap: wrap;
         }
         
         .downloads a {
             display: inline-flex;
             align-items: center;
-            padding: 10px 20px;
+            padding: 8px 16px;
             background-color: #ecf0f1;
             color: #2c3e50;
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
             border: 1px solid #bdc3c7;
             transition: all 0.3s;
         }
@@ -132,6 +149,18 @@
             background-color: #3498db;
             color: white;
             border-color: #3498db;
+        }
+
+        /* 코딩 자료 전용 버튼 스타일 (시각적 분리) */
+        .downloads a.code-btn {
+            background-color: #f8f9fa;
+            border-color: #2ecc71;
+            color: #27ae60;
+        }
+
+        .downloads a.code-btn:hover {
+            background-color: #2ecc71;
+            color: white;
         }
     </style>
 </head>
@@ -143,10 +172,10 @@
     </div>
 
     <div class="tab-container" id="tabs">
-        </div>
+    </div>
 
     <div id="tab-contents">
-        </div>
+    </div>
 
     <script>
         const startYear = 2018;
@@ -154,7 +183,6 @@
         const tabsContainer = document.getElementById('tabs');
         const contentsContainer = document.getElementById('tab-contents');
 
-        // 최신 연도(2026년)를 기본으로 활성화하기 위해 설정
         let defaultYear = endYear;
 
         // 2018년부터 2026년까지 탭과 내용을 동적으로 생성
@@ -181,10 +209,19 @@
                     기상 데이터 파이썬 분석, 대기 경계층 내 난류 특성(EDR) 연구, 그리고 머신러닝(LSTM, CNN) 알고리즘을 활용한 기상 및 환경 데이터 예측 모델링 과정을 포함한다. 
                     수집된 데이터를 바탕으로 의미 있는 패턴을 추출하고, 이를 기반으로 구체적인 결론을 도출하였다. 상세한 분석 결과와 활용된 코드 및 발표 자료는 아래 링크에서 확인할 수 있다.
                 </div>
+                
+                <div class="image-gallery">
+                    <img src="./images/result_${year}_1.jpg" alt="${year}년도 분석 결과 1">
+                    <img src="./images/result_${year}_2.jpg" alt="${year}년도 분석 결과 2">
+                </div>
+
                 <div class="downloads">
-                    <a href="./files/ppt_${year}.pptx" target="_blank">📄 PPT 자료 다운로드</a>
-                    <a href="./files/paper_${year}.pdf" target="_blank">📑 논문 자료 다운로드</a>
-                    <a href="./files/code_${year}.zip" target="_blank">💻 코딩 자료 다운로드</a>
+                    <a href="./files/ppt_${year}.pptx" target="_blank">📄 PPT 자료</a>
+                    <a href="./files/paper_${year}.pdf" target="_blank">📑 논문 자료</a>
+                    
+                    <a href="./files/code_${year}_preprocessing.py" target="_blank" class="code-btn">💻 데이터 전처리 코드</a>
+                    <a href="./files/code_${year}_model.py" target="_blank" class="code-btn">💻 모델 학습 코드</a>
+                    <a href="./files/code_${year}_visualization.py" target="_blank" class="code-btn">💻 시각화 코드</a>
                 </div>
             `;
             contentsContainer.appendChild(contentDiv);
