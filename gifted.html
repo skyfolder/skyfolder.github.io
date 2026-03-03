@@ -14,7 +14,7 @@
             color: #333;
         }
         
-        /* 상단 헤더 영역 (Home 버튼 및 제목) */
+        /* 상단 헤더 영역 */
         .header {
             display: flex;
             align-items: center;
@@ -107,7 +107,7 @@
             text-align: justify;
         }
 
-        /* 이미지 갤러리 영역 - 가로 크기 10cm 고정 */
+        /* 이미지 갤러리 영역 - 가로 10cm 고정 */
         .image-gallery {
             margin-bottom: 30px;
             display: flex;
@@ -151,7 +151,7 @@
             border-color: #3498db;
         }
 
-        /* 코딩 자료 전용 버튼 스타일 (시각적 분리) */
+        /* 코딩 자료 전용 버튼 스타일 */
         .downloads a.code-btn {
             background-color: #f8f9fa;
             border-color: #2ecc71;
@@ -172,70 +172,182 @@
     </div>
 
     <div class="tab-container" id="tabs">
+        <button class="tab" onclick="openTab('2018')">2018년</button>
+        <button class="tab" onclick="openTab('2019')">2019년</button>
+        <button class="tab" onclick="openTab('2020')">2020년</button>
+        <button class="tab" onclick="openTab('2021')">2021년</button>
+        <button class="tab" onclick="openTab('2022')">2022년</button>
+        <button class="tab" onclick="openTab('2023')">2023년</button>
+        <button class="tab" onclick="openTab('2024')">2024년</button>
+        <button class="tab" onclick="openTab('2025')">2025년</button>
+        <button class="tab active" onclick="openTab('2026')">2026년</button>
     </div>
 
     <div id="tab-contents">
+        
+        <div id="content-2018" class="content">
+            <h3>2018년: 기초 기상 데이터 및 대기 환경 분석</h3>
+            <div class="abstract">
+                본 연구는 2018년도 영재원 프로젝트의 기초 과정으로 수행되었다. 공공 기상 데이터를 수집하고 파이썬을 활용하여 기본적인 통계 분석 및 시각화를 진행하였다. 이를 통해 대기 환경의 장기적인 변화 경향을 파악하고 기초적인 데이터 과학의 방법론을 적용하였다.
+            </div>
+            <div class="image-gallery">
+                <img src="./images/2018_temp_trend.jpg" alt="2018 온도 변화 추이">
+            </div>
+            <div class="downloads">
+                <a href="./files/2018_presentation.pptx" target="_blank">📄 PPT 자료</a>
+                <a href="./files/2018_report.pdf" target="_blank">📑 논문 자료</a>
+                <a href="./files/2018_data_analysis.py" target="_blank" class="code-btn">💻 기상 데이터 분석 코드</a>
+            </div>
+        </div>
+
+        <div id="content-2019" class="content">
+            <h3>2019년: 국지성 집중호우 패턴 분석</h3>
+            <div class="abstract">
+                본 연구는 여름철 국지성 집중호우의 발생 빈도와 지역별 특성을 분석하였다. 강수량 시계열 데이터를 바탕으로 공간적 분포 양상을 확인하고, 주요 발생 원인을 기상학적 관점에서 고찰하였다.
+            </div>
+            <div class="image-gallery">
+                <img src="./images/2019_rain_pattern.jpg" alt="2019 강수 패턴 분석">
+            </div>
+            <div class="downloads">
+                <a href="./files/2019_presentation.pptx" target="_blank">📄 PPT 자료</a>
+                <a href="./files/2019_report.pdf" target="_blank">📑 논문 자료</a>
+                <a href="./files/2019_precip_plot.py" target="_blank" class="code-btn">💻 강수량 시각화 코드</a>
+            </div>
+        </div>
+
+        <div id="content-2020" class="content">
+            <h3>2020년: 미세기상학 관측 데이터 전처리 및 분석</h3>
+            <div class="abstract">
+                본 연구는 지표 부근의 미세기상학적 특성을 파악하기 위해 플럭스 타워 관측 데이터를 활용하였다. 결측치 보완(Gap-filling) 기술을 적용하여 데이터의 신뢰성을 높이고, 지면과 대기 사이의 에너지 교환 과정을 분석하였다.
+            </div>
+            <div class="image-gallery">
+                <img src="./images/2020_flux_tower.jpg" alt="2020 플럭스 타워 분석">
+            </div>
+            <div class="downloads">
+                <a href="./files/2020_presentation.pptx" target="_blank">📄 PPT 자료</a>
+                <a href="./files/2020_report.pdf" target="_blank">📑 논문 자료</a>
+                <a href="./files/2020_gap_filling.py" target="_blank" class="code-btn">💻 결측치 보완 코드</a>
+                <a href="./files/2020_energy_flux.py" target="_blank" class="code-btn">💻 에너지 플럭스 계산 코드</a>
+            </div>
+        </div>
+
+        <div id="content-2021" class="content">
+            <h3>2021년: 대기 경계층 내 난류 특성 연구</h3>
+            <div class="abstract">
+                본 연구는 대기 경계층 내에서 발생하는 난류의 구조와 강도를 분석하였다. 고해상도 풍속 데이터를 이용하여 난류 운동 에너지 및 관련 스펙트럼을 도출하고, 대기 안정도에 따른 난류의 발달 양상을 규명하였다.
+            </div>
+            <div class="image-gallery">
+                <img src="./images/2021_turbulence_spectrum.jpg" alt="2021 난류 스펙트럼">
+            </div>
+            <div class="downloads">
+                <a href="./files/2021_presentation.pptx" target="_blank">📄 PPT 자료</a>
+                <a href="./files/2021_report.pdf" target="_blank">📑 논문 자료</a>
+                <a href="./files/2021_turbulence_calc.py" target="_blank" class="code-btn">💻 난류 에너지 계산 코드</a>
+            </div>
+        </div>
+
+        <div id="content-2022" class="content">
+            <h3>2022년: 머신러닝을 활용한 기상 데이터 분류</h3>
+            <div class="abstract">
+                본 연구는 방대한 기상 데이터를 효율적으로 처리하기 위해 머신러닝 기법을 도입하였다. 기상 레이더 및 위성 자료를 활용하여 특정 기상 현상을 자동 분류하는 모델을 구축하고, 그 예측 정확도를 검증하였다.
+            </div>
+            <div class="image-gallery">
+                <img src="./images/2022_ml_classification.jpg" alt="2022 머신러닝 분류 결과">
+            </div>
+            <div class="downloads">
+                <a href="./files/2022_presentation.pptx" target="_blank">📄 PPT 자료</a>
+                <a href="./files/2022_report.pdf" target="_blank">📑 논문 자료</a>
+                <a href="./files/2022_data_prep.py" target="_blank" class="code-btn">💻 데이터 전처리 코드</a>
+                <a href="./files/2022_ml_model.py" target="_blank" class="code-btn">💻 머신러닝 학습 코드</a>
+            </div>
+        </div>
+
+        <div id="content-2023" class="content">
+            <h3>2023년: CNN 기반 기상 위성 이미지 분석 모델링</h3>
+            <div class="abstract">
+                본 연구는 합성곱 신경망(CNN) 알고리즘을 활용하여 구름의 형태와 이동 경로를 파악하였다. 영상 이미지 내의 공간적 특징을 추출하여 악기상 발생 가능성을 조기에 탐지하는 딥러닝 모델의 활용 가능성을 확인하였다.
+            </div>
+            <div class="image-gallery">
+                <img src="./images/2023_cnn_model.jpg" alt="2023 CNN 모델 구조">
+                <img src="./images/2023_cloud_prediction.jpg" alt="2023 구름 탐지 결과">
+            </div>
+            <div class="downloads">
+                <a href="./files/2023_presentation.pptx" target="_blank">📄 PPT 자료</a>
+                <a href="./files/2023_report.pdf" target="_blank">📑 논문 자료</a>
+                <a href="./files/2023_cnn_train.py" target="_blank" class="code-btn">💻 CNN 모델 학습 코드</a>
+                <a href="./files/2023_image_eval.py" target="_blank" class="code-btn">💻 영상 평가 및 출력 코드</a>
+            </div>
+        </div>
+
+        <div id="content-2024" class="content">
+            <h3>2024년: LSTM을 활용한 온실가스 농도 시계열 예측</h3>
+            <div class="abstract">
+                본 연구는 대기 중 CO2 농도 변화의 시간적 의존성을 반영하기 위해 순환 신경망 계열인 LSTM 모델을 적용하였다. 과거 기상 조건과 탄소 배출량 데이터를 기반으로 미래의 농도 변화 추이를 예측하여 유의미한 시계열 모델을 구축하였다.
+            </div>
+            <div class="image-gallery">
+                <img src="./images/2024_lstm_prediction.jpg" alt="2024 LSTM 시계열 예측 그래프">
+            </div>
+            <div class="downloads">
+                <a href="./files/2024_presentation.pptx" target="_blank">📄 PPT 자료</a>
+                <a href="./files/2024_report.pdf" target="_blank">📑 논문 자료</a>
+                <a href="./files/2024_lstm_model.py" target="_blank" class="code-btn">💻 LSTM 예측 모델 코드</a>
+                <a href="./files/2024_timeseries_plot.py" target="_blank" class="code-btn">💻 시계열 시각화 코드</a>
+            </div>
+        </div>
+
+        <div id="content-2025" class="content">
+            <h3>2025년: 저고도 대기 난류(EDR) 분석 및 UAM 비행 안전성 연구</h3>
+            <div class="abstract">
+                본 연구는 도심 항공 모빌리티(UAM)의 안전한 운항을 위해 300m 고도 이하의 대기 경계층 내 난류 특성을 집중적으로 분석하였다. 관측 데이터를 바탕으로 와동소산율(EDR)을 산출하고, 이를 통해 저고도 대기 역학의 변화 패턴을 도출하였다.
+            </div>
+            <div class="image-gallery">
+                <img src="./images/2025_edr_map.jpg" alt="2025 와동소산율(EDR) 분석 결과">
+                <img src="./images/2025_uam_safety.jpg" alt="2025 UAM 고도별 안전성 분석">
+            </div>
+            <div class="downloads">
+                <a href="./files/2025_presentation.pptx" target="_blank">📄 PPT 자료</a>
+                <a href="./files/2025_report.pdf" target="_blank">📑 논문 자료</a>
+                <a href="./files/2025_edr_calc.py" target="_blank" class="code-btn">💻 EDR 산출 알고리즘</a>
+                <a href="./files/2025_uam_analysis.py" target="_blank" class="code-btn">💻 UAM 비행 궤적 영향 코드</a>
+            </div>
+        </div>
+
+        <div id="content-2026" class="content active">
+            <h3>2026년: ASIA-AQ 항공 관측과 플럭스 타워 연동 분석</h3>
+            <div class="abstract">
+                본 연구는 2024년 ASIA-AQ 캠페인 데이터를 바탕으로 수행되었다. NASA DC-8 항공 관측 트랙과 보성 플럭스 타워의 지상 관측 데이터를 좌표 기반으로 매칭하여, 고도별 대기 질 및 이산화탄소(CO2) 플럭스 변화를 입체적으로 규명하였다. 
+            </div>
+            <div class="image-gallery">
+                <img src="./images/2026_asia_aq_track.jpg" alt="2026 ASIA-AQ 비행 트랙 매칭">
+                <img src="./images/2026_flux_comparison.jpg" alt="2026 지상 및 항공 관측 비교">
+            </div>
+            <div class="downloads">
+                <a href="./files/2026_presentation.pptx" target="_blank">📄 PPT 자료</a>
+                <a href="./files/2026_report.pdf" target="_blank">📑 논문 자료</a>
+                <a href="./files/2026_track_matching.py" target="_blank" class="code-btn">💻 DC-8 궤적 좌표 매칭 코드</a>
+                <a href="./files/2026_flux_analysis.py" target="_blank" class="code-btn">💻 다중 고도 플럭스 분석 코드</a>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        const startYear = 2018;
-        const endYear = 2026;
-        const tabsContainer = document.getElementById('tabs');
-        const contentsContainer = document.getElementById('tab-contents');
+        // 탭 전환 기능을 처리하는 자바스크립트 함수
+        function openTab(selectedYear) {
+            // 1. 모든 탭 버튼에서 active 클래스 제거
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
 
-        let defaultYear = endYear;
+            // 2. 모든 콘텐츠 영역에서 active 클래스 제거
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => content.classList.remove('active'));
 
-        // 2018년부터 2026년까지 탭과 내용을 동적으로 생성
-        for (let year = startYear; year <= endYear; year++) {
-            
-            // 1. 탭 버튼 생성
-            const tabBtn = document.createElement('button');
-            tabBtn.className = `tab ${year === defaultYear ? 'active' : ''}`;
-            tabBtn.innerText = `${year}년`;
-            tabBtn.setAttribute('data-year', year);
-            tabBtn.onclick = function() { openTab(year, this); };
-            tabsContainer.appendChild(tabBtn);
+            // 3. 클릭한 연도의 탭 버튼을 찾아 active 클래스 추가
+            // Array.from을 사용하여 일치하는 텍스트를 가진 버튼을 찾음
+            const activeTab = Array.from(tabs).find(tab => tab.innerText === selectedYear + '년');
+            if(activeTab) activeTab.classList.add('active');
 
-            // 2. 탭 내용 생성
-            const contentDiv = document.createElement('div');
-            contentDiv.className = `content ${year === defaultYear ? 'active' : ''}`;
-            contentDiv.id = `content-${year}`;
-            
-            // 내부 HTML 구조
-            contentDiv.innerHTML = `
-                <h3>${year}년도 프로젝트 초록</h3>
-                <div class="abstract">
-                    본 연구는 ${year}년도 대학부설 중등 영재원 프로젝트의 일환으로 수행되었다. 
-                    기상 데이터 파이썬 분석, 대기 경계층 내 난류 특성(EDR) 연구, 그리고 머신러닝(LSTM, CNN) 알고리즘을 활용한 기상 및 환경 데이터 예측 모델링 과정을 포함한다. 
-                    수집된 데이터를 바탕으로 의미 있는 패턴을 추출하고, 이를 기반으로 구체적인 결론을 도출하였다. 상세한 분석 결과와 활용된 코드 및 발표 자료는 아래 링크에서 확인할 수 있다.
-                </div>
-                
-                <div class="image-gallery">
-                    <img src="./images/result_${year}_1.jpg" alt="${year}년도 분석 결과 1">
-                    <img src="./images/result_${year}_2.jpg" alt="${year}년도 분석 결과 2">
-                </div>
-
-                <div class="downloads">
-                    <a href="./files/ppt_${year}.pptx" target="_blank">📄 PPT 자료</a>
-                    <a href="./files/paper_${year}.pdf" target="_blank">📑 논문 자료</a>
-                    
-                    <a href="./files/code_${year}_preprocessing.py" target="_blank" class="code-btn">💻 데이터 전처리 코드</a>
-                    <a href="./files/code_${year}_model.py" target="_blank" class="code-btn">💻 모델 학습 코드</a>
-                    <a href="./files/code_${year}_visualization.py" target="_blank" class="code-btn">💻 시각화 코드</a>
-                </div>
-            `;
-            contentsContainer.appendChild(contentDiv);
-        }
-
-        // 탭 전환 함수
-        function openTab(selectedYear, clickedTab) {
-            const allTabs = document.querySelectorAll('.tab');
-            allTabs.forEach(tab => tab.classList.remove('active'));
-            
-            const allContents = document.querySelectorAll('.content');
-            allContents.forEach(content => content.classList.remove('active'));
-
-            clickedTab.classList.add('active');
+            // 4. 해당 연도의 콘텐츠 영역에 active 클래스 추가
             document.getElementById(`content-${selectedYear}`).classList.add('active');
         }
     </script>
