@@ -1,258 +1,304 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter 1. Infinite Series</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>수열과 극한, 테일러 급수</title>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #34495e;
+        --accent-color: #2980b9;
+        --bg-color: #f8f9fa;
+        --box-bg: #ffffff;
+    }
+
+    body {
+        font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: var(--bg-color);
+        margin: 0;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: var(--box-bg);
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    /* Navigation Button Styles */
+    .btn-wrapper {
+        display: flex;
+        justify-content: flex-end; /* Align right */
+        margin-bottom: 20px;
+    }
 
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    .btn-home {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 18px;
+        background-color: var(--secondary-color);
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-    <style>
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            margin: 0;
-            padding: 3rem 5rem;
-            color: #333;
-            line-height: 1.8;
-            background-color: #fcfcfc;
-        }
+    .btn-home:hover {
+        background-color: var(--primary-color);
+        transform: translateY(-1px);
+        color: #ffffff;
+    }
 
-        h1 {
-            font-size: 2.2rem;
-            color: #2c3e50;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 1rem;
-            margin-bottom: 2rem;
-        }
+    .btn-home svg {
+        margin-right: 8px; /* Space between icon and text */
+    }
 
-        h2 {
-            font-size: 1.6rem;
-            color: #d35400; /* 주황색 계열 (1장 느낌) */
-            margin-top: 3.5rem;
-            margin-bottom: 1.5rem;
-            padding-left: 10px;
-            border-left: 5px solid #d35400;
-        }
+    h1 {
+        color: var(--primary-color);
+        border-bottom: 3px solid var(--accent-color);
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+    }
 
-        h3 {
-            font-size: 1.2rem;
-            color: #444;
-            margin-top: 2rem;
-            font-weight: 600;
-        }
+    h2 {
+        color: var(--secondary-color);
+        margin-top: 40px;
+        border-left: 4px solid var(--accent-color);
+        padding-left: 10px;
+    }
 
-        p {
-            margin-bottom: 1.2rem;
-            text-align: justify;
-            word-break: keep-all;
-        }
+    h3 {
+        color: var(--primary-color);
+        margin-top: 25px;
+    }
 
-        /* 핵심 공식 박스 */
-        .key-formula {
-            background-color: #fff8e1; /* 연한 노란색 */
-            padding: 1.5rem;
-            border-radius: 8px;
-            text-align: center;
-            font-family: 'Times New Roman', serif;
-            font-size: 1.1rem;
-            margin: 2rem 0;
-            border: 1px solid #ffe0b2;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-        }
+    .summary-box {
+        background-color: #eaf2f8;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
 
-        /* 예제 박스 스타일 */
-        .example-box {
-            background-color: #fff;
-            border: 1px solid #e1e8ed;
-            border-left: 5px solid #e67e22; 
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
+    .summary-box ul {
+        margin: 0;
+        padding-left: 20px;
+    }
 
-        .example-title {
-            color: #d35400;
-            font-weight: 700;
-            font-size: 1.1rem;
-            display: block;
-            margin-bottom: 1rem;
-        }
+    .concept-box {
+        background-color: #fdfefe;
+        border: 1px solid #d5dbdb;
+        border-radius: 8px;
+        padding: 15px 20px;
+        margin: 15px 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
 
-        .solution-step {
-            margin-top: 1rem;
-            padding-left: 1rem;
-            border-left: 2px solid #eee;
-        }
+    p {
+        margin-bottom: 15px;
+    }
 
-        /* 이미지 플레이스홀더 */
-        .img-placeholder {
-            width: 100%;
-            max-width: 550px;
-            height: 280px;
-            background-color: #f8f9fa;
-            border: 2px dashed #bdc3c7;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #7f8c8d;
-            margin: 2rem auto;
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        .caption {
-            font-size: 0.9rem;
-            color: #7f8c8d;
-            margin-top: 10px;
-            font-style: italic;
-        }
-    </style>
+    .important {
+        font-weight: bold;
+        color: var(--accent-color);
+    }
+
+    /* Fixed Image Width (10rem) */
+    img {
+        width: 10rem;
+        height: auto;
+        display: block;
+        margin: 10px 0;
+    }
+</style>
 </head>
 <body>
 
-    <h1>Chapter 1. 무한급수 (Infinite Series)</h1>
+<div class="container">
     
-    <p>
-        물리학에서는 복잡한 현상을 단순화하여 이해하는 것이 중요하다. 
-        <strong>무한급수</strong>는 다루기 힘든 함수나 물리적 상황을 우리가 잘 아는 다항식($1, x, x^2 \dots$)의 합으로 쪼개서 분석하는 강력한 도구이다.
-        이 장에서는 가장 기초적인 기하급수부터 시작하여, 물리학자의 필수 무기인 테일러 급수까지 다룬다.
+    <div class="btn-wrapper">
+        <a href="https://skyfolder.github.io/boas_menu.html" class="btn-home">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            </svg>
+            Boas 메뉴로 돌아가기
+        </a>
+    </div>
+
+    <h1>제 1장. 수열과 무한급수</h1>
+
+    <div class="summary-box">
+        <strong>1장은 다음 내용으로 구성된다.</strong>
+        <ul>
+            <li>수열과 극한의 개념</li>
+            <li>무한급수와 부분합을 통한 수렴 정의</li>
+            <li>양의 항 급수의 수렴판정(비교판정, 비율판정 등)</li>
+            <li>교대급수, 절대수렴과 조건수렴</li>
+            <li>멱급수와 수렴반경 (실수·복소수 양쪽 모두)</li>
+            <li>테일러 급수의 정의와 계수 계산법</li>
+            <li>대표적인 매클로린 급수($e^x$, $\sin x$, $\cos x$, $\ln(1+x)$)</li>
+            <li>테일러 급수를 이용한 근사와 오차 개념</li>
+        </ul>
+    </div>
+
+    <h2>1. 수열과 극한</h2>
+    <div class="concept-box">
+        <p>수열 $a_n$이 주어졌을 때 $n$이 커질수록 $a_n$이 어떤 값 $L$에 가까워지면 $\lim_{n\to\infty} a_n = L$이라 정의한다.</p>
+        <p>만약 이러한 $L$이 존재하지 않으면 그 수열은 <span class="important">발산한다</span>고 한다.</p>
+        <p>수열의 극한 개념은 나중에 "부분합 수열"의 극한으로 무한급수의 합을 정의할 때 사용한다. 대표적인 예로는 $a_n = 1/n$은 0으로 수렴하고, $a_n = (-1)^n$은 두 값 사이를 왔다 갔다 하므로 극한이 존재하지 않아 발산한다고 한다.</p>
+    </div>
+
+    <h2>2. 무한급수와 부분합</h2>
+    <div class="concept-box">
+        <p>무한급수는 다음과 같은 무한히 많은 항의 합이다.</p>
+        $$ \sum_{n=0}^{\infty} a_n = a_0 + a_1 + a_2 + \cdots $$
+        <p>$N$번째 부분합을</p>
+        $$ S_N = \sum_{n=0}^{N} a_n $$
+        <p>으로 두고, 수열 $S_N$이 어떤 유한한 값 $S$로 수렴하면, 급수는 <span class="important">수렴한다</span>고 하고 $S$를 급수의 합이라고 정의한다. $S_N$이 수렴하지 않으면 급수는 발산한다고 한다.</p>
+        <p>기본 예로 기하급수 $\sum_{n=0}^{\infty} r^n$이 등장한다. 이 급수는 $|r|<1$일 때 합이 $\frac{1}{1-r}$가 되고, $|r|\ge 1$일 때는 발산한다고 한다.</p>
+    </div>
+
+    <h2>3. 양의 항 급수의 수렴 판정</h2>
+    
+    <h3>3.1 비교 판정</h3>
+    <div class="concept-box">
+        <p>항들이 모두 0 이상인 두 급수 $\sum a_n, \sum b_n$에 대해 다음을 쓴다.</p>
+        <ul>
+            <li>$0 \le a_n \le b_n$이고 $\sum b_n$이 수렴하면, $\sum a_n$도 수렴한다.</li>
+            <li>$0 \le b_n \le a_n$이고 $\sum b_n$이 발산하면, $\sum a_n$도 발산한다.</li>
+        </ul>
+        <p>이 판정은 보통 성질이 잘 알려진 기준 급수(예: p-급수 $\sum 1/n^p$)와의 비교에 사용한다.</p>
+    </div>
+
+    <h3>3.2 비율 판정 (Ratio test)</h3>
+    <div class="concept-box">
+        <p>양의 항 급수 $\sum a_n$에 대해 다음을 계산한다.</p>
+        $$ \rho = \lim_{n\to\infty} \left|\frac{a_{n+1}}{a_n}\right| $$
+        <ul>
+            <li>$\rho < 1$이면 급수는 (절대) 수렴한다.</li>
+            <li>$\rho > 1$ 또는 $\rho = \infty$이면 급수는 발산한다.</li>
+            <li>$\rho = 1$이면 이 판정만으로는 결론을 내릴 수 없고 다른 판정을 써야 한다.</li>
+        </ul>
+        <p>팩토리얼이 들어가는 급수에서 특히 유용하게 쓰는 판정이다.</p>
+    </div>
+
+    <h2>4. 교대급수와 절대·조건 수렴</h2>
+    
+    <h3>4.1 교대급수</h3>
+    <div class="concept-box">
+        <p>부호가 번갈아 나오는 급수, 예를 들면 $\sum (-1)^n a_n$ 형태를 교대급수라고 부른다.</p>
+        <p>교대급수판정(Leibniz 판정)은 다음 조건에서 $\sum (-1)^n a_n$이 수렴한다고 말한다.</p>
+        <ul>
+            <li>$a_n > 0$</li>
+            <li>$a_n$이 단조 감소</li>
+            <li>$a_n \to 0$</li>
+        </ul>
+        <p>이 세 조건이 만족되면 교대급수는 수렴한다고 한다.</p>
+    </div>
+
+    <h3>4.2 절대수렴과 조건수렴</h3>
+    <div class="concept-box">
+        <ul>
+            <li><strong>절대수렴:</strong> $\sum |a_n|$이 수렴하면 $\sum a_n$도 수렴하는데, 이 경우 급수가 절대수렴한다고 한다.</li>
+            <li><strong>조건수렴:</strong> $\sum a_n$은 수렴하지만 $\sum |a_n|$은 발산하는 경우를 조건수렴이라고 한다.</li>
+        </ul>
+        <p>이 구분은 나중에 급수의 항을 재배열했을 때 합이 어떻게 변하는지, 또 복소수 급수에서 어떻게 취급하는지를 이해하는 데 중요하다.</p>
+    </div>
+
+    <h2>5. 멱급수와 수렴반경</h2>
+    
+    <h3>5.1 멱급수의 정의</h3>
+    <div class="concept-box">
+        <p>멱급수(power series)는 다음과 같은 꼴이다.</p>
+        $$ \sum_{n=0}^{\infty} a_n (x - x_0)^n $$
+        <p>고정된 $x_0$에 대해 어떤 $x$ 값들에서는 수렴하고, 다른 값들에서는 발산하는데, 이 수렴 영역을 설명하기 위해 <span class="important">수렴반경</span>이라는 개념을 도입한다.</p>
+    </div>
+
+    <h3>5.2 수렴반경과 수렴구간</h3>
+    <div class="concept-box">
+        <p>비율판정을 멱급수에 적용하면,</p>
+        $$ \lim_{n\to\infty} \left|\frac{a_{n+1}(x-x_0)^{n+1}}{a_n(x-x_0)^n}\right| = |x-x_0| \cdot \lim_{n\to\infty} \left|\frac{a_{n+1}}{a_n}\right| $$
+        <p>을 얻게 되고, 이 값이 1보다 작을 때 수렴한다고 한다. 결과를 요약하면 다음과 같다.</p>
+        <ul>
+            <li>$|x-x_0| < R$이면 멱급수는 수렴한다.</li>
+            <li>$|x-x_0| > R$이면 멱급수는 발산한다.</li>
+            <li>$|x-x_0| = R$에서는 별도로 조사해야 한다.</li>
+        </ul>
+        <p>여기서 $R$을 수렴반경이라 부른다. 실수 변수의 경우에는 수렴구간, 복소수 변수의 경우에는 수렴원판(디스크)이라는 기하적 해석을 한다.</p>
+    </div>
+
+    <h2>6. 테일러 급수의 정의</h2>
+    
+    <h3>6.1 테일러 급수</h3>
+    <div class="concept-box">
+        <p>함수 $f(x)$가 점 $x=a$ 근처에서 충분히 많이 미분 가능하면, 다음과 같이 전개할 수 있다고 정의한다. 이를 $f(x)$의 $a$에서의 테일러 급수라고 부른다.</p>
+        $$ f(x) = f(a) + f'(a)(x-a) + \frac{f''(a)}{2!}(x-a)^2 + \frac{f^{(3)}(a)}{3!}(x-a)^3 + \cdots $$
+        <p>각 계수는 $a_n = \frac{f^{(n)}(a)}{n!}$ 로 주어진다. 즉, 도함수를 계산하여 $x=a$에서의 값을 나누기 $n!$ 하면 되는 것이다.</p>
+    </div>
+
+    <h3>6.2 매클로린 급수</h3>
+    <div class="concept-box">
+        <p>특별히 $a=0$ 인 경우를 매클로린 급수라고 한다. 이때 다음과 같이 쓴다.</p>
+        $$ f(x) = f(0) + f'(0)x + \frac{f''(0)}{2!}x^2 + \cdots $$
+    </div>
+
+    <h2>7. 대표적인 매클로린 급수들</h2>
+    <div class="concept-box">
+        <p>Boas 1장은 이후 장에서 반복해서 사용할 기본 급수들을 정리해 둔다.</p>
+        <ol>
+            <li><strong>지수함수</strong>
+                $$ e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots $$
+            </li>
+            <li><strong>사인 함수</strong>
+                $$ \sin x = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + \cdots $$
+            </li>
+            <li><strong>코사인 함수</strong>
+                $$ \cos x = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \frac{x^6}{6!} + \cdots $$
+            </li>
+            <li><strong>자연로그 (원점 근처)</strong>
+                $$ \ln(1+x) = x - \frac{x^2}{2} + \frac{x^3}{3} - \frac{x^4}{4} + \cdots,\quad |x|<1 $$
+            </li>
+        </ol>
+        <p>이러한 급수들은 복소수 장, 미분방정식, 특수함수, 푸리에 해석 등에서 기본 도구로 사용한다.</p>
+    </div>
+
+    <h2>8. 테일러 급수를 이용한 근사와 오차</h2>
+    <div class="concept-box">
+        <p>테일러 급수는 실제 계산에서 무한히 많은 항을 쓰지 않고, 적당한 차수까지만 잘라서 근사값을 구하는 데 사용한다.</p>
+        <p>예를 들어, 작은 $x$에 대해서는 다음과 같이 몇 개의 항만 사용하여 근사한다.</p>
+        <ul>
+            <li>$\sin x \approx x$</li>
+            <li>$\cos x \approx 1 - \frac{x^2}{2}$</li>
+            <li>$e^x \approx 1 + x + \frac{x^2}{2}$</li>
+        </ul>
+        <p>이때 오차는 보통 다음 항 한 개 정도의 크기로 추정하며, 보다 엄밀하게는 테일러 나머지항(Remainder term)을 통해 오차를 상계하는 방식으로 다룬다.</p>
+        <p>이러한 근사와 오차 개념은 이후 수치해석, 미분방정식의 수치해법, 물리 모델 선형화의 정확도 평가 등에서 핵심적인 도구가 된다.</p>
+    </div>
+
+    <p style="text-align: center; margin-top: 40px; color: #7f8c8d; font-size: 0.9em;">
+        이 장의 개념들은 이후 Boas 전체에서 공통적으로 사용되는 언어이므로, “무한급수”와 “테일러 전개”의 정의와 성질을 확실히 익혀두는 것이 중요하다.
     </p>
 
-    <section>
-        <h2>1. 기하급수 (The Geometric Series)</h2>
-        <p>
-            일정한 비율로 변하는 수들의 합을 기하급수(등비급수)라고 한다. 
-            예를 들어 박테리아가 매시간 2배로 늘어나는 경우($1, 2, 4, 8 \dots$)는 합이 무한대로 발산하지만, 
-            반대로 줄어드는 비율을 가진다면 무한히 더해도 유한한 값을 가질 수 있다.
-        </p>
-
-        <div class="img-placeholder">
-            <svg width="400" height="200" viewBox="0 0 400 200">
-                <line x1="0" y1="180" x2="400" y2="180" stroke="#333" stroke-width="2"/>
-                <path d="M 20 20 Q 40 180 60 180" fill="none" stroke="#e67e22" stroke-width="2"/> <path d="M 60 180 Q 80 80 100 180" fill="none" stroke="#e67e22" stroke-width="2"/> <path d="M 100 180 Q 115 120 130 180" fill="none" stroke="#e67e22" stroke-width="2"/> <path d="M 130 180 Q 140 140 150 180" fill="none" stroke="#e67e22" stroke-width="2"/> <path d="M 150 180 Q 155 160 160 180" fill="none" stroke="#e67e22" stroke-width="2"/>
-                <text x="5" y="20" font-size="12">1m</text>
-                <text x="80" y="70" font-size="12">2/3m</text>
-                <text x="115" y="110" font-size="12">4/9m</text>
-            </svg>
-            <div class="caption">[그림 1] 튀어 오르는 공: 높이가 2/3씩 줄어든다.</div>
-        </div>
-
-        <div class="key-formula">
-            $$ S = a + ar + ar^2 + ar^3 + \dots = \frac{a}{1-r} \quad (\text{단, } |r| < 1) $$
-        </div>
-
-        <div class="example-box">
-            <span class="example-title">[Example 1] 튀어 오르는 공 문제</span>
-            <p><strong>문제:</strong> 높이 1에서 공을 떨어뜨렸다. 공이 바닥에 닿을 때마다 원래 높이의 \( 2/3 \)만큼 튀어 오른다. 공이 멈출 때까지 움직인 총 거리는 얼마인가?</p>
-            
-            <div class="solution-step">
-                <strong>풀이:</strong> <br>
-                공은 내려갔다가 올라오기를 반복한다.
-                <ul>
-                    <li>처음 낙하: \( 1 \)</li>
-                    <li>첫 번째 튀어 오름 + 낙하: \( (2/3) + (2/3) = 2 \times (2/3) \)</li>
-                    <li>두 번째 튀어 오름 + 낙하: \( (2/3)^2 + (2/3)^2 = 2 \times (4/9) \)</li>
-                </ul>
-                전체 거리 \( S \)는 다음과 같다.
-                $$ S = 1 + 2\left[ \frac{2}{3} + \left(\frac{2}{3}\right)^2 + \left(\frac{2}{3}\right)^3 + \dots \right] $$
-                대괄호 안은 첫째 항 \( a=2/3 \), 공비 \( r=2/3 \)인 기하급수이다.
-                $$ \text{괄호 안 합} = \frac{2/3}{1 - 2/3} = \frac{2/3}{1/3} = 2 $$
-                따라서 총 거리는:
-                $$ S = 1 + 2(2) = 5 $$
-                공은 무한히 튀기지만 이동 거리는 5로 수렴한다.
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <h2>2. 멱급수와 함수 근사 (Power Series)</h2>
-        <p>
-            숫자의 합을 넘어 \( x \)가 포함된 급수를 생각해보자. 
-            $$ c_0 + c_1 x + c_2 x^2 + \dots $$
-            이것을 <strong>멱급수(Power Series)</strong>라고 한다. 놀랍게도 우리가 아는 대부분의 함수($\sin, \cos, e^x$)는 멱급수로 표현될 수 있다.
-            물리학에서는 복잡한 함수를 다루기 어려울 때, \( x \)가 작다면 앞의 몇 개 항($x$나 $x^2$)만 남기고 나머지를 버리는 <strong>근사(Approximation)</strong>를 자주 사용한다.
-        </p>
-
-        <div class="key-formula">
-            $$ \sin x \approx x \quad (\text{작은 } x \text{에 대해}) $$
-            $$ \cos x \approx 1 - \frac{x^2}{2} $$
-        </div>
-
-        <div class="img-placeholder">
-             <svg width="400" height="200" viewBox="0 0 400 200">
-                <line x1="0" y1="100" x2="400" y2="100" stroke="#888" stroke-width="1"/>
-                <line x1="200" y1="0" x2="200" y2="200" stroke="#888" stroke-width="1"/>
-                
-                <path d="M 20 100 Q 110 0 200 100 T 380 100" fill="none" stroke="black" stroke-width="2"/>
-                <text x="360" y="90" font-size="12">sin(x)</text>
-
-                <line x1="100" y1="150" x2="300" y2="50" stroke="red" stroke-width="2" stroke-dasharray="5,5"/>
-                <text x="280" y="40" font-size="12" fill="red">y=x</text>
-                
-                <text x="180" y="190" font-size="12">x=0 근처에서 두 선이 겹친다!</text>
-            </svg>
-            <div class="caption">[그림 2] 사인 함수(검은색)와 1차 근사(빨간색)</div>
-        </div>
-    </section>
-
-    <section>
-        <h2>3. 테일러 급수와 응용 (Taylor Series)</h2>
-        <p>
-            함수를 다항식으로 바꾸는 일반적인 공식이 바로 테일러 전개이다. 특히 \( x=0 \)에서의 전개를 <strong>매클로린 급수(Maclaurin Series)</strong>라고 한다.
-            다음의 세 가지 급수는 물리학과 학생이라면 구구단처럼 외워야 한다.
-        </p>
-        
-        <div class="example-box">
-            <span class="example-title">[필수 암기 급수]</span>
-            <ul>
-                <li>\( \sin x = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \dots \) (홀수 차수)</li>
-                <li>\( \cos x = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \dots \) (짝수 차수)</li>
-                <li>\( e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \dots \) (모든 차수)</li>
-            </ul>
-        </div>
-
-        <div class="example-box">
-            <span class="example-title">[Example 2] 로피탈 정리 대신 급수 사용하기</span>
-            <p><strong>문제:</strong> 다음 극한값을 구하시오.</p>
-            $$ \lim_{x \to 0} \frac{\sin x - x}{x^3} $$
-            
-            <div class="solution-step">
-                <strong>풀이:</strong> <br>
-                물론 로피탈의 정리를 써서 분자 분모를 3번 미분해도 답은 나온다. 하지만 급수를 쓰면 훨씬 우아하다.
-                분자의 \( \sin x \) 자리에 급수를 대입해보자.
-                $$ \sin x - x = \left( x - \frac{x^3}{3!} + \frac{x^5}{5!} - \dots \right) - x $$
-                \( x \)가 지워지고 제일 큰 항은 \( -x^3/6 \)이 남는다.
-                $$ \approx -\frac{x^3}{6} $$
-                이제 극한을 구하면:
-                $$ \frac{-x^3/6}{x^3} = -\frac{1}{6} $$
-                미분 없이 단순한 대수 계산으로 극한을 구할 수 있다.
-            </div>
-        </div>
-
-        <div class="example-box">
-            <span class="example-title">[Example 3] 적분이 안 되는 함수 적분하기</span>
-            <p><strong>문제:</strong> \( \int_{0}^{1} \sin(x^2) \, dx \) 를 계산하시오.</p>
-            
-            <div class="solution-step">
-                <strong>풀이:</strong> <br>
-                \( \sin(x^2) \)의 부정적분은 초등함수로 표현할 수 없다(불가능하다). 하지만 급수를 이용하면 정밀한 값을 구할 수 있다.
-                \( \sin t \) 급수 식의 \( t \) 자리에 \( x^2 \)을 넣는다.
-                $$ \sin(x^2) = x^2 - \frac{(x^2)^3}{3!} + \frac{(x^2)^5}{5!} - \dots $$
-                $$ = x^2 - \frac{x^6}{6} + \frac{x^{10}}{120} - \dots $$
-                이제 항별로 적분한다. (다항식 적분은 누구나 할 수 있다!)
-                $$ \int_{0}^{1} \left( x^2 - \frac{x^6}{6} + \dots \right) dx = \left[ \frac{x^3}{3} - \frac{x^7}{42} + \dots \right]_0^1 $$
-                $$ = \frac{1}{3} - \frac{1}{42} + \dots \approx 0.3333 - 0.0238 = 0.3095 $$
-                항을 더 많이 계산할수록 실제 값에 더 가까워진다.
-            </div>
-        </div>
-    </section>
+</div>
 
 </body>
 </html>
