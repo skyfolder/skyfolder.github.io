@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF 리스트 뷰어</title>
+    <style>
+        /* 화면 레이아웃 설정 */
+        .container {
+            display: flex;
+            height: 90vh;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* 왼쪽 리스트 스타일 */
+        .pdf-list {
+            width: 250px;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+        }
+
+        .pdf-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f4f4f4;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .pdf-item:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* 오른쪽 뷰어 스타일 */
+        .viewer-area {
+            flex-grow: 1;
+            border: 2px solid #333;
+            background-color: #eee;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="pdf-list">
+        <h3>PDF 목록</h3>
+        <div class="pdf-item" onclick="viewPDF('file1.pdf')">01. 문서 제목 1</div>
+        <div class="pdf-item" onclick="viewPDF('file2.pdf')">02. 문서 제목 2</div>
+        <div class="pdf-item" onclick="viewPDF('file3.pdf')">03. 문서 제목 3</div>
+        <div class="pdf-item" onclick="viewPDF('file4.pdf')">04. 문서 제목 4</div>
+        <div class="pdf-item" onclick="viewPDF('file5.pdf')">05. 문서 제목 5</div>
+        <div class="pdf-item" onclick="viewPDF('file6.pdf')">06. 문서 제목 6</div>
+        <div class="pdf-item" onclick="viewPDF('file7.pdf')">07. 문서 제목 7</div>
+        <div class="pdf-item" onclick="viewPDF('file8.pdf')">08. 문서 제목 8</div>
+        <div class="pdf-item" onclick="viewPDF('file9.pdf')">09. 문서 제목 9</div>
+    </div>
+
+    <div class="viewer-area">
+        <iframe id="pdf-viewer" src="" title="PDF Viewer">
+            이 브라우저는 PDF 미리보기를 지원하지 않습니다.
+        </iframe>
+    </div>
+</div>
+
+<script>
+    function viewPDF(fileName) {
+        // iframe의 src를 클릭한 파일 경로로 변경
+        const viewer = document.getElementById('pdf-viewer');
+        viewer.src = fileName;
+    }
+
+    // 페이지 로드 시 첫 번째 PDF를 기본으로 보여주고 싶다면 아래 주석 해제
+    // window.onload = () => viewPDF('file1.pdf');
+</script>
+
+</body>
+</html>
