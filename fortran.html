@@ -1,61 +1,62 @@
-<details style="margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; padding: 10px;">
-  <summary style="font-weight: bold; cursor: pointer; padding: 5px; font-size: 1.1em;">
-    보충 8.1-1 — 벡터 정규화 ▾
-  </summary>
-  
-  <div style="margin-top: 15px; padding-left: 10px;">
-    <p>벡터의 길이를 <code>sqrt(sum(v**2))</code>로 구하고, 배열 전체를 그 스칼라로 나눠 단위 벡터를 만든다. 스칼라 확장과 축약 함수가 한 줄씩 쓰였다.</p>
-    
-    <div style="background-color: #f9f9f9; padding: 15px; border-left: 4px solid #0056b3; margin-bottom: 15px;">
-      <p style="margin-top: 0;"><strong>[퀴즈]</strong> 배열 <code>v</code> 전체를 스칼라 <code>norm</code>으로 나누어 요소별 연산을 수행하는 구문을 완성하시오.</p>
-      
-      <pre style="background-color: #272822; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; font-family: monospace;">
-program s81_1
-   implicit none
-   real :: v(3), norm, unit(3)
-
-   v = [3.0, 0.0, 4.0]
-   norm = sqrt(sum(v**2))     ! length of the vector
-   
-   <span style="color: #75715e;">! scale whole array by a scalar</span>
-   unit = <input type="text" id="quiz-8-1-1" placeholder="빈칸 입력" style="padding: 3px; font-family: monospace; width: 120px;">
-
-   print '(a, f6.3)',    "norm   = ", norm
-   print '(a, *(f7.3))', "unit  =", unit
-end program s81_1</pre>
-
-      <button onclick="checkAnswer811()" style="padding: 8px 15px; background-color: #0056b3; color: white; border: none; border-radius: 4px; cursor: pointer;">정답 확인</button>
-      <span id="result-8-1-1" style="margin-left: 10px; font-weight: bold;"></span>
-    </div>
-
-    <div style="background-color: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 5px; font-family: monospace;">
-      <div style="color: #858585; margin-bottom: 5px; font-size: 0.9em;">실행 결과:</div>
-      norm   =  5.000<br>
-      unit  =  0.600  0.000  0.800
-    </div>
-  </div>
-</details>
-
-<script>
-  function checkAnswer811() {
-    // 1. 사용자 입력값 가져오기
-    let userInput = document.getElementById('quiz-8-1-1').value;
-    let resultSpan = document.getElementById('result-8-1-1');
-    
-    // 2. 입력값 정규화 (모든 공백 제거 및 소문자 변환)
-    // Fortran은 대소문자를 구분하지 않으며, 연산자 사이의 공백도 무시됨
-    let normalizedInput = userInput.replace(/\s+/g, '').toLowerCase();
-    
-    // 3. 정답 판정 (v/norm)
-    if (normalizedInput === "v/norm") {
-      resultSpan.textContent = "✅ 정답입니다! 스칼라 확장이 올바르게 적용되었습니다.";
-      resultSpan.style.color = "green";
-    } else if (normalizedInput === "") {
-      resultSpan.textContent = "⚠️ 빈칸을 입력해 주세요.";
-      resultSpan.style.color = "#ff9800"; // 주황색
-    } else {
-      resultSpan.textContent = "❌ 틀렸습니다. 배열을 스칼라로 나누는 연산자를 확인해 보세요.";
-      resultSpan.style.color = "red";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fortran Lecture Materials</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      line-height: 1.6;
     }
-  }
-</script>
+    h1 {
+      color: #2c3e50;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 8px 0;
+    }
+    a {
+      text-decoration: none;
+      color: #2980b9;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .intro {
+      margin-bottom: 20px;
+      padding: 10px;
+      background: #ecf0f1;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fortran Lecture Materials</h1>
+  <div class="intro">
+    <p>Here you can download the lecture slides (PPTX format) for the Fortran programming course.  
+    Click on each item below to download the corresponding file.</p>
+  </div>
+
+  <h2>Available PPTX Files</h2>
+  <ul>
+    <li><a href="pptx/1장_Fortran_소개와_개발_환경.pptx" download>Lecture 01 - Introduction</a></li>
+    <li><a href="pptx/lecture02.pptx" download>Lecture 02 - Basics</a></li>
+    <li><a href="pptx/lecture03.pptx" download>Lecture 03 - Variables</a></li>
+    <li><a href="pptx/lecture04.pptx" download>Lecture 04 - Control Structures</a></li>
+    <li><a href="pptx/lecture05.pptx" download>Lecture 05 - Arrays</a></li>
+    <li><a href="pptx/lecture06.pptx" download>Lecture 06 - Functions</a></li>
+    <li><a href="pptx/lecture07.pptx" download>Lecture 07 - Modules</a></li>
+    <li><a href="pptx/lecture08.pptx" download>Lecture 08 - File I/O</a></li>
+    <li><a href="pptx/lecture09.pptx" download>Lecture 09 - Numerical Methods</a></li>
+    <li><a href="pptx/lecture10.pptx" download>Lecture 10 - Advanced Topics</a></li>
+    <li><a href="pptx/lecture11.pptx" download>Lecture 11 - Optimization</a></li>
+    <li><a href="pptx/lecture12.pptx" download>Lecture 12 - Parallel Computing</a></li>
+    <li><a href="pptx/lecture13.pptx" download>Lecture 13 - Case Studies</a></li>
+    <li><a href="pptx/lecture14.pptx" download>Lecture 14 - Final Review</a></li>
+  </ul>
+</body>
+</html>
