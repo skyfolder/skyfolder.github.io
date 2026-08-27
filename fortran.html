@@ -7,74 +7,88 @@
     body {
       font-family: Arial, sans-serif;
       margin: 40px;
-      line-height: 1.6;
     }
     h1 {
       color: #2c3e50;
     }
     .chapter {
+      display: grid;
+      grid-template-columns: 250px auto;
+      gap: 20px;
       margin-bottom: 25px;
-      padding: 15px;
+      padding-bottom: 15px;
       border-bottom: 1px solid #ccc;
     }
-    .chapter h2 {
+    .left {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .left h2 {
       margin: 0;
       color: #34495e;
     }
-    .chapter p {
-      margin: 5px 0 10px;
-    }
-    .links a {
-      margin-right: 15px;
+    .left a {
       text-decoration: none;
       color: #2980b9;
       font-weight: bold;
     }
-    .links a:hover {
+    .left a:hover {
       text-decoration: underline;
+    }
+    .right {
+      color: #555;
     }
   </style>
 </head>
 <body>
   <h1>Fortran Lecture Materials</h1>
   <p>Welcome to the Fortran programming course materials.  
-     Each chapter includes a short introduction, a downloadable PPTX file, and a practice exercise page.</p>
+     Each chapter includes a downloadable PPTX file and a practice exercise page, with a short introduction provided alongside.</p>
 
   <!-- Example Chapter -->
   <div class="chapter">
-    <h2>Chapter 1: Introduction to Fortran</h2>
-    <p>Overview of Fortran history, basic syntax, and why it remains important in scientific computing.</p>
-    <div class="links">
+    <div class="left">
+      <h2>Chapter 1: Introduction to Fortran</h2>
       <a href="pptx/lecture01.pptx" download>📥 Download PPTX</a>
       <a href="practice/practice01.html">📝 Practice Exercises</a>
     </div>
+    <div class="right">
+      Overview of Fortran history, basic syntax, and why it remains important in scientific computing.
+    </div>
   </div>
 
   <div class="chapter">
-    <h2>Chapter 2: Basic Syntax</h2>
-    <p>Learn about program structure, variables, and simple input/output operations.</p>
-    <div class="links">
+    <div class="left">
+      <h2>Chapter 2: Basic Syntax</h2>
       <a href="pptx/lecture02.pptx" download>📥 Download PPTX</a>
       <a href="practice/practice02.html">📝 Practice Exercises</a>
     </div>
-  </div>
-
-  <div class="chapter">
-    <h2>Chapter 3: Variables and Data Types</h2>
-    <p>Introduction to integer, real, character types, and type declarations in Fortran.</p>
-    <div class="links">
-      <a href="pptx/lecture03.pptx" download>📥 Download PPTX</a>
-      <a href="practice/practice03.html">📝 Practice Exercises</a>
+    <div class="right">
+      Learn about program structure, variables, and simple input/output operations.
     </div>
   </div>
 
-  <!-- 동일한 형식으로 Chapter 4 ~ Chapter 14까지 반복 -->
   <div class="chapter">
-    <h2>Chapter 14: Final Review</h2>
-    <p>Comprehensive review of all topics covered, with summary exercises and exam preparation tips.</p>
-    <div class="links">
+    <div class="left">
+      <h2>Chapter 3: Variables and Data Types</h2>
+      <a href="pptx/lecture03.pptx" download>📥 Download PPTX</a>
+      <a href="practice/practice03.html">📝 Practice Exercises</a>
+    </div>
+    <div class="right">
+      Introduction to integer, real, character types, and type declarations in Fortran.
+    </div>
+  </div>
+
+  <!-- 동일한 형식으로 Chapter 4 ~ Chapter 14 반복 -->
+  <div class="chapter">
+    <div class="left">
+      <h2>Chapter 14: Final Review</h2>
       <a href="pptx/lecture14.pptx" download>📥 Download PPTX</a>
       <a href="practice/practice14.html">📝 Practice Exercises</a>
+    </div>
+    <div class="right">
+      Comprehensive review of all topics covered, with summary exercises and exam preparation tips.
     </div>
   </div>
 
