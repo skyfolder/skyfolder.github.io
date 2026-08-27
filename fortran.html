@@ -11,9 +11,22 @@
     h1 {
       color: #2c3e50;
     }
+    .topnav {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+    .topnav a {
+      text-decoration: none;
+      color: #2980b9;
+      font-weight: bold;
+      margin-left: 15px;
+    }
+    .topnav a:hover {
+      text-decoration: underline;
+    }
     .chapter {
       display: grid;
-      grid-template-columns: 1fr 3fr; /* 왼쪽:오른쪽 비율 1:3 */
+      grid-template-columns: 2fr 3fr; /* 왼쪽:오른쪽 비율 2:3 */
       gap: 20px;
       margin-bottom: 25px;
       padding-bottom: 15px;
@@ -42,6 +55,10 @@
   </style>
 </head>
 <body>
+  <div class="topnav">
+    <a href="index.html">🏠 Home</a>
+  </div>
+
   <h1>Fortran Lecture Materials</h1>
   <p>Welcome to the Fortran programming course materials.  
      Each chapter includes a downloadable PPTX file and a practice exercise page, with a short introduction provided alongside.</p>
