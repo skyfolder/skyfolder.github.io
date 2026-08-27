@@ -26,38 +26,30 @@
     }
     .chapter {
       display: grid;
-      grid-template-columns: 2fr 3fr; /* 1:1 비율 */
+      grid-template-columns: 1fr 1fr; /* 1:1 비율 */
       gap: 20px;
       margin-bottom: 25px;
-      padding-bottom: 15px;
-      /* border-bottom: 1px solid #ccc; */
     }
     .header-row {
       display: flex;
-      justify-content: space-between; /* 제목 왼쪽, 링크 오른쪽 */
+      justify-content: flex-start;
       align-items: center;
+      gap: 20px;
     }
     .header-row h2 {
       margin: 0;
       color: #34495e;
     }
     .links a {
-      margin-left: 15px;
+      margin-left: 10px;
       text-decoration: none;
       color: #2980b9;
-      font-weight: bold;
+      font-weight: normal; /* 굵게 하지 않음 */
     }
-    .download {
-      font-weight: normal;
-    }
-    .practice {
-      font-weight: normal;
-    }
-
     .links a:hover {
       text-decoration: underline;
     }
-    .right {
+    .desc {
       color: #555;
     }
   </style>
@@ -71,177 +63,48 @@
   <p>Welcome to the Fortran programming course materials.  
      Each chapter includes a downloadable PPTX file and a practice exercise page, with a short introduction provided alongside.</p>
 
-  <!-- Example Chapter -->
+  <!-- Chapter 1 -->
   <div class="chapter">
     <div class="header-row">
-      <h3> 1장 Fortran 소개와 개발환경</h3>
+      <h2>Chapter 1: Introduction to Fortran</h2>
       <div class="links">
-        <a href="pdf_fortran/1장_Fortran_소개와_개발_환경.pdf" download>📥 Download</a>
+        <a href="pptx/lecture01.pptx" download>📥 Download</a>
         <a href="practice/practice01.html">📝 Practice</a>
       </div>
     </div>
-    <div class="right">
-      컴퓨터의 작동 원리, Fortran의 역사, 개발 환경
+    <div class="desc">
+      Overview of Fortran history, basic syntax, and why it remains important in scientific computing.
     </div>
   </div>
 
+  <!-- Chapter 2 -->
   <div class="chapter">
     <div class="header-row">
-      <h3> 2장 프로그램 구조와 기본 문법</h3>
+      <h2>Chapter 2: Basic Syntax</h2>
       <div class="links">
-        <a href="pdf_fortran/2장_프로그램_구조와_기본_문법.pdf" download>📥 Download</a>
+        <a href="pptx/lecture02.pptx" download>📥 Download</a>
         <a href="practice/practice02.html">📝 Practice</a>
       </div>
     </div>
-    <div class="right">
-      소스 형식, 프로그램 골격, 식별자, implicit none
+    <div class="desc">
+      Learn about program structure, variables, and simple input/output operations.
     </div>
   </div>
 
+  <!-- Chapter 3 -->
   <div class="chapter">
     <div class="header-row">
-      <h3> 3장 자료형과 변수</h3>
+      <h2>Chapter 3: Variables and Data Types</h2>
       <div class="links">
-        <a href="pdf_fortran/3장_자료형과_변수.pdf" download>📥 Download</a>
+        <a href="pptx/lecture03.pptx" download>📥 Download</a>
         <a href="practice/practice03.html">📝 Practice</a>
       </div>
     </div>
-    <div class="right">
-      다섯 가지 자료형, kind와 정밀도, parameter 상수, 초기화
-    </div>
-  </div>
-
-  <div class="chapter">
-    <div class="header-row">
-      <h3> 4장 연산자와 식</h3>
-      <div class="links">
-        <a href="pdf_fortran/4장_연산자와_식.pdf" download>📥 Download</a>
-        <a href="practice/practice03.html">📝 Practice</a>
-      </div>
-    </div>
-    <div class="right">
-      산술·관계·논리 연산자, 우선순위, 형 변환, 수학 내장 함수
-
-    </div>
-  </div>
-
-  <div class="chapter">
-    <div class="header-row">
-      <h3> 5장 제어 흐름</h3>
-      <div class="links">
-        <a href="pdf_fortran/5장_제어_흐름.pdf" download>📥 Download</a>
-        <a href="practice/practice03.html">📝 Practice</a>
-      </div>
-    </div>
-    <div class="right">
-      if, select case, do, do while, do concurrent, stop
-    </div>
-  </div>
-
-  <div class="chapter">
-    <div class="header-row">
-      <h3> 6장 입출력 기초와 서식</h3>
-      <div class="links">
-        <a href="pdf_fortran/6장_입출력_기초와_서식.pdf" download>📥 Download</a>
-        <a href="practice/practice03.html">📝 Practice</a>
-      </div>
-    </div>
-    <div class="right">
-      목록 지정 입출력, 편집 기술자, csv 파일, NaN과 Inf
-    </div>
-  </div>
-
-  <div class="chapter">
-    <div class="header-row">
-      <h3> 7장 배열 기초</h3>
-      <div class="links">
-        <a href="pdf_fortran/7장_배열_기초.pdf" download>📥 Download</a>
-        <a href="practice/practice03.html">📝 Practice</a>
-      </div>
-    </div>
-    <div class="right">
-      계수, 형상, 경계, 배열 생성자, 슬라이스, 열 우선 저장
-    </div>
-  </div>
-
-  <div class="chapter">
-    <div class="header-row">
-      <h3> 8장 배열 연산</h3>
-      <div class="links">
-        <a href="pdf_fortran/8장_배열_연산.pdf" download>📥 Download</a>
-        <a href="practice/practice03.html">📝 Practice</a>
-      </div>
-    </div>
-    <div class="right">
-      전체 배열 연산, where 마스킹, 축약, reshape, matmul
-    </div>
-  </div>
-
-  <div class="chapter">
-    <div class="header-row">
-      <h3> 9장 동적 배열과 메모리 할당</h3>
-      <div class="links">
-        <a href="pdf_fortran/9장_동적_배열과_메모리_할당.pdf" download>📥 Download</a>
-        <a href="practice/practice03.html">📝 Practice</a>
-      </div>
-    </div>
-    <div class="right">
-      allocatable, allocate, deallocate, 자동 재할당
-    </div>
-  </div>
-
-  <div class="chapter">
-    <div class="header-row">
-      <h3> 10장 함수와 서브루틴</h3>
-      <div class="links">
-        <a href="pdf_fortran/10장_함수와_서브루틴.pdf" download>📥 Download</a>
-        <a href="practice/practice03.html">📝 Practice</a>
-      </div>
-    </div>
-    <div class="right">
-      function, subroutine, contains, result, recursive
-    </div>
-  </div>
-
-    <div class="chapter">
-    <div class="header-row">
-      <h3> 11장 인수 전달과 인터페이스</h3>
-      <div class="links">
-        <a href="pdf_fortran/11장_인수_전달과_인터페이스.pdf" download>📥 Download</a>
-        <a href="practice/practice03.html">📝 Practice</a>
-      </div>
-    </div>
-    <div class="right">
-      intent, optional, 키워드 인수, 가정형상 배열, interface
-    </div>
-  </div>
-
-    <div class="chapter">
-    <div class="header-row">
-      <h3> 12장 모듈과 프로그램 구조</h3>
-      <div class="links">
-        <a href="pdf_fortran/12장_모듈과_프로그램_구성.pdf" download>📥 Download</a>
-        <a href="practice/practice03.html">📝 Practice</a>
-      </div>
-    </div>
-    <div class="right">
+    <div class="desc">
       Introduction to integer, real, character types, and type declarations in Fortran.
     </div>
   </div>
 
-  <div class="chapter">
-    <div class="header-row">
-      <h3> 13장 함수와 서브루틴</h3>
-      <div class="links">
-        <a href="pdf_fortran/13장_함수와_서브루틴.pdf" download>📥 Download</a>
-        <a href="practice/practice03.html">📝 Practice</a>
-      </div>
-    </div>
-    <div class="right">
-      Introduction to integer, real, character types, and type declarations in Fortran.
-    </div>
-  </div>
-  
   <!-- 동일한 형식으로 Chapter 4 ~ Chapter 14 반복 -->
 
 </body>
