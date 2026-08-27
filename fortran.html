@@ -12,51 +12,71 @@
     h1 {
       color: #2c3e50;
     }
-    ul {
-      list-style-type: none;
-      padding: 0;
+    .chapter {
+      margin-bottom: 25px;
+      padding: 15px;
+      border-bottom: 1px solid #ccc;
     }
-    li {
-      margin: 8px 0;
+    .chapter h2 {
+      margin: 0;
+      color: #34495e;
     }
-    a {
+    .chapter p {
+      margin: 5px 0 10px;
+    }
+    .links a {
+      margin-right: 15px;
       text-decoration: none;
       color: #2980b9;
+      font-weight: bold;
     }
-    a:hover {
+    .links a:hover {
       text-decoration: underline;
-    }
-    .intro {
-      margin-bottom: 20px;
-      padding: 10px;
-      background: #ecf0f1;
-      border-radius: 5px;
     }
   </style>
 </head>
 <body>
   <h1>Fortran Lecture Materials</h1>
-  <div class="intro">
-    <p>Here you can download the lecture slides (PPTX format) for the Fortran programming course.  
-    Click on each item below to download the corresponding file.</p>
+  <p>Welcome to the Fortran programming course materials.  
+     Each chapter includes a short introduction, a downloadable PPTX file, and a practice exercise page.</p>
+
+  <!-- Example Chapter -->
+  <div class="chapter">
+    <h2>Chapter 1: Introduction to Fortran</h2>
+    <p>Overview of Fortran history, basic syntax, and why it remains important in scientific computing.</p>
+    <div class="links">
+      <a href="pptx/lecture01.pptx" download>📥 Download PPTX</a>
+      <a href="practice/practice01.html">📝 Practice Exercises</a>
+    </div>
   </div>
 
-  <h2>Available PPTX Files</h2>
-  <ul>
-    <li><a href="pptx/1장_Fortran_소개와_개발_환경.pptx" download>Lecture 01 - Introduction</a></li>
-    <li><a href="pptx/lecture02.pptx" download>Lecture 02 - Basics</a></li>
-    <li><a href="pptx/lecture03.pptx" download>Lecture 03 - Variables</a></li>
-    <li><a href="pptx/lecture04.pptx" download>Lecture 04 - Control Structures</a></li>
-    <li><a href="pptx/lecture05.pptx" download>Lecture 05 - Arrays</a></li>
-    <li><a href="pptx/lecture06.pptx" download>Lecture 06 - Functions</a></li>
-    <li><a href="pptx/lecture07.pptx" download>Lecture 07 - Modules</a></li>
-    <li><a href="pptx/lecture08.pptx" download>Lecture 08 - File I/O</a></li>
-    <li><a href="pptx/lecture09.pptx" download>Lecture 09 - Numerical Methods</a></li>
-    <li><a href="pptx/lecture10.pptx" download>Lecture 10 - Advanced Topics</a></li>
-    <li><a href="pptx/lecture11.pptx" download>Lecture 11 - Optimization</a></li>
-    <li><a href="pptx/lecture12.pptx" download>Lecture 12 - Parallel Computing</a></li>
-    <li><a href="pptx/lecture13.pptx" download>Lecture 13 - Case Studies</a></li>
-    <li><a href="pptx/lecture14.pptx" download>Lecture 14 - Final Review</a></li>
-  </ul>
+  <div class="chapter">
+    <h2>Chapter 2: Basic Syntax</h2>
+    <p>Learn about program structure, variables, and simple input/output operations.</p>
+    <div class="links">
+      <a href="pptx/lecture02.pptx" download>📥 Download PPTX</a>
+      <a href="practice/practice02.html">📝 Practice Exercises</a>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <h2>Chapter 3: Variables and Data Types</h2>
+    <p>Introduction to integer, real, character types, and type declarations in Fortran.</p>
+    <div class="links">
+      <a href="pptx/lecture03.pptx" download>📥 Download PPTX</a>
+      <a href="practice/practice03.html">📝 Practice Exercises</a>
+    </div>
+  </div>
+
+  <!-- 동일한 형식으로 Chapter 4 ~ Chapter 14까지 반복 -->
+  <div class="chapter">
+    <h2>Chapter 14: Final Review</h2>
+    <p>Comprehensive review of all topics covered, with summary exercises and exam preparation tips.</p>
+    <div class="links">
+      <a href="pptx/lecture14.pptx" download>📥 Download PPTX</a>
+      <a href="practice/practice14.html">📝 Practice Exercises</a>
+    </div>
+  </div>
+
 </body>
 </html>
