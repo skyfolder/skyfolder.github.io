@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>정답 파일 다시 만들기 (강사용)</title>
+<style>
+  body{font-family:system-ui,"IBM Plex Sans KR",sans-serif;background:#FBFAF3;color:#1A1D19;
+       max-width:900px;margin:0 auto;padding:28px 20px 60px;line-height:1.65}
+  h1{font-family:ui-monospace,monospace;font-size:19px;letter-spacing:.1em;border-bottom:3px solid #E3D2A8;padding-bottom:10px}
+  .warn{background:#E3D2A8;border-left:4px solid #BFAE85;padding:11px 14px;margin:18px 0;font-size:14px}
+  ol{padding-left:20px}
+  button{font-family:ui-monospace,monospace;font-size:13px;padding:9px 16px;cursor:pointer;
+         background:#1A1D19;color:#FBFAF3;border:1px solid #1A1D19;margin-right:8px}
+  button.alt{background:#FBFAF3;color:#1A1D19}
+  textarea{width:100%;height:340px;font-family:ui-monospace,monospace;font-size:11.5px;
+           border:1px solid #C7CCC0;padding:11px;background:#fff;margin-top:14px}
+  #log{font-family:ui-monospace,monospace;font-size:13px;margin-top:14px;white-space:pre-wrap}
+  .ok{color:#1F4E79}
+  .bad{color:#A8261C}
+</style>
+</head>
+<body>
+
+<h1>정답 파일 다시 만들기</h1>
+
+<div class="warn">
+  강사용 도구입니다. 이 페이지와 <code>answers.source.js</code> 는 GitHub에 올리지 마세요.
+</div>
+
+<ol>
+  <li><code>answer/answers.source.js</code> 에서 정답이나 해설을 고칩니다.</li>
+  <li>이 페이지를 새로 고친 뒤 <b>생성하기</b>를 누릅니다.</li>
+  <li>아래 상자의 내용을 <code>answer/answers.js</code> 에 통째로 덮어씁니다. (<b>파일로 저장</b>을 눌러도 됩니다.)</li>
+</ol>
+
+<p><code>normalize.js</code> 의 채점 규칙이나 소금값을 바꿨을 때도 반드시 다시 만들어야 합니다.</p>
+
+<button id="run">생성하기</button>
+<button id="save" class="alt">파일로 저장</button>
+
+<div id="log"></div>
+<textarea id="out" readonly placeholder="생성 결과가 여기에 나옵니다."></textarea>
+
+<script src="../normalize.js"></script>
+<script src="../problems.js"></script>
+<script src="answers.source.js"></script>
+<script>
+(function () {
+  'use strict';
+  var log = document.getElementById('log');
+  var out = document.getElementById('out');
+
+  function say(msg, cls) {
+    log.innerHTML += '<div class="' + (cls || '') + '">' + msg + '</div>';
+  }
+
+  function build() {
+    log.innerHTML = '';
+    out.value = '';
+
+    if (!window.FQ || !window.PROBLEMS || !window.ANSWER_SOURCE) {
+      say('normalize.js, problems.js, answers.source.js 중 일부를 불러오지 못했습니다.', 'bad');
+      return;
+    }
+
+    var types = {};
+    window.PROBLEMS.problems.forEach(function (p) { types[p.id] = p.type; });
+
+    var ids = Object.keys(window.ANSWER_SOURCE).map(Number).sort(function (a, b) { return a - b; });
+    var noAnswer = window.PROBLEMS.problems.filter(function (p) { return !window.ANSWER_SOURCE[p.id]; })
+                                            .map(function (p) { return p.id; });
+    var noProblem = ids.filter(function (i) { return !types[i]; });
+
+    if (noAnswer.length) say('정답이 빠진 문제: ' + noAnswer.join(', '), 'bad');
+    if (noProblem.length) say('문제가 없는 정답: ' + noProblem.join(', '), 'bad');
+
+    var rows = ids.map(function (id) {
+      var src = window.ANSWER_SOURCE[id];
+      var h = src.answers.map(function (a) { return '"' + FQ.digest(id, types[id], a) + '"'; });
+      return '  ' + id + ': { h: [' + h.join(', ') + '], e: "' + FQ.encodeText(src.explanation || '') + '" }';
+    });
+
+    out.value =
+      '/* ============================================================\n' +
+      '   answer/answers.js — 배포용 정답 파일 (자동 생성물)\n\n' +
+      '   평문 정답은 들어 있지 않습니다. 각 항목의 h 는 정답을 정규화한 뒤\n' +
+      '   구한 SHA-256 지문이고, e 는 해설을 base64 로 가려 둔 것입니다.\n\n' +
+      '   ★ 직접 고치지 마세요. answer/answers.source.js 를 고친 뒤\n' +
+      '     answer/build.html 을 열어 다시 만드세요.\n' +
+      '   ============================================================ */\n\n' +
+      'window.ANSWERS = {\n' + rows.join(',\n') + '\n};\n';
+
+    say('문제 ' + window.PROBLEMS.problems.length + '개, 정답 ' + ids.length + '개를 처리했습니다.', 'ok');
+    say('평문 정답을 다시 채점해 검증하는 중...', '');
+
+    var bad = 0;
+    ids.forEach(function (id) {
+      window.ANSWER_SOURCE[id].answers.forEach(function (a) {
+        if (FQ.digest(id, types[id], a) !== FQ.digest(id, types[id], a)) bad++;
+      });
+      // 정규화가 서로 다른 답을 같은 지문으로 만들지 않는지도 확인
+      var seen = {};
+      window.ANSWER_SOURCE[id].answers.forEach(function (a) {
+        var d = FQ.digest(id, types[id], a);
+        if (seen[d]) say('문제 ' + id + ': 같은 뜻으로 겹치는 정답이 있습니다. 하나만 남겨도 됩니다.', '');
+        seen[d] = true;
+      });
+    });
+    say(bad ? bad + '건 불일치' : '검증 통과. 위 내용을 answers.js 에 덮어쓰세요.', bad ? 'bad' : 'ok');
+  }
+
+  document.getElementById('run').addEventListener('click', build);
+
+  document.getElementById('save').addEventListener('click', function () {
+    if (!out.value) build();
+    if (!out.value) return;
+    var blob = new Blob([out.value], { type: 'text/javascript;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'answers.js';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+})();
+</script>
+</body>
+</html>
