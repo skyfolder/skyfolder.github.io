@@ -1,0 +1,8 @@
+# 평문 정답 원본과 강사용 도구는 절대 올리지 않는다.
+answer/answers.source.js
+answer/build.html
+
+# 배포되는 것은 해시본 answer/answers.js 하나뿐이다.
+
+.DS_Store
+Thumbs.db
