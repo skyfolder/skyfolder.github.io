@@ -1,5 +1,9 @@
 
 ---
+layout: default
+title: 1장 Fortran 소개와 개발 환경
+---
+
 
 <div align="center">
 
