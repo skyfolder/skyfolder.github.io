@@ -1,0 +1,175 @@
+
+---
+## 부록 E. C 언어 상호운용성
+
+
+### E.1 개념 설명
+
+- **`iso_c_binding` 모듈**: C와 호환되는 종류 매개변수(`c_int`, `c_double`, `c_char` 등)와 포인터형(`c_ptr`)을 제공한다. Fortran의 기본 `integer`/`real`이 C의 `int`/`double`과 같다는 보장은 없으므로, 상호운용 코드에서는 반드시 이 종류를 쓴다.
+- **`bind(c)` 속성**: 프로시저·파생형이 C와 같은 호출 규약·메모리 배치를 따르게 한다. `name="..."`으로 C 쪽 심볼 이름을 정확히 지정한다.
+- **`value` 속성**: C는 스칼라를 **값으로** 전달한다(Fortran 기본은 참조 전달). C 함수의 값 인수에는 `value`를 붙인다. 배열·포인터는 참조로 전달된다.
+
+### E.2 문법 규격
+
+```fortran
+use iso_c_binding, only: c_int, c_double, ...
+
+interface
+   function ‹name›(‹args›) bind(c, name="‹c-symbol›") result(‹r›)
+      import :: ‹kinds›
+      ‹type›(‹c-kind›), value :: ‹scalar-arg›   ! 값 전달
+      ‹type›(‹c-kind›) :: ‹array-arg›(*)         ! 참조 전달
+   end function ‹name›
+end interface
+
+type, bind(c) :: ‹name›        ! C 구조체와 호환되는 파생형
+   ‹type›(‹c-kind›) :: ‹component›
+end type ‹name›
+```
+
+### E.3 예제 1 — C 함수(스칼라·배열) 호출
+
+C로 작성한 두 함수를 Fortran에서 호출한다: 값 인수만 받는 `c_hypot`와, 배열을 참조로 받아 제자리에서 바꾸는 `c_scale`.
+
+**① C 소스** 
+
+```c
+#include <math.h>
+
+double c_hypot(double a, double b) {
+    return sqrt(a * a + b * b);
+}
+
+void c_scale(double *x, int n, double factor) {
+    for (int i = 0; i < n; i++) {
+        x[i] = x[i] * factor;
+    }
+}
+```
+
+**① Fortran 소스** 
+
+```fortran
+%%writefile interop.f90
+module c_api
+   use iso_c_binding, only: c_double, c_int
+   implicit none
+
+   interface
+      pure function c_hypot(a, b) bind(c, name="c_hypot") result(r)
+         import :: c_double
+         real(c_double), value :: a, b
+         real(c_double) :: r
+      end function c_hypot
+
+      subroutine c_scale(x, n, factor) bind(c, name="c_scale")
+         import :: c_double, c_int
+         real(c_double), intent(inout) :: x(*)
+         integer(c_int), value :: n
+         real(c_double), value :: factor
+      end subroutine c_scale
+   end interface
+
+end module c_api
+
+program interop
+   use iso_c_binding, only: c_double, c_int
+   use c_api
+   implicit none
+   real(c_double) :: h
+   real(c_double) :: v(4)
+   integer :: i
+
+   h = c_hypot(3.0_c_double, 4.0_c_double)
+   print '("c_hypot(3,4) = ", F6.3)', h
+
+   v = [(real(i, c_double), i = 1, 4)]
+   call c_scale(v, size(v, kind=c_int), 10.0_c_double)
+   print '("scaled = ", 4F7.1)', v
+end program interop
+```
+
+**② 컴파일·실행** — C는 `gcc`로 컴파일해 목적 파일을 만들고, gfortran으로 함께 링크한다.
+
+```bash
+!gcc -O2 -c cfuncs.c -o cfuncs.o
+!gfortran -O2 -std=f2018 -Wall interop.f90 cfuncs.o -o interop
+!./interop
+```
+
+**실행 결과**
+
+```text
+c_hypot(3,4) =  5.000
+scaled =   10.0   20.0   30.0   40.0
+```
+
+`c_hypot`의 두 스칼라는 `value`로 값 전달, `c_scale`의 배열 `x(*)`는 참조 전달이라 C가 제자리에서 수정한 결과가 Fortran 쪽에 그대로 반영된다.
+
+### E.4 예제 2 — 구조체(파생형) 주고받기
+
+`bind(c)` 파생형은 C 구조체와 메모리 배치가 호환된다. 점 두 개를 값으로 넘겨 거리의 제곱을 받는다.
+
+**① C 소스** 
+
+```c
+struct point { double x; double y; };
+
+double point_dist(struct point p, struct point q) {
+    double dx = p.x - q.x;
+    double dy = p.y - q.y;
+    return dx * dx + dy * dy;
+}
+```
+
+**① Fortran 소스**
+
+```fortran
+%%writefile interop2.f90
+module c_point
+   use iso_c_binding, only: c_double
+   implicit none
+
+   type, bind(c) :: point_t
+      real(c_double) :: x
+      real(c_double) :: y
+   end type point_t
+
+   interface
+      pure function point_dist(p, q) bind(c, name="point_dist") result(d)
+         import :: point_t, c_double
+         type(point_t), value :: p, q
+         real(c_double) :: d
+      end function point_dist
+   end interface
+
+end module c_point
+
+program interop2
+   use iso_c_binding, only: c_double
+   use c_point
+   implicit none
+   type(point_t) :: a, b
+
+   a = point_t(0.0_c_double, 0.0_c_double)
+   b = point_t(3.0_c_double, 4.0_c_double)
+   print '("dist^2 = ", F6.2)', point_dist(a, b)
+end program interop2
+```
+
+**② 컴파일·실행**
+
+```bash
+!gcc -O2 -c point.c -o point.o
+!gfortran -O2 -std=f2018 -Wall interop2.f90 point.o -o interop2
+!./interop2
+```
+
+**실행 결과**
+
+```text
+dist^2 =  25.00
+```
+
+`bind(c)` 파생형의 구성 요소 순서와 종류가 C 구조체와 일치해야 한다. `bind(c)` 형에는 `allocatable`·`pointer` 성분이나 기본값을 둘 수 없다(C에 대응물이 없다).
+
