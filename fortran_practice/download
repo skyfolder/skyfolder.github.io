@@ -1,8 +1,12 @@
-# 평문 정답 원본과 강사용 도구는 절대 올리지 않는다.
-answer/answers.source.js
-answer/build.html
+# ---- 평문 정답과 강사용 도구는 절대 올리지 않는다 ----
+# 챕터가 늘어나도 아래 두 줄이 자동으로 걸러 준다.
+answer/*_answers.src.js
+answer/build_*.html
 
-# 배포되는 것은 해시본 answer/answers.js 하나뿐이다.
+# 배포되는 것은 해시본 answer/*_answers.js 뿐이다.
+
+# ---- 학생 점수를 공개 저장소에 올리지 않으려면 아래 주석을 푼다 ----
+# score/*.txt
 
 .DS_Store
 Thumbs.db
