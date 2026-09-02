@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>제출물 검증</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../fortquiz.css">
+<style>
+  .wrap{max-width:1000px;margin:0 auto;padding:26px 22px 70px}
+  .drop{
+    border:2px dashed var(--rule);background:#fff;padding:34px 20px;text-align:center;
+    font-family:var(--mono);font-size:13px;color:var(--muted);margin:18px 0;cursor:pointer;
+  }
+  .drop.over{border-color:var(--blue);background:var(--bar);color:var(--ink)}
+  textarea.paste{
+    width:100%;height:150px;font-family:var(--mono);font-size:12px;
+    border:1px solid var(--rule);padding:11px;background:#fff;
+  }
+  table{width:100%;border-collapse:collapse;margin-top:20px;font-size:13.5px}
+  th,td{border-bottom:1px solid var(--rule);padding:8px 9px;text-align:left;vertical-align:top}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--ink)}
+  td.n{font-family:var(--mono)}
+  tr.pass td.v{color:var(--blue);font-weight:600}
+  tr.fail td.v{color:var(--red);font-weight:600}
+  tr.fail{background:rgba(168,38,28,.05)}
+  .why{font-size:12.5px;color:var(--red);margin-top:3px}
+  .sum{font-family:var(--mono);font-size:13px;margin-top:16px}
+  details{margin-top:6px}
+  summary{cursor:pointer;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  details pre{font-family:var(--mono);font-size:11.5px;background:var(--bar);padding:9px;margin-top:6px;white-space:pre-wrap;overflow-x:auto}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <h1>제출물 검증</h1>
+  <span class="tag">서명이 맞는지, 본문이 고쳐지지 않았는지 확인합니다</span>
+</header>
+
+<div class="wrap">
+  <p>학생이 낸 <code>.txt</code> 파일을 아래에 끌어다 놓으세요. 여러 개를 한 번에 넣어도 됩니다.
+  파일 대신 내용을 붙여 넣어도 됩니다.</p>
+
+  <div class="drop" id="drop">
+    파일을 여기로 끌어다 놓거나, 눌러서 고르세요
+    <input type="file" id="picker" accept=".txt,text/plain" multiple hidden>
+  </div>
+
+  <span class="box-label">내용 붙여 넣기</span>
+  <textarea class="paste" id="paste" placeholder="결과 텍스트를 통째로 붙여 넣으세요."></textarea>
+  <div class="actions">
+    <button class="btn btn-primary" id="run">검증하기</button>
+    <button class="btn btn-quiet" id="clear">결과 지우기</button>
+  </div>
+
+  <div id="sum" class="sum"></div>
+  <div id="out"></div>
+</div>
+
+<script src="../fortquiz.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var rows = [];
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function grab(text, label) {
+    var m = text.match(new RegExp('^\\s*' + label + '\\s*:\\s*(.*)$', 'm'));
+    return m ? m[1].trim() : null;
+  }
+
+  /* 한 건을 검증한다.
+     1) 서명 블록을 찾아 지문을 다시 계산해 본다
+     2) 사람이 읽는 머리글이 서명 안의 값과 같은지 대조한다
+     3) 정오답 문자열의 1 개수가 총점과 맞는지 본다  */
+  function verify(text, fname) {
+    var res = { file: fname, ok: false, why: [], name: '', sid: '', chapter: '', time: '', total: '', count: '' };
+
+    text = text.replace(/^\uFEFF/, '');
+
+    var m = text.match(/---\s*BEGIN SIGNATURE\s*---\s*\r?\n([\s\S]*?)\r?\n\s*---\s*END SIGNATURE\s*---/);
+    if (!m) { res.why.push('서명 블록이 없습니다. 파일 전체를 넣었는지 확인하세요.'); return res; }
+
+    var parts = m[1].trim().split('|');
+    if (parts.length < 10) { res.why.push('서명 블록의 형식이 깨졌습니다.'); return res; }
+
+    var sig = parts.pop();
+    var payload = parts.join('|');
+    var expect = FQ.sign(payload);
+
+    var v = parts[0], ch = parts[1], name = parts[2], sid = parts[3],
+        time = parts[4], total = parts[5], count = parts[6], r = parts[7], x = parts[8];
+
+    res.name = name; res.sid = sid; res.chapter = ch; res.time = time;
+    res.total = total; res.count = count; res.code = FQ.signCode(sig);
+    res.correct = (r.match(/1/g) || []).length;
+    res.wrong = (r.match(/0/g) || []).length;
+    res.skipped = (r.match(/\./g) || []).length;
+    res.revealed = (x.match(/1/g) || []).length;
+
+    if (v !== 'v1') res.why.push('알 수 없는 형식 버전입니다: ' + v);
+
+    if (sig !== expect) {
+      res.why.push('서명이 맞지 않습니다. 파일을 고쳤거나 다른 서명 키로 만들어진 파일입니다.');
+      return res;
+    }
+
+    /* 머리글 대조 — 서명 블록만 남기고 본문을 고친 경우를 잡는다 */
+    var hName = grab(text, '이름'), hSid = grab(text, '학번'), hTime = grab(text, '제출');
+    var hTotal = text.match(/^\s*총점\s*:\s*(\d+)\s*\/\s*(\d+)/m);
+
+    if (hName !== null && hName !== name) res.why.push('본문의 이름(' + hName + ')이 서명(' + name + ')과 다릅니다.');
+    if (hSid !== null && hSid !== sid) res.why.push('본문의 학번(' + hSid + ')이 서명(' + sid + ')과 다릅니다.');
+    if (hTime !== null && hTime !== time) res.why.push('본문의 제출 시각이 서명과 다릅니다.');
+    if (hTotal) {
+      if (hTotal[1] !== total) res.why.push('본문의 총점(' + hTotal[1] + ')이 서명(' + total + ')과 다릅니다.');
+      if (hTotal[2] !== count) res.why.push('본문의 만점(' + hTotal[2] + ')이 서명(' + count + ')과 다릅니다.');
+    }
+
+    if (String(res.correct) !== String(total)) {
+      res.why.push('문항별 결과의 정답 수(' + res.correct + ')가 총점(' + total + ')과 맞지 않습니다.');
+    }
+    if (r.length !== Number(count)) {
+      res.why.push('문항 수가 맞지 않습니다.');
+    }
+
+    res.ok = res.why.length === 0;
+    res.detail = ' 이름 ' + name + ' / 학번 ' + sid + ' / ' + ch + '장\n' +
+                 ' 제출 ' + time + '\n' +
+                 ' 정답 ' + res.correct + '  오답 ' + res.wrong + '  미응시 ' + res.skipped +
+                 '  해설 열람 ' + res.revealed + '\n' +
+                 ' 문항별 ' + r;
+    return res;
+  }
+
+  function draw() {
+    var out = document.getElementById('out');
+    if (!rows.length) { out.innerHTML = ''; document.getElementById('sum').textContent = ''; return; }
+
+    var pass = rows.filter(function (r) { return r.ok; }).length;
+    document.getElementById('sum').innerHTML =
+      '검증 통과 <b>' + pass + '</b> / ' + rows.length +
+      (pass < rows.length ? '  ·  확인 필요 ' + (rows.length - pass) + '건' : '');
+
+    out.innerHTML = '<table><thead><tr>' +
+      '<th>파일</th><th>이름</th><th>학번</th><th>장</th><th>점수</th><th>검증 코드</th><th>결과</th>' +
+      '</tr></thead><tbody>' +
+      rows.map(function (r) {
+        return '<tr class="' + (r.ok ? 'pass' : 'fail') + '">' +
+          '<td class="n">' + esc(r.file || '(붙여넣기)') + '</td>' +
+          '<td>' + esc(r.name) + '</td>' +
+          '<td class="n">' + esc(r.sid) + '</td>' +
+          '<td class="n">' + esc(r.chapter) + '</td>' +
+          '<td class="n">' + esc(r.total) + (r.count ? ' / ' + esc(r.count) : '') + '</td>' +
+          '<td class="n">' + esc(r.code || '-') + '</td>' +
+          '<td class="v">' + (r.ok ? '정상' : '확인 필요') +
+            (r.why.length ? r.why.map(function (w) { return '<div class="why">' + esc(w) + '</div>'; }).join('') : '') +
+            (r.detail ? '<details><summary>자세히</summary><pre>' + esc(r.detail) + '</pre></details>' : '') +
+          '</td></tr>';
+      }).join('') + '</tbody></table>';
+  }
+
+  function addFiles(list) {
+    var files = Array.prototype.slice.call(list).filter(function (f) { return /\.txt$/i.test(f.name); });
+    if (!files.length) return;
+    var left = files.length;
+    files.forEach(function (f) {
+      var fr = new FileReader();
+      fr.onload = function () {
+        rows.push(verify(String(fr.result), f.name));
+        if (--left === 0) { rows.sort(function (a, b) { return (a.ok === b.ok) ? 0 : (a.ok ? 1 : -1); }); draw(); }
+      };
+      fr.onerror = function () {
+        rows.push({ file: f.name, ok: false, why: ['파일을 읽지 못했습니다.'], name: '', sid: '', chapter: '', total: '' });
+        if (--left === 0) draw();
+      };
+      fr.readAsText(f, 'utf-8');
+    });
+  }
+
+  var drop = document.getElementById('drop');
+  var picker = document.getElementById('picker');
+
+  drop.addEventListener('click', function () { picker.click(); });
+  picker.addEventListener('change', function () { addFiles(picker.files); picker.value = ''; });
+
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('over'); });
+  });
+  ['dragleave', 'drop'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('over'); });
+  });
+  drop.addEventListener('drop', function (e) {
+    if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files);
+  });
+
+  document.getElementById('run').addEventListener('click', function () {
+    var t = document.getElementById('paste').value;
+    if (!t.trim()) return;
+    rows.push(verify(t, ''));
+    draw();
+  });
+
+  document.getElementById('clear').addEventListener('click', function () {
+    rows = []; document.getElementById('paste').value = ''; draw();
+  });
+})();
+</script>
+</body>
+</html>
