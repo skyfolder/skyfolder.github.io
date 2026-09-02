@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>14장_문자열과_파일_입출력</title>
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.6;
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        color: #24292e;
+        background-color: #ffffff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 24px;
+        margin-bottom: 16px;
+        font-weight: 600;
+        line-height: 1.25;
+    }
+    h1, h2 {
+        padding-bottom: 0.3em;
+        border-bottom: 1px solid #eaecef;
+    }
+    a { color: #0366d6; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    p, blockquote, ul, ol, dl, table, pre, details {
+        margin-top: 0;
+        margin-bottom: 16px;
+    }
+    /* 인용구 (옵시디언 Callout 형태 대응) */
+    blockquote {
+        padding: 0 1em;
+        color: #6a737d;
+        border-left: 0.25em solid #dfe2e5;
+        background-color: #f9f9f9;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+    /* 코드 블록 스타일 */
+    code {
+        padding: 0.2em 0.4em;
+        margin: 0;
+        font-size: 85%;
+        background-color: rgba(27,31,35,0.05);
+        border-radius: 3px;
+        font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    pre {
+        padding: 16px;
+        overflow: auto;
+        font-size: 85%;
+        line-height: 1.45;
+        background-color: #f6f8fa;
+        border-radius: 6px;
+    }
+    pre code {
+        background-color: transparent;
+        padding: 0;
+    }
+    /* 표(Table) 스타일 */
+    table {
+        border-spacing: 0;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    table th, table td {
+        padding: 6px 13px;
+        border: 1px solid #dfe2e5;
+    }
+    table tr:nth-child(2n) { background-color: #f6f8fa; }
+    img { max-width: 100%; box-sizing: border-box; }
+</style>
+</head>
+<body>
+<hr />
+<div align="center"> <span style="font-size:0.9em; letter-spacing:0.35em; color:#2e7d32;">제 5 부 — 자료 구조와 파일</span> </div>
+
+<p><br>
+<br></p>
+<div align="center" style="font-size: 28px; font-weight: bold;"> <span style="color:#1b5e20;"> <big>14장 ·</big></span> <big>문자열과 파일 입출력</big> </div>
+<p><br></p>
+<div align="center" style="color:#8a8a8a; margin-top:-0.3em;"> <em>Text, Records, and Persistence</em> </div>
+<p><br>
+<br></p>
+<blockquote>
+<p>[!attention] <big><font color="green">이 장의 목표</font></big></p>
+<ul>
+<li><strong>문자열 다루기</strong> — character 자료형과 문자열 연산·내장 함수를 익힌다.</li>
+<li><strong>파일 열고 닫기</strong> — open·close로 파일을 다루고 단위(unit)를 관리한다.</li>
+<li><strong>순차·직접 접근</strong> — 순차 접근과 직접 접근 파일을 구분해 쓴다.</li>
+<li><strong>데이터 저장</strong> — 계산 결과를 파일로 저장하고 다시 읽어 들인다.</li>
+</ul>
+</blockquote>
+<hr />
+<p>지금까지는 수치 연산 결과를 컴퓨터 화면에 단순히 출력하거나, 6장에서 다룬 기초적인 서식 제어를 통해 csv 파일로 저장하는 것에 집중했다. 그러나 실무에서는 그 반대 방향, 즉 외부에 이미 존재하는 데이터 파일(실험, 관측 자료)을 프로그램 내부로 정밀하게 읽어 들이는 공정(data ingestion)이 훨씬 많다.</p>
+<p>이 장에서는 다음의 내용을 배운다. </p>
+<ul>
+<li>
+<p><strong>문자열 제어 도구 장착:</strong> 외부 텍스트를 파싱(parsing)하고 정돈하기 위한 파일 경로 및 문자열 조작 기법을 배운다.</p>
+</li>
+<li>
+<p><strong>파일 서술자 및 상태 검증:</strong> 물리 파일을 안전하게 열고(<code>open</code>), 닫으며(<code>close</code>), 파일의 현재 존재 여부와 접근 권한을 사전 점검(<code>inquire</code>)하는 방법을 익힌다.</p>
+</li>
+<li>
+<p><strong>접근 및 저장 형식의 다각화:</strong> 데이터의 밀도와 목적에 따라 순차적/직접적 접근 방식 및 텍스트/바이너리 저장 형식을 유연하게 선택할 수 있다. </p>
+</li>
+<li>
+<p><strong>입출력 오류 예외 처리:</strong> 프로그램이 실행 도중 멈추는 에러를 방지하기 위해, 입출력 구문에 오류 지시자(<code>iostat</code>, <code>iomsg</code>)를 사용하는 법을 배운다. </p>
+</li>
+</ul>
+<hr />
+<blockquote>
+<p>[!important] <big>  <font color="green"> 14.1 문자형 연산과 내장 함수</font></big></p>
+</blockquote>
+<p>Fortran의 기본 문자형(<code>character</code>)은 선언 시점에 크기가 결정되는 고정 길이(fixed-length)를 기본으로 채택하고 있다. 예를 들어 <code>character(len=10) :: name</code>으로 선언한 변수는 메모리 내에 정확히 10 글자 만을 담을 수 있는 정적 메모리 공간으로 할당된다.</p>
+<p>이 공간에 10자보다 더 짧은 문자열을 대입하면, 시스템은 남은 빈 공간의 오른쪽을 모두 공백(space)으로 채워 넣는다. 만약 선언된 <code>len</code>보다 더 긴 문자열을 대입하면 상자를 초과하는 뒷부분은 잘려 나간다(truncation).</p>
+<h3>문자열 기본 제어 규격과 특성</h3>
+<p>문자열을 선언하고, 결합하고, 필요한 영역만 추출하는 기술은 파일 이름을 동적으로 생성하거나 로그 메시지를 기록하고 설정 파일(namelist)의 경로 데이터를 파싱할 때 필수적으로 요구된다. 각 제어 단위의 구체적인 작동 방식은 다음과 같다.</p>
+<ul>
+<li>
+<p><strong>정적 문자열 선언 구조:</strong> <code>character(len=길이) :: 변수명</code> 구조를 통해 메모리에 정해진 길이 만큼의 문자열 공간을 확보한다. 여기서 <code>len</code> 지시자는 해당 문자형 변수가 저장할 수 있는 최대 유효 글자 수이다. </p>
+</li>
+<li>
+<p><strong>문자열 연결 연산의 공백 배제:</strong> 두 개의 문자열을 하나로 이어 붙여 새로운 문자열을 만들 때는 연결 연산자인 <code>//</code>를 사용한다. 이때 시스템은 두 문자열 사이에 어떠한 여백도 자동으로 삽입하지 않으므로, 단어 간 공백이 필요하다면 <code>'char1' // ' ' // 'char2'</code>와 같이 공백 문자를 직접 명시해야 한다.</p>
+</li>
+<li>
+<p><strong>부분 문자열(substring) 추출 방식:</strong> 전체 문자열 중 특정 부분만 참조하거나 수정할 때는 <code>변수(시작_인덱스 : 끝_인덱스)</code> 형태의 부분 문자열 구문을 적용한다. 이는 8장에서 배운 배열 슬라이싱과 동일한 표기법이다. 예를 들어 <code>str(2:4)</code> 구문은 <code>str</code> 변수가 가지고 있는 전체 텍스트에서 정확히 2번째 글자부터 4번째 글자까지의 영역을 잘라서 반환한다.</p>
+</li>
+</ul>
+<p>부분 문자열 인덱스 접근 시 주의 사항이 있다.</p>
+<ul>
+<li>
+<p>부분 문자열을 지정할 때 개발자가 지정한 시작 인덱스와 끝 인덱스의 범위는 선언된 문자열 전체 길이 경계를 절대 넘어서는 안 된다.</p>
+</li>
+<li>
+<p>비어 있는 것처럼 보이는 우측 여백도 엄연히 메모리를 점유하고 있어 유효 인덱스 범위에 포함되므로, 인덱싱 연산 시 경계 초과(out-of-bounds)의 오작동이 발생하지 않도록 유의해야 한다.</p>
+</li>
+</ul>
+<h3>[예제] 문자열 검색·정렬 내장 함수와 파일 확장자 정밀 추출</h3>
+<p>외부 입력 파이프라인 설계나 데이터 가공 시 빈번하게 수행하는 작업 중 하나는 파일 경로 분석과 포맷 정렬이다. </p>
+<p>이 예제는 다양한 문자열 내장 함수를 활용하여 데이터 경로 문자열의 형식을 분석하고, 파일명의 마지막 점(<code>.</code>)의 위치를 역방향으로 찾아 확장자만 잘라내는 설계 기법을 보여준다.</p>
+<pre><code class="language-fortran">%%writefile char_basics.f90
+program char_basics
+   implicit none
+   character(len=10) :: first = &quot;Grace&quot;
+   character(len=10) :: last  = &quot;Hopper&quot;
+   character(len=21) :: full
+
+   full = trim(first) // &quot; &quot; // trim(last)
+
+   print *, &quot;first      = [&quot;, first, &quot;]&quot;
+   print *, &quot;len(first) = &quot;, len(first)
+   print *, &quot;trim       = [&quot;, trim(first), &quot;]&quot;
+   print *, &quot;full       = [&quot;, trim(full), &quot;]&quot;
+   print *, &quot;substring  = [&quot;, full(1:5), &quot;]&quot;
+   print *, &quot;len_trim(first)   = &quot;, len_trim(first)
+end program char_basics
+</code></pre>
+<p>컴파일·실행:</p>
+<pre><code class="language-bash">!gfortran -O2 -std=f2018 -Wall char_basics.f90 -o char_basics
+!./char_basics
+</code></pre>
+<p>실행 결과:</p>
+<pre><code> first      = [Grace     ]
+ len(first) =           10
+ trim       = [Grace]
+ full       = [Grace Hopper]
+ substring  = [Grace]
+ len_trim(first) =              5
+</code></pre>
+<ul>
+<li>
+<p><strong>공백 채움 현상의 가시화:</strong> <code>first</code> 변수를 출력하면 대입한 <code>"Grace"</code> 뒤에 공백 다섯 칸이  따라붙어 총 10자의 영역을 점유한다. 선언 길이가 10으로 고정되어 있기 때문에 남는 공간을 시스템이 자동으로 메운 결과다.</p>
+</li>
+<li>
+<p><strong>우측 여백의 제거와 결합:</strong> 내장 함수 <code>trim</code>은 문자열의 우측 끝에 붙은 불필요한 공백들을 완전히 제거한다. <code>full = trim(first) // " " // trim(last)</code> 구문처럼 <code>trim</code>과 연결 연산자(<code>//</code>)를 적절히 사용하여 문자끼리 멀리 떨어지는 현상을 방지하여 <code>"Grace Hopper"</code>라는 정돈된 결합 문자열을 얻을 수 있다.</p>
+</li>
+<li>
+<p><strong>선언 길이와 실제 길이의 구별:</strong> 내장 함수 <code>len(first)</code>은 변수가 선언될 때 배정받은 메모리 공간 크기인 10을 돌려준다. 반면 우측 공백을 제외하고 유효한 글자들만의 실제 길이가 필요할 때는 <code>len_trim(first)</code>을 사용해야 하며 본 예제에서는 정확히 5를 반환한다.</p>
+</li>
+</ul>
+<p>Fortran이 제공하는 핵심 문자열 내장 함수들의 작동 방식은 다음과 같다. </p>
+<ul>
+<li>
+<p><strong><code>len(s)</code> 함수는</strong> 문자열 변수 <code>s</code>가 선언 시점에 할당받은 고정 길이 전체를 정수 형태로 돌려준다.</p>
+</li>
+<li>
+<p><strong><code>len_trim(s)</code> 함수는</strong> 문자열 <code>s</code>에서 우측 끝의 공백 영역을 제거하고, 남아 있는 유효 문자들만의 실제 길이를 반환한다.</p>
+</li>
+<li>
+<p><strong><code>trim(s)</code> 함수는</strong> 문자열 <code>s</code> 끝 부분의 모든 공백 문자를 제거한 순수 문자열 데이터를 생성한다.</p>
+</li>
+<li>
+<p><strong><code>adjustl(s)</code> 및 <code>adjustr(s)</code> 함수는</strong> 문자열 내의 유효 텍스트를 각각 왼쪽 또는 오른쪽으로 정렬하며, 이 과정에서 밀려난 앞쪽 혹은 뒤쪽의 빈 공간은 공백으로 채워 정렬한다.</p>
+</li>
+<li>
+<p><strong><code>index(s, sub [, back])</code> 함수는</strong> 전체 문자열 <code>s</code> 내부에서 지정된 부분 문자열 <code>sub</code>가 처음으로 나타나는 인덱스 위치를 찾아주며, 만약 해당 패턴이 존재하지 않으면 0을 반환한다. 선택 인자인 <code>back</code>을 참(<code>.true.</code>)으로 설정하면 뒤에서부터 탐색을 수행한다.</p>
+</li>
+<li>
+<p><strong><code>scan(s, set [, back])</code> 함수는</strong> 지정된 문자 집합 <code>set</code>에 포함된 글자들 중 하나라도 문자열 <code>s</code>에서 처음으로 발견되는 위치를 찾는다.</p>
+</li>
+<li>
+<p><strong><code>verify(s, set)</code> 함수는</strong> 문자열 <code>s</code>를 처음부터 검사하여, 문자 집합 <code>set</code>에 소속되어 있지 않은 문자가 등장하는 인덱스 번호를 돌려준다.</p>
+</li>
+<li>
+<p><strong><code>repeat(s, n)</code> 함수는</strong> 원본 문자열 <code>s</code>를 정해진 횟수 <code>n</code>번 만큼 연속으로 이어 붙여 확장된 형태의 새로운 문자열을 만든다.</p>
+</li>
+<li>
+<p><strong><code>achar(i)</code> 및 <code>iachar(c)</code> 함수는</strong> 컴퓨터의 표준 ASCII 코드를 기반으로 하는 문자 변환 장치이다. <code>achar(i)</code>는 정수 번호 <code>i</code>에 대응하는 ASCII 문자를 생성하고, <code>iachar(c)</code>는 반대로 단일 문자 <code>c</code>가 가진 고유의 ASCII 정수 값을 추출한다.</p>
+</li>
+</ul>
+<h3>[예제] 검색·정렬 함수와 확장자 추출</h3>
+<p><code>character(len=*)</code> 형태의 가변 정적 상수 선언과 역방향 탐색 지시어인 <code>back=.true.</code>의 역할을  알아 보자.</p>
+<pre><code class="language-fortran">%%writefile char_intrinsics.f90
+program char_intrinsics
+   implicit none
+   character(len=*), parameter :: text = &quot;  fortran 2018  &quot;
+   character(len=*), parameter :: path = &quot;data/input.csv&quot;
+   integer :: dot
+
+   print *, &quot;len      =&quot;, len(text)
+   print *, &quot;len_trim =&quot;, len_trim(text)
+   print *, &quot;adjustl  = [&quot;, trim(adjustl(text)), &quot;]&quot;
+   print *, &quot;index    =&quot;, index(path, &quot;.&quot;)
+   print *, &quot;scan     =&quot;, scan(path, &quot;/.&quot;)
+   print *, &quot;verify   =&quot;, verify(&quot;12345x&quot;, &quot;0123456789&quot;)
+   print *, &quot;repeat   = [&quot;, repeat(&quot;ab&quot;, 3), &quot;]&quot;
+
+   dot = index(path, &quot;.&quot;, back=.true.)
+   print *, &quot;extension= [&quot;, path(dot+1:), &quot;]&quot;
+end program char_intrinsics
+</code></pre>
+<p>컴파일·실행:</p>
+<pre><code class="language-bash">!gfortran -O2 -std=f2018 -Wall char_intrinsics.f90 -o char_intrinsics
+!./char_intrinsics
+</code></pre>
+<p>실행 결과:</p>
+<pre><code> len      =          16
+ len_trim =          14
+ adjustl  = [fortran 2018]
+ index    =          11
+ scan     =           5
+ verify   =           6
+ repeat   = [ababab]
+ extension= [csv]
+</code></pre>
+<ul>
+<li>
+<p><strong><code>character(len=*)</code> 지시어의 매핑:</strong> 변수 선언 시점에 고정 길이를 명시하지 않고 <code>len=*</code> 형태의 가변 인터페이스 표기를 부여하면, 우변에 대입되는 초기값(<code>" fortran 2018 "</code>, <code>"data/input.csv"</code>)의 실제 글자 수를 컴파일러가 자동으로 찾아준다.</p>
+</li>
+<li>
+<p><strong>좌우 정렬과 불필요 여백 소거:</strong> <code>" fortran 2018 "</code> 변수는 앞뒤로 빈칸이 들어있어 <code>len</code> 결과는 16이 되지만, 우측 공백만 제거하는 <code>len_trim</code>은 14를 돌려준다. <code>adjustl(text)</code> 함수는 앞쪽에 있는 공백 2칸을 뒤쪽으로 밀고, 이를 다시 <code>trim</code>으로 감싸 좌우 공백이 완전히 제거된 문자열 <code>"fortran 2018"</code>을 만들어 낸다.</p>
+</li>
+<li>
+<p><strong>복합 인덱스 검사:</strong> <code>scan(path, "/.")</code>은 슬래시(<code>/</code>)나 점(<code>.</code>) 중 어느 하나라도 처음 나타나는 위치를 찾아내며, 예제의 경우 5번째 인덱스에 있는 <code>/</code>를 정확히 짚어낸다. 반면 <code>verify("12345x", "0123456789")</code>는 숫자에 해당하는 문자들은 모두 건너뛰고, 지정된 문자 집합에 속하지 않는 첫 번째 문자인 <code>'x'</code>의 위치, 즉 6을 반환한다.</p>
+</li>
+</ul>
+<blockquote>
+<p>[!note]
+프로그램 하단의 아래 두 구문은 외부 데이터 파일들을 다룰 때 항상 재활용되는 코드 패턴이다.</p>
+<p><code>Fortran
+dot = index(path, ".", back=.true.)
+print *, "extension= [", path(dot+1:), "]"</code></p>
+<ul>
+<li>
+<p><strong>역방향 추적 기법의 적용:</strong> <code>index</code> 함수의 세 번째 선택 인자인 <code>back=.true.</code> 옵션은 문자열의 끝(오른쪽)부터 시작하여 거꾸로 역방향 탐색을 지시한다. 파일 경로에 폴더명이 섞여 있어 다중 도트 표현(<code>directory.v1/data.input.csv</code>)이 혼재하더라도, 오직 파일 포맷을 규정하는 가장 오른쪽 끝의 확장자 구분자(<code>.</code>)의 위치만 추출한다. </p>
+</li>
+<li>
+<p><strong>상한 경계 생략을 통한 잔여 문자열 수집:</strong> 위치를 확인한 인덱스 번호 <code>dot</code>에 1을 더한 뒤, 마지막 인덱스를 비워둔 <strong><code>path(dot+1:)</code></strong> 형태로 슬라이싱한다. 이는 지정된 인덱스부터 문자열이 허용하는 최종 경계선 끝까지 남은 데이터 전부를 한 번에 긁어오라는 의미이므로, 동적으로 변하는 파일 경로 안에서 파일 확장자 이름인 <code>"csv"</code>만 정확하게 추출할 수 있다.</p>
+</li>
+</ul>
+</blockquote>
+<hr />
+<blockquote>
+<p>[!important] <big>  <font color="green"> 14.2 가변 길이 할당 가능 문자열</font></big></p>
+</blockquote>
+<p>현대 Fortran은 고정 길이의 한계를 극복하고, 파일 경로나 외부 텍스트 입력처럼 실행 전에는 길이를 전혀 예측할 수 없는 데이터를 메모리 낭비 없이 다룰 수 있는 <strong>가변 길이 할당 가능 문자열(allocatable character)</strong> 을 지원한다.</p>
+<p>가변 길이 할당 가능 문자열의 문법 규격은 아래와 같다. </p>
+<pre><code class="language-fortran">character(len=:), allocatable :: s
+</code></pre>
+<ul>
+<li>
+<p><strong>지연 크기 지정 (<code>len=:</code>):</strong> 선언부의 <code>len=:</code> 표현식은 문자열의 길이를 컴파일 시점이 아닌, 프로그램이 실행된 후 <strong>실제 텍스트 데이터가 대입되는 실행(런타임) 시점에 결정하겠다</strong>는 의미다.</p>
+</li>
+<li>
+<p><strong>시스템 내부의 자동 재할당:</strong> <code>allocatable</code> 속성이 부여된 가변 문자열 변수에 새로운 텍스트를 대입(<code>=</code>)하면, 9장의 동적 배열의 자동 할당과 같은 규칙이 적용된다. 컴파일러가 우변 데이터 길이에 맞춰 메모리 크기(공간)를 자동 확보하고 기존 공간은 해제한다.</p>
+</li>
+</ul>
+<h3>[예제]  동적 문자열 출력</h3>
+<p>대입문이 가동될 때마다 변수 <code>s</code>의 문자열 크기가 어떻게 변하는지 확인해 보자.</p>
+<pre><code class="language-Fortran">%%writefile string_test.f90
+program string_test
+   implicit none
+   character(len=:), allocatable :: s
+   
+   ! 문자열 대입 (s는 길이가 5인 문자열로 자동 할당됨)
+   s = &quot;Hello&quot;
+   print *, s, &quot; (길이: &quot;, len(s), &quot;)&quot;
+   
+   ! 더 긴 문자열 대입 (s는 길이가 13인 문자열로 자동 재할당됨)
+   s = &quot;Hello, Fortran&quot;
+   print *, s, &quot; (길이: &quot;, len(s), &quot;)&quot;
+end program string_test
+</code></pre>
+<p>컴파일·실행:</p>
+<pre><code class="language-bash">!gfortran -O2 -std=f2018 -Wall string_test.f90 -o string_test
+!./string_test
+</code></pre>
+<p>실행 결과: </p>
+<pre><code> Hello  (길이:            5 )
+ Hello, Fortran  (길이:           14 )
+</code></pre>
+<p>가변 길이 문자열의 주요 특징은 다음과 같다.</p>
+<ul>
+<li>
+<p><strong>버퍼 오버플로우 차단:</strong> 외부 파일에서 읽어 들이는 문자 크기가 일정하지 않고 변하더라도, 동적 문자열 구조를 사용하면 메모리 낭비나 배열 경계 침범(buffer overflow) 등의 오류 없이 대용량 텍스트 데이터를 읽을 수 있다.</p>
+</li>
+<li>
+<p><strong>공간 점유와 공백 채움 배제:</strong> 기존 고정 길이 문자열 방식과의 가장 큰 차이점이다. 데이터를 넣을 때 불필요한 오른쪽 공백이 추가되지 않으며, 실제 텍스트 길이 만큼만 메모리를 차지한다. 따라서, 대용량 문자 데이터를 파싱할 때 메모리를 대폭 절약할 수 있다. </p>
+</li>
+</ul>
+<p>가변 길이 문자열 역시 메모리 할당(allocatable)이 필수적이다. 우변 대입을 통해 자동 할당되도록 하거나, <code>allocate</code> 구문으로 메모리 공간을 미리 확보한 뒤 사용해야 한다. 메모리가 할당되지 않은 상태에서 읽기나 연산을 시도하면 세그멘테이션 오류(segmentation fault)가 발생하므로, 작업 전 변수의 할당 상태를 반드시 확인해야 한다.</p>
+<h3>[예제] 대입과 결합 연산(<code>//</code>)에 따른 가변 길이 문자열의 동작 방식</h3>
+<p>기존 고정 길이 문자열의 공백 채움이나 글자 잘림 없이, 데이터의 실제 길이와 결합 연산에 따라 메모리 크기를 유연하게 변형하는 가변 문자열 예제이다.</p>
+<p><code>name</code> 변수의 데이터 대입에 따른 길이 변화와 <code>do</code> 루프 안에서 <code>greeting</code> 변수가 점차 확장되는 과정을 살펴보자.</p>
+<pre><code class="language-fortran">%%writefile alloc_string.f90
+program alloc_string
+   implicit none
+   character(len=:), allocatable :: name
+   character(len=:), allocatable :: greeting
+   integer :: i
+
+   name = &quot;Ada&quot;
+   print *, &quot;len =&quot;, len(name), &quot; [&quot;, name, &quot;]&quot;
+
+   name = &quot;Margaret&quot;
+   print *, &quot;len =&quot;, len(name), &quot; [&quot;, name, &quot;]&quot;
+
+   greeting = &quot;&quot;
+   do i = 1, 3
+      greeting = greeting // &quot;ha&quot;
+   end do
+   print *, &quot;len =&quot;, len(greeting), &quot; [&quot;, greeting, &quot;]&quot;
+end program alloc_string
+</code></pre>
+<p>컴파일·실행:</p>
+<pre><code class="language-bash">!gfortran -O2 -std=f2018 -Wall alloc_string.f90 -o alloc_string
+!./alloc_string
+</code></pre>
+<p>실행 결과:</p>
+<pre><code> len =           3  [Ada]
+ len =           8  [Margaret]
+ len =           6  [hahaha]
+</code></pre>
+<ul>
+<li>
+<p><strong>런타임 크기 자동 피팅:</strong> 최초에 변수 <code>name</code>에 <code>"Ada"</code>를 대입하는 순간, 메모리 공간은 정확히 길이가 3인 영역으로 자동 설정된다. 이어서 <code>name = "Margaret"</code> 구문이 실행되면 동적 배열의 자동 재할당 메커니즘이 작동한다. 기존의 3바이트 공간을 해제하고 우변 데이터 크기에 맞춰 8바이트의 새로운 공간을 재할당하여 안전하게 저장한다. 이는 고정 길이 문자열에서 발생하는 우측 여백 채움이나 문자 잘림 현상을 방지한다.</p>
+</li>
+<li>
+<p><strong>점진적 누적 결합 파이프라인:</strong> 변수 <code>greeting</code>을 활용한 루프 연산 구조는 데이터 처리 시 자주 활용되는 패턴이다. 빈 문자열(<code>""</code>)로 초기화한 후, <code>do i = 1, 3</code> 루프 내부에서 자기 자신에게 <code>"ha"</code>라는 문자열 조각을 지속적으로 연결한다(<code>greeting = greeting // "ha"</code>). 반복마다 컴파일러는 우변의 결합 결과에 맞춰 메모리를 2바이트, 4바이트, 6바이트로 실시간 확장하며, 최종적으로 6바이트 크기의 <code>"hahaha"</code>를 완성한다.</p>
+</li>
+</ul>
+<hr />
+<blockquote>
+<p>[!important] <big>  <font color="green"> 14.3 입출력 제어 open, close, inquire, newunit</font></big></p>
+</blockquote>
+<p>외부 자원과의 데이터 교환은 연결(open) $\rightarrow$ 전송(read/write) $\rightarrow$ 해제(close)의 3단계를 거치며 수행된다. Fortran의 입출력 제어 구문은 다음과 같이 구분된다.</p>
+<ul>
+<li>
+<p><strong>연결 제어문 (<code>open</code>, <code>close</code>):</strong> 디스크 상의 파일과 내부 메모리 사이의 데이터 흐름 통로를 개설하고 정리한다.</p>
+</li>
+<li>
+<p><strong>데이터 전송문 (<code>read</code>, <code>write</code>, <code>print</code>):</strong> 통로를 통해 데이터를 양방향으로 전송시킨다.</p>
+</li>
+<li>
+<p><strong>파일 관리문 (<code>inquire</code>, <code>rewind</code>, <code>backspace</code>, <code>endfile</code>):</strong> 파일의 현재 상태를 조사하거나 파일 내부의 데이터 포인터 위치를 통제한다.</p>
+</li>
+</ul>
+<p>이를 구현하기 위한 파일 제어 구문 규격은 다음과 같다.</p>
+<pre><code class="language-fortran">! 1. 파일 열기 및 장치 연결
+open(newunit = u, file = 이름 [, status = 상태] [, action = 동작] [, form = 형식] [, access = 접근] [, iostat = 정수변수] [, iomsg = 문자변수])
+
+! 2. 파일 닫기 및 장치 해제
+close(u)
+
+! 3. 파일 물리 정보 조회
+inquire(file = 이름, exist = 논리변수 [, size = 정수변수] [, opened = 논리변수])
+</code></pre>
+<p>입출력 운용 시 주의 사항은 다음과 같다. </p>
+<ul>
+<li>
+<p><strong>버퍼 관리와 강제 기록:</strong> <code>open</code>으로 파일 장치를 연결하여 읽기(<code>read</code>)나 쓰기(<code>write</code>)를 수행한 뒤에는 <code>close</code>를 호출하여 할당된 자원을 해제해야 한다. 이는 메모리 버퍼에 남아 있는 데이터를 디스크로 완전하게 전송(flush)하여 데이터 유실을 방지하기 위함이다. </p>
+</li>
+<li>
+<p><strong>사전 상태 확인:</strong> <code>inquire</code> 구문으로 파일의 상태를 미리 조회하면, 파일의 물리적 존재 유무와 타 프로세스에 의한 접근 상태를 사전에 파악할 수 있다. 이로써 예기치 않은 런타임 오류를 방지하고 시뮬레이션의 안정적인 실행 환경을 확보한다.</p>
+</li>
+</ul>
+<h3>파일 동작 지정자(specifier)의 역할과 설정 규격</h3>
+<p>파일 지정자(specifier)는 파일을 열거나 상태를 조회할 때, 해당 파일의 성격과 메모리 내 처리 방식을 컴파일러에 상세히 규정하는 설정 옵션이다. 파일 제어 명령어의 동작 방식을 구체적으로 지시하여 입출력 시스템의 유연성과 안전성을 확보하는 역할을 한다.</p>
+<p>주요 지정자 매개변수들의 역할과 구체적인 분기 값들은 다음과 같다.</p>
+<p><strong>1. status (파일 상태 지정자)</strong>: 파일의 초기 상태를 규정하여 기존 데이터를 보호하거나 임시 자원을 제어한다.</p>
+<ul>
+<li>
+<p><strong>old:</strong> 디스크 상에 이미 존재하는 파일만을 연결한다. 지정한 경로에 파일이 존재하지 않는 경우 런타임 오류를 발생시킨다.</p>
+</li>
+<li>
+<p><strong>new:</strong> 새로운 파일을 생성하도록 지시한다. 동일한 이름의 파일이 이미 존재하는 경우 덮어쓰지 않고 오류를 발생시킨다.</p>
+</li>
+<li>
+<p><strong>replace:</strong> 파일이 이미 존재하는 경우, 해당 파일을 삭제한 후 새 파일로 대체하여 생성한다.</p>
+</li>
+<li>
+<p><strong>scratch:</strong> 프로그램 실행 중에만 사용하는 임시 파일을 생성한다. 이 파일은 프로그램이 정상 종료될 때 디스크에서 자동으로 삭제된다.</p>
+</li>
+<li>
+<p><strong>unknown:</strong> 상태 지정자를 생략할 때 적용되는 기본 설정값(default)이다. 파일이 존재하면 해당 파일을 열고, 없으면 새 파일을 생성한다.</p>
+</li>
+</ul>
+<p><strong>2. action (작업 권한 지정자)</strong>: 파일에 대한 입출력 작업 권한을 제한하여 부주의한 데이터 손실이나 파일 훼손을 방지한다.</p>
+<ul>
+<li>
+<p><strong>read:</strong> 파일 내 데이터를 읽는 작업만 허용하는 읽기 전용 모드이다.</p>
+</li>
+<li>
+<p><strong>write:</strong> 파일에 데이터를 기록하는 작업만 허용하며 읽기 작업을 차단하는 쓰기 전용 모드이다.</p>
+</li>
+<li>
+<p><strong>readwrite:</strong> 읽기와 쓰기 작업을 모두 허용하는 양방향 모드이며, 기본 설정값(default)이다.</p>
+</li>
+</ul>
+<p><strong>3. iostat (상태 변수 리턴)</strong>: 파일 입출력 명령 실행 후 작업의 성공 여부를 나타내는 고유 정수 코드를 반환한다.</p>
+<ul>
+<li>
+<p><strong>반환값이 0인 경우:</strong> 파일 입출력 작업이 오류 없이 정상적으로 완료되었음을 의미한다.</p>
+</li>
+<li>
+<p><strong>반환값이 0이 아닌 정수인 경우:</strong> 입출력 과정에서 오류가 발생했음을 의미한다. 반환된 코드 값을 통해 오류 유형을 식별할 수 있으며, 예외 처리 구문과 함께 사용하여 프로그램의 비정상 종료를 방지한다.</p>
+</li>
+</ul>
+<p><strong>4. iomsg (오류 메시지 문자열 리턴)</strong></p>
+<ul>
+<li>
+<p><code>iostat</code> 변수에 0이 아닌 오류 코드가 반환되는 시점에 구체적인 오류 원인을 문자열 형태로 전달받는다.</p>
+</li>
+<li>
+<p>정수 형태의 오류 코드 대신 "접근 권한 부족" 또는 "디스크 공간 부족"과 같은 상세 원인을 텍스트로 제공하므로 디버깅 시 유용하게 활용된다.</p>
+</li>
+</ul>
+<h3>[예제] 파일에 쓰기 및 입출력 오류 방어</h3>
+<p>수치 해석이나 시뮬레이션 데이터를 물리 디스크에 안전하게 저장하는 동시에, 장치 연결 중에 발생할 수 있는 돌발적인 문제(디스크 용량 초과, 권한 부재 등)를 사전에 통제하는 파일 쓰기 예제이다.</p>
+<p>파일 열기(<code>open</code>)가 실패했을 때 <code>iostat</code>과 <code>iomsg</code>를 통해 비정상 종료를 강제 우회하는 예외 구조를 눈여겨보자.</p>
+<pre><code class="language-fortran">%%writefile open_write.f90
+program open_write
+   implicit none
+   integer :: u, ios
+   character(len=200) :: msg
+
+   open(newunit=u, file=&quot;output.txt&quot;, status=&quot;replace&quot;, &amp;
+        action=&quot;write&quot;, iostat=ios, iomsg=msg)
+   if (ios /= 0) then
+      print *, &quot;open failed: &quot;, trim(msg)
+      error stop 1
+   end if
+
+   write(u, '(a)') &quot;first line&quot;
+   write(u, '(a)') &quot;second line&quot;
+   close(u)
+
+   print *, &quot;output.txt written&quot;
+end program open_write
+</code></pre>
+<p>컴파일·실행:</p>
+<pre><code class="language-bash">!gfortran -O2 -std=f2018 -Wall open_write.f90 -o open_write
+!./open_write
+</code></pre>
+<p>실행 결과: </p>
+<pre><code> output.txt written
+</code></pre>
+<p><code>!cat output.txt</code> 명령을 사용하여 파일 내부를 확인하면 아래와 같다. </p>
+<pre><code> first line 
+ second line
+</code></pre>
+<ul>
+<li>
+<p><strong><code>newunit = u</code> 장치의 무결성 보장:</strong> 레거시 코드처럼 장치 번호를 코드에 하드 코딩하지 않고 이 옵션을 부여하면, 장치 번호를 자동으로 확보해 정수형 변수 <code>u</code>에 저장한다. 라이브러리 간 번호 중복 충돌을 차단하는 기법이다.</p>
+</li>
+<li>
+<p><strong><code>iostat = ios</code> 지시자의 실시간 추적:</strong> 파일 열기 명령문이 수행될 때 마주하는 모든 하드웨어 신호를 수령한다. 성공 시에는 <code>0</code>을 돌려받고, 디스크 쓰기 금지나 가상 경로 누락 등 실패 시에는 <code>0</code>이 아닌 고유의 에러 코드를 넘겨받아 변수 <code>ios</code>에 배정한다.</p>
+</li>
+<li>
+<p><strong><code>iomsg = msg</code>를 통한 인간 친화적 파싱:</strong> <code>ios</code> 변수가 비정상 시그널을 감지했을 때 "Permission denied" 또는 "No space left on device"와 같은 에러 메시지를 변수 <code>msg</code>에 넣어 출력한다. </p>
+</li>
+<li>
+<p><strong><code>error stop 1</code> 기반의 신뢰성 제어:</strong> 파일 연결에 결함이 발생했을 때, 문제가 발생한 원인(<code>msg</code>)을 화면에 출력한 후, 종료 코드인 <code>1</code>을 반환하면서 시스템을 안전하게 차단한다.</p>
+</li>
+</ul>
+<blockquote>
+<p>[!note] 실무 개발 시 반드시 내재화할 방어 규칙</p>
+<ul>
+<li>
+<p><strong>읽기 목적 연결 시 <code>status="old"</code> 장착 습관:</strong> 
+외부 시계열 csv 등 존재하는 파일 데이터를 가져와 분석할 때 이 옵션을 생략하면, 일부 오래된 빌드 환경에서는 신규 임시 파일을 멋대로 생성하거나 에러를 내며 멈출 수 있다. 데이터를 읽을 때는 <code>status="old"</code>, 덮어 쓸 때는 <code>status="replace"</code>를 명시하여 코드의 목적을 확실하게 기록하는 습관이 중요하다.</p>
+</li>
+<li>
+<p><strong>하드 코딩 장치 번호 퇴출:</strong> 
+ 소스 코드 내부에 <code>10</code>이나 <code>20</code> 같은 임의의 양의 정수 번호를 직접 써 넣는 것은 타 서브루틴 결합 시 잠재적 위험을 가지게 된다. 수치 모델링과 같은 대형 연산 파이프라인을 설계할 때는 무조건 <code>newunit</code>을 사용한다. </p>
+</li>
+</ul>
+</blockquote>
+<h3>[예제] inquire를 활용한 파일 존재 여부 및 물리적 크기 사전 진단</h3>
+<p><code>inquire</code> 문은 파일을 실제로 열지 않고도, 해당 파일의 존재 유무, 접근 속성, 물리적 장치 상태 및 바이트 크기 등을 미리 스캔하는 편리한 진단 도구이다.</p>
+<p>대규모 수치 시뮬레이션 가동 전 외부 격자 데이터 파일이 올바른 경로에 배치되어 있는지 사전 검증함으로써, <code>open</code> 시 발생할 수 있는 시스템 런타임 충돌을 원천적으로 차단할 수 있다. </p>
+<p><code>inquire</code> 제어문이 물리 파일의 존립 상태에 따라 어떠한 내부 값을 반환해 주는지 분석해 보자. </p>
+<pre><code class="language-fortran">%%writefile inquire_demo.f90
+program inquire_demo
+   implicit none
+   logical :: found
+   integer :: fsize
+
+   inquire(file=&quot;output.txt&quot;, exist=found, size=fsize)
+   if (found) then
+      print *, &quot;output.txt exists, size =&quot;, fsize, &quot;bytes&quot;
+   else
+      print *, &quot;output.txt not found&quot;
+   end if
+
+   inquire(file=&quot;missing.txt&quot;, exist=found)
+   print *, &quot;missing.txt exists:&quot;, found
+end program inquire_demo
+</code></pre>
+<ul>
+<li>
+<p><strong><code>file="output.txt"</code>의 대상 표적화:</strong> 프로그램 내부 메모리와 연결하기 전 단계로서, 검사 및 가공 대상인 파일의 시스템 경로와 이름을 정의한다.</p>
+</li>
+<li>
+<p><strong><code>exist=found</code> 논리 연동:</strong> 지정한 파일이 실제 디스크 상에 존재하는지 점검하여 그 결과를 논리형 변수 <code>found</code>에 저장한다. 파일이 정상적으로 식별되면 참(<code>.true.</code>)을, 존재하지 않으면 거짓(<code>.false.</code>)을 반환한다.</p>
+</li>
+<li>
+<p><strong><code>size=fsize</code>에 의한 물리 용량 계측:</strong> 파일이 점유하고 있는 실제 용량을 바이트 단위로 측정하여 정수형 변수 <code>fsize</code>에 저장한다. 파일이 존재하지 않을 경우 정규화되지 않은 쓰레기 값이 반환될 수 있으므로, 반드시 <code>exist</code> 지정자의 판정 결과와 함께 연동하여 안전하게 사용해야 한다.</p>
+</li>
+</ul>
+<p>컴파일·실행:</p>
+<pre><code class="language-bash">!gfortran -O2 -std=f2018 -Wall inquire_demo.f90 -o inquire_demo
+!./inquire_demo
+</code></pre>
+<p>실행 결과: </p>
+<pre><code> output.txt exists, size =          23 bytes
+ missing.txt exists: F
+</code></pre>
+<p>텍스트 데이터의 용량을 계산할 때, 파일에 작성된 문자열의 순수 길이를 합산하면 다음과 같다. 첫 번째 줄 "first line"은 순수 알파벳과 공백을 합쳐 10바이트를 차지한다. 두 번째 줄 "second line"은 순수 알파벳과 공백을 합쳐 11바이트를 차지한다. 합산하면 21바이트이다. </p>
+<p>그러나 <code>inquire</code> 구문을 통해 운영체제 수준에서 확인한 파일의 실제 물리 크기는 23바이트로 계산된다. 이는 텍스트 파일 저장 시 각 행의 끝에 눈에 보이지 않는 줄 바꿈(개행) 문자가 개당 1바이트씩 추가되어 있기 때문이다. </p>
+<p>즉, 첫 번째 줄 10바이트에 개행 문자 1바이트가 더해져 11바이트를 형성한다. 두 번째 줄 11바이트에 개행 문자 1바이트가 추가되어 12바이트가 된다. 최종적으로 총 23바이트의 크기가 된다.</p>
+<p>존재하지 않는 파일인 <code>missing.txt</code>에 대해서 시스템은 부재 판정을 내리고 <code>exist</code> 매개변수에 거짓(<code>.false.</code>)을 반환한다. </p>
+<p>프로그램 동작의 안정성을 확보하기 위해 파일 자원의 실제 존재 여부를 확인하는 검증 로직을 반드시 전면에 배치해야 한다.</p>
+<blockquote>
+<p>[!warning] [흔한 실수] 왜 <code>exist</code>를 먼저 확인해야 하는가?</p>
+<p>흔히 저지르는 치명적인 실수는, 파일의 존재여부를 확인하지 않고 파일 크기(<code>size</code>)나 장치 정보  값부터 믿고 꺼내어 연산에 사용하는 것이다.</p>
+<p>본격적인 데이터 조회나 계산을 수행하기 전에 "안전하게 진입할 수 있는 통로가 완벽하게 확보되었는가?"를 먼저 검사하는 프로그래밍을 '가드(guard)패턴'이라고 한다. 
+<code>fortran   
+   inquire(file="output.txt", exist=found, size=fsize)
+                                                                        ! exist로 파일의 존재 여부 확인 
+   if (found) then  ! .true.일 때만 size를 조회  
+         print *, "output.txt exists, size =", fsize, "bytes" 
+   else             ! .false.이면 size 조회를 건너뛰고 "파일이 없음"을 알림
+          print *, "output.txt not found"
+   end if</code><br />
+만약 파일이 물리적으로 부재한 상황에서 가드 조건문 없이 곧바로 <code>fsize</code> 변수의 값을 읽어 연산이나 메모리 할당(예: 파일 크기만큼 배열 할당)의 인자로 투입하면 <strong>정의되지 않은 동작(undefined behavior)</strong>, <strong>쓰레기 값(garbage value) 유입</strong>, <strong>시스템 크래시(crash)</strong> 를 유발할 수 있다. </p>
+<p>따라서 아무리 사소한 파일 읽기라도 존재 여부(<code>exist</code>)를 가장 먼저 확인하여 오류 상황을 철저히 배제한 뒤, 참인 경로 안에서만 세부 정보(<code>size</code>, <code>opened</code> 등)를 가공하고 다루는 습관을 기르자. </p>
+</blockquote>
+<hr />
+<blockquote>
+<p>[!important] <big>  <font color="green"> 14.4 입출력 접근 방식(Access)과 저장 형식(Form)</font></big></p>
+</blockquote>
+<p>Fortran의 파일 입출력 파이프라인은 데이터를 다루는 논리적 경로인 접근 방식(<code>access</code>)과 메모리 데이터를 디스크에 기록하는 물리적 구조인 저장 형식(<code>form</code>)으로 구성된다. 이 두 속성의 조합에 따라 데이터의 처리 속도, 저장 용량, 시스템 간의 호환성이 결정된다.</p>
+<p><strong>1. 접근 방식 (<code>access</code> 지정자)</strong>: 파일 내부의 데이터 포인터를 이동시키며 레코드에 접근하는 방식을 결정하는 설정 옵션이다.</p>
+<ul>
+<li>
+<p><strong><code>sequential</code> (순차 접근):</strong> 입출력 제어의 기본값(default)이다. 파일의 첫 부분에서 시작하여 한 줄(레코드)씩 순차적으로 읽거나 쓰는 방식이며, csv 데이터를 처리하는 표준 규격이다.</p>
+</li>
+<li>
+<p><strong><code>stream</code> (스트림 접근):</strong> 파일을 고정된 레코드 단위가 아닌 연속된 바이트(byte)의 흐름으로 취급한다. 오프셋(offset) 위치 지정을 통해 파일 내부의 임의 위치로 즉시 이동하여 접근할 수 있으므로, 대용량 시뮬레이션 데이터를 처리할 때 높은 유연성을 제공한다.</p>
+</li>
+</ul>
+<p><strong>2. 저장 형식 (<code>form</code> 지정자)</strong>: 메모리에 상주하는 데이터를 디스크에 어떠한 형태로 기록할 것인지 규정하는 설정 옵션이다.</p>
+<ul>
+<li>
+<p><strong><code>formatted</code> (서식화 형식):</strong> 수치 데이터를 사람이 읽을 수 있는 ASCII 문자열 형태로 변환하여 디스크에 저장하는 기본 설정이다. csv, 환경 설정 파일, 실행 로그 시스템을 구축할 때 주로 사용된다.</p>
+</li>
+<li>
+<p><strong><code>unformatted</code> (비서식화 형식):</strong> 메모리의 이진(binary) 데이터를 문자열 변환 없이 디스크에 직접 기록하는 방식이다. 데이터 변환 과정이 생략되어 입출력 속도가 빠르고 부동소수점 오차가 발생하지 않지만, 일반 텍스트 편집기로 내용을 직접 확인할 수 없다.</p>
+</li>
+</ul>
+<p>위 두 가지 속성을 조합하여 다음 용도로 사용할 수 있다.</p>
+<ul>
+<li>
+<p><strong>순차 접근(<code>sequential</code>)과 서식화 형식(<code>formatted</code>)의 결합:</strong> 텍스트 및 csv 파일 처리 모드이다. 눈으로 확인이 가능하므로, 환경 설정 파일이나 로그 파일을 생성할 때 주로 활용한다.</p>
+</li>
+<li>
+<p><strong>순차 접근(<code>sequential</code>)과 비서식화 형식(<code>unformatted</code>)의 결합:</strong> 실행 중 산출되는 중간 계산 결과를 디스크에 저장하고, 이후 다시 읽어와 복원할 때 주로 사용한다.</p>
+</li>
+<li>
+<p><strong>스트림 접근(<code>stream</code>)과 서식화 형식(<code>formatted</code>)의 결합:</strong> 텍스트 파일 내부에서 바이트 단위의 제어가 필요할 때 사용한다. 전체 문서를 다시 작성할 필요 없이 원하는 문자열만 수정할 때 유용하다.</p>
+</li>
+<li>
+<p><strong>스트림 접근(<code>stream</code>)과 비서식화 형식(<code>unformatted</code>)의 결합:</strong> 대용량 수치 배열을 이진 신호 상태로 디스크에 저장할 때 활용한다. 하드웨어의 최대 속도로 데이터를 저장할 수 있다.</p>
+</li>
+</ul>
+<blockquote>
+<p>[!note] 파일 포인터 제어 명령: <code>rewind</code>와 <code>backspace</code>
+순차 접근 모드로 열린 파일 장치 내부에서 데이터의 읽기/쓰기 위치를 제어하기 위해 Fortran은 직관적인 파일 위치 관리 명령어를 제공한다.</p>
+<ul>
+<li>
+<p><strong><code>rewind(u)</code> 명령은</strong> 장치 번호 <code>u</code>에 연결된 파일의 <strong>첫 번째 레코드로 위치를 되돌린다.</strong> 파일의 크기를 알 수 없을 때 파일 끝까지 한 번 읽어 행 개수를 센 뒤, 다시 맨 앞으로 돌아와 배열을 할당하고 두 번 읽는 패턴(two-pass read pattern)을 구축할 때 사용한다.</p>
+</li>
+<li>
+<p><strong><code>backspace(u)</code> 명령은</strong> 현재 데이터 포인터의 위치를 <strong>한 레코드(한 행) 뒤로 물러나게 하여</strong> 직전 데이터를 다시 읽을 수 있도록 방향을 수정한다. </p>
+</li>
+</ul>
+<p>이 제어 도구들을 정밀하게 조합하여 데이터 스트리밍 인프라를 구축할 수 있다. </p>
+</blockquote>
+<h3><strong>[예제] 비서식(unformatted) 입출력을 활용한 데이터 고속 입출력 및 복원</strong></h3>
+<p>대규모 배열 데이터를 서식화된 텍스트로 다루면 데이터 입출력 시 서식 변환 오버헤드로 인해 처리 속도가 저하된다. </p>
+<p>본 예제에서는 부동소수점 수치를 별도의 문자열 변환 없이 이진 비트 구조 그대로 저장하고 복원하는 비서식 스트림 입출력 방식에 대해 알아본다. <code>access="stream"</code> 및 <code>form="unformatted"</code> 지정자를 조합하여 입출력 성능을 최적화한다. </p>
+<pre><code class="language-fortran">%%writefile stream_io.f90
+program stream_io
+   use iso_fortran_env, only: real64
+   implicit none
+   integer :: u, i
+   real(real64) :: v
+   real(real64) :: out(5) = [1.0_real64, 2.0_real64, 3.0_real64, &amp;
+                             4.0_real64, 5.0_real64]
+
+   open(newunit=u, file=&quot;values.bin&quot;, access=&quot;stream&quot;, &amp;
+        form=&quot;unformatted&quot;, status=&quot;replace&quot;, action=&quot;write&quot;)
+   write(u) out
+   close(u)
+
+   open(newunit=u, file=&quot;values.bin&quot;, access=&quot;stream&quot;, &amp;
+        form=&quot;unformatted&quot;, status=&quot;old&quot;, action=&quot;read&quot;)
+   do i = 1, 5
+      read(u) v
+      print '(&quot;v(&quot;,i0,&quot;) = &quot;,f6.2)', i, v
+   end do
+   close(u)
+end program stream_io
+</code></pre>
+<p>컴파일·실행:</p>
+<pre><code class="language-bash">!gfortran -O2 -std=f2018 -Wall stream_io.f90 -o stream_io
+!./stream_io
+</code></pre>
+<p>실행 결과:</p>
+<pre><code>v(1) =   1.00
+v(2) =   2.00
+v(3) =   3.00
+v(4) =   4.00
+v(5) =   5.00
+</code></pre>
+<ul>
+<li>
+<p><strong><code>write(u) out</code> 구문의 메모리 직결성:</strong> 파일 기록 시 어떠한 서식 지정자(<code>fmt</code>)도 기술하지 않는다. 컴파일러는 이 명령을 실행하는 즉시 64비트 정밀도 실수(<code>real64</code>, 8바이트) 배열 5개 분량의 메모리 영역 전체를 변환 없이 파일 <code>values.bin</code>에 직접 저장한다.</p>
+</li>
+<li>
+<p><strong>메모리 공간 점유의 최적화:</strong> 동일한 실수 데이터를 텍스트로 저장할 경우 문자와 개행 기호가 추가되어 훨씬 더 큰 공간을 차지한다. 반면 이진 파일로 기록된 <code>values.bin</code>은 실제 메모리 크기와 동일하게 8바이트 데이터 5개 분량에 해당하는 40바이트만을 차지한다.</p>
+</li>
+</ul>
+<p><strong>비서식(Unformatted) 입출력 방식의 주요 특징 및 장점</strong></p>
+<ul>
+<li>
+<p><strong>포맷 변환 프로세스의 생략:</strong> 일반적인 서식화 출력문은 수치 데이터를 사람이 읽을 수 있는 문자열로 변환하는 과정에서 CPU 자원을 소모한다. 비서식 방식은 이런 변환 과정을 거치지 않고 메모리의 8바이트 원시 데이터를 디스크로 직접 복사하므로 파일 기록 속도가 대폭 향상된다.</p>
+</li>
+<li>
+<p><strong>소수점 정밀도의 완전한 보존:</strong> 텍스트 파일 저장 시 발생하는 자릿수 자르기나 반올림 문제가 발생하지 않는다. 소수점 이하 마지막 비트 정보까지 저장 당시 상태 그대로 유지되므로, 데이터를 다시 읽어올 때 발생하는 부동소수점 오차(floating-point drift)를 방지할 수 있다.</p>
+</li>
+<li>
+<p><strong>엄격한 데이터 정렬 요구 사항:</strong> 이진 파일 내부의 비트 데이터는 사람이 직접 볼 수 없다. 따라서 해당 파일의 데이터를 읽어올 때는 저장할 때 지정한 자료형 규격(<code>real64</code>)과 완전히 동일한 타입으로 변수를 선언하여 전달받아야 한다.</p>
+</li>
+</ul>
+<blockquote>
+<p>[!note] 컴퓨터 간의 데이터 이식성 한계</p>
+<p>비서식(Unformatted) 이진 파일은 입출력 속도와 메모리 효율성이 뛰어나지만, 서로 다른 하드웨어 환경 간 데이터를 교환할 때 호환성(이식성) 문제가 발생할 수 있다.</p>
+<ul>
+<li>
+<p><strong>원인:</strong> 컴퓨터 아키텍처에 따라 메모리에 바이트를 정렬하는 순서인 엔디언(endianness, 예: little-endian vs big-endian) 규격이 다르다. 이로 인해 특정 시스템에서 생성한 이진 파일을 타 기종 서버에서 읽을 경우 비트 순서가 달라 데이터를 정상적으로 로딩하지 못한다.</p>
+</li>
+<li>
+<p><strong>대응 전략:</strong> 장기 보존용 데이터나 타 개발자와 공유해야 하는 계산 결과물은 범용성과 이식성이 우수한 csv 등의 서식화(formatted) 텍스트 파일 구조로 변환하는 것이 바람직하다.</p>
+</li>
+</ul>
+</blockquote>
+<hr />
+<blockquote>
+<p>[!important] <big>  <font color="green"> 14.5 입출력 오류 예외 처리</font></big></p>
+</blockquote>
+<p>외부 환경 설정 파일이나 관측 장비의 원시 텍스트를 읽어 들일 때는 파일 서식의 오류나 예상치 못한 파일 끝(EOF) 도달 등 다양한 예외 상황이 발생할 수 있다. Fortran은 <code>iostat</code> 지정자와 예외 질의 함수를 활용하여, 런타임 오류 발생 시 전체 계산 프로세스가 비정상 종료되는 것을 방지하고 사전에  정의된 예외 처리 시나리오에 따라 프로그램을 안전하게 제어하는 메커니즘을 제공한다. </p>
+<p>아래와 같이 <code>read</code>나 <code>write</code> 제어문에 <code>iostat = 정수변수</code> 지시자를 명시하면 입출력 작업의 성공 및 오류 상태가 해당 변수에 정수 코드로 즉시 전달된다.</p>
+<pre><code class="language-Fortran">integer :: ios
+! 파일을 읽되, 오류가 발생해도 프로그램이 멈추지 않음
+read(u, *, iostat=ios) my_var
+
+if (ios /= 0) then
+   ! 오류 처리 로직 수행
+end if
+</code></pre>
+<p><code>iostat</code> 지정자가 오류 발생 시 반환하는 0이 아닌 정수형 에러 코드는 컴파일러종류에 따라 다르다. 따라서 특정 숫자 상수를 하드 코딩하여 오류 종류를 식별하는 방식은 시스템 이식성을 크게 저해한다. 이를 해결하기 위해, 아래의 파일 상태를 검증하는 표준 질의 함수를 사용한다.</p>
+<ul>
+<li>
+<p><strong><code>is_iostat_end(ios)</code>:</strong> 상태 코드 <code>ios</code>를 분석하여 파일 내부의 모든 레코드를 읽고 파일 끝(EOF, End-of-File)에 정상적으로 도달했는지 확인한다. 반환값이 참(<code>.true.</code>)이면 더 이상 읽을 데이터가 없음을 의미하므로 파일 읽기 루프를 종료하는 조건으로 활용한다.</p>
+</li>
+<li>
+<p><strong><code>is_iostat_eor(ios)</code>:</strong> 비전진 입출력(non-advancing I/O) 수행 중 현재 레코드의 끝(EOR, End-of-Record) 경계에 도달했는지 확인한다. 여기서, 비전진 입출력은 줄 바꿈을 하지 않고 원하는 크기만큼 나누어서 읽고 쓰는 방식을 말한다. </p>
+</li>
+</ul>
+<p>이런 예외 제어 기법을 조합하여 아래와 같은 데이터 입력 시스템을 구축할 수 있다.</p>
+<ul>
+<li>
+<p><strong>동적 파일 종단(EOF) 루프 탈출:</strong> 행 개수가 가변적인 시계열 데이터를 읽을 때, 반복 횟수를 고정하는 대신 <code>do</code> 무한 루프 내부에 <code>read(..., iostat=ios)</code>를 배치한다. 데이터를 순차적으로 읽다가 <code>is_iostat_end(ios)</code>가 참이 되는 시점에 루프를 탈출(<code>exit</code>)하도록 설계하면 데이터 유실이나 런타임 오류 없이 대용량 파일을 읽을 수 있다.</p>
+</li>
+<li>
+<p><strong>원인 추적을 위한 메시지 출력:</strong> 파일 입출력 시 <code>iomsg=msg</code> 옵션을 함께 지정한다. 파일 부재나 접근 권한 부족 등으로 오류가 발생했을 때 반환되는 시스템 에러 텍스트(<code>msg</code>)를 출력하여 예외 발생의 원인을 파악할 수 있다.</p>
+</li>
+<li>
+<p><strong>예외 발생 시 방어적 처리 수립:</strong> 입력 데이터 일부가 손상되었을 때 전체 프로그램이 비정상 종료되는 문제를 방지한다. 오류가 발생한 행을 건너뛰고 다음 행을 처리하거나, 오류 종료 코드(<code>error stop</code>)를 외부 프로세스에 전달하고 안전하게 프로그램을 종료하도록 구성한다.</p>
+</li>
+</ul>
+<h3>[예제] 파일 종단(EOF) 감지를 이용한 가변 데이터 판독 구조</h3>
+<p>대용량 관측 시계열 데이터나 시스템 센서 로그 파일은 실행 시점에 전체 행(line) 수를 미리 알 수 없는 경우가 많다. 이와 같이 데이터 크기가 유동적인 텍스트 파일을 안전하게 읽어 오기 위해, <code>do</code> 무한 루프 내에서 한 줄씩 입출력을 수행하고 표준 질의 함수인 <code>is_iostat_end</code>로 파일 끝(EOF)을 검지하여 정상 탈출하는 방식이 널리 사용된다.</p>
+<pre><code class="language-fortran">%%writefile read_lines.f90
+program read_lines
+   implicit none
+   integer :: u, ios, count
+   character(len=256) :: line
+
+   open(newunit=u, file=&quot;output.txt&quot;, status=&quot;old&quot;, action=&quot;read&quot;)
+   count = 0
+   do
+      read(u, '(a)', iostat=ios) line
+      if (is_iostat_end(ios)) exit
+      if (ios /= 0) then
+         print *, &quot;read error code:&quot;, ios
+         exit
+      end if
+      count = count + 1
+      print '(i0,&quot;: &quot;,a)', count, trim(line)
+   end do
+   close(u)
+
+   print *, &quot;total lines =&quot;, count
+end program read_lines
+</code></pre>
+<p>컴파일·실행:</p>
+<pre><code class="language-bash">!gfortran -O2 -std=f2018 -Wall read_lines.f90 -o read_lines
+!./read_lines
+</code></pre>
+<p>실행 결과: </p>
+<pre><code>1: first line
+2: second line
+ total lines =           2
+</code></pre>
+<ul>
+<li>
+<p><strong>가변 데이터 처리를 위한 <code>do</code> 무한 루프:</strong> 행 수가 정해지지 않은 데이터를 읽어 오기 위해 반복 한계를 지정하지 않는 <code>do</code> 블록을 구성한다. <code>read(u, '(a)', iostat=ios) line</code> 구문은 한 줄의 문자열을 읽어 변수 <code>line</code>에 저장하고, 실행 시의 입출력 상태 코드를 변수 <code>ios</code>에 반환한다.</p>
+</li>
+<li>
+<p><strong><code>is_iostat_end(ios)</code> 조건에 의한 루프 탈출:</strong> 파일의 모든 레코드를 읽고 파일 끝(EOF)에 도달하면 시스템은 <code>ios</code>에 종단 상태 코드를 저장한다. 질의 함수 <code>is_iostat_end(ios)</code>는 이를 검증하여 참(<code>.true.</code>)을 반환하며, 프로그램은 <code>exit</code> 문을 실행하여 무한 루프를 안전하게 종료한다.</p>
+</li>
+<li>
+<p><strong>예외적 파일 및 포맷 오류 분기:</strong> <code>ios</code> 변수가 0이 아니면서 파일 끝 도달 상태(<code>is_iostat_end</code>)도 아니라면 이는 데이터 서식 오류나 파일 접근 문제에 의한 예외 상황이다. 프로그램은 이를 정상적인 파일 종단 도달과 구분하여 에러 코드(<code>ios</code>)를 출력하고 루프를 탈출하도록 예외 처리 분기를 구성한다.</p>
+</li>
+</ul>
+<hr />
+<blockquote>
+<p>[!important] <big>  <font color="green"> 14.6 외부 파일을 통한 런타임 제어: namelist </font></big></p>
+</blockquote>
+<p>수치 시뮬레이션의 격자 간격, 총 타임스텝, 물리 상수 등의 경계 조건을 변경할 때마다 소스 코드를 수정하고 재컴파일하는 방식은 대규모 과학 계산 환경에서 비효율적이다. Fortran의 <code>namelist</code> 기능은 핵심 제어 변수들을 하나의 논리적 그룹으로 묶어 관리함으로써, 재컴파일 없이 실행 시점에 외부 설정 텍스트 파일만 수정하여 매개변수를 동적으로 제어할 수 있게 해준다.</p>
+<p><code>namelist</code>를 프로그램 내부에 적용하고 외부 데이터를 읽어오는 과정은은 다음과 같다.</p>
+<ul>
+<li>
+<p><strong>설정 그룹의 선언 구조:</strong> <code>namelist /그룹이름/ 변수1, 변수2, ...</code> 구문을 사용하여 소스 코드 내의 제어 변수들을 하나의 그룹으로 묶어 선언한다. 이 구문은 반드시 변수 선언부와 실행부 사이에 위치해야 한다.</p>
+</li>
+<li>
+<p><strong>설정 데이터의 입력 파싱:</strong> 외부 파일로부터 설정값을 읽어올 때는 데이터 전송문에 <code>nml = 그룹이름</code> 지시자를 결합하여 <code>read(u, nml=그룹이름 [, iostat=변수])</code> 형태로 사용한다. 시스템은 해당 장치 번호 <code>u</code>에서 해당 그룹 데이터를 탐색(scan)한 후, 선언된 변수명과 일치하는 메모리 공간에 값을 매칭하여 대입한다.</p>
+</li>
+</ul>
+<h3>표준 설정 파일(config.nml)의 물리적 구조</h3>
+<p>외부에서 프로그램을 제어하는 설정 파일(통상 <code>.nml</code> 또는 <code>.cfg</code> 확장자 사용)은 텍스트 편집기 기반의 구조를 가진다. 파일의 시작 부분은 <code>&amp;그룹이름</code>으로 명시하고, 내부에 <code>변수명 = 값</code> 형태로 실험 조건을 할당한 뒤, 끝부분에 <code>/</code>를 배치하여 데이터 블록을 닫아준다. 수치 모델 등에서 표준적으로 사용하는 외부 설정 파일의 포맷 예시는 다음과 같다.</p>
+<pre><code>&amp;sim_config
+   n_steps = 500
+   dt = 0.005
+   gravity = 9.80665
+/
+</code></pre>
+<p><code>namelist</code> 기법의 장점과 동작 원리는 다음과 같다. </p>
+<ul>
+<li>
+<p><strong>독립적 실험 제어:</strong> 시뮬레이션의 반복 횟수나 물리 상수를 소스 코드 내부에 하드코딩하지 않고 외부 설정 파일(<code>config.nml</code>)로 분리하여 관리한다. 이에 따라 하나의 실행 파일만으로 설정 파일 변경을 통해 다수의 시나리오 실험을 수행할 수 있다.</p>
+</li>
+<li>
+<p><strong>사용자 편의성 향상:</strong> 텍스트 기반의 직관적인 형식을 제공하므로, 프로그래밍 언어 구조를 완전히 숙지하지 않아도 일반 텍스트 편집기를 이용해 매개변수를 수정하고 모델을 재가동할 수 있다.</p>
+</li>
+<li>
+<p><strong>자동 식별 매핑을 통한 코드 경량화:</strong> 문자열 파싱이나 위치 서식 처리 로직을 별도로 구현할 필요가 없다. 런타임 엔진이 외부 파일의 변수명과 코드 내부 변수명을 대조하여 순서나 공백에 관계없이 자동으로 값을 대입하므로, 코드 분량을 줄이고 유지보수성을 높인다.</p>
+</li>
+</ul>
+<p>결과적으로 <code>namelist</code>를 적용하면 프로그램의 연산 로직과 실행 환경 설정이 분리되어 소프트웨어 구조적 안정성을 확보할 수 있다.</p>
+<h3>[예제] 네임리스트(Namelist)를 활용한 런타임 매개변수 동적 제어</h3>
+<p>수치 시뮬레이션 프로그램 설계 시 안정성을 확보하는 방법 중 하나는 외부 설정 파일의 읽기 실패나 항목 누락 상황에서도 프로그램이 오작동 없이 실행을 유지하도록 구조화하는 것이다. </p>
+<p>본 예제에서는 코드 내부에 기본값(default value)을 사전에 정의한 뒤, 외부 네임리스트 데이터를 읽어 와 해당 매개변수를 동적으로 업데이트하는 방어적 프로그래밍 방식을 제시한다. 파일 개설(<code>open</code>)과 데이터 읽기(<code>read</code>) 단계에서 발생하는 입출력 예외를 안전하게 처리하고 우회하는 제어 구조를 살펴보자.</p>
+<pre><code class="language-fortran">%%writefile namelist_demo.f90
+program namelist_demo
+   use iso_fortran_env, only: real64
+   implicit none
+   integer  :: n_steps
+   real(real64) :: dt, gravity
+   integer  :: u, ios
+   character(len=200) :: msg
+
+   namelist /sim_config/ n_steps, dt, gravity
+
+   n_steps = 100
+   dt      = 0.01_real64
+   gravity = 9.81_real64
+
+   open(newunit=u, file=&quot;config.nml&quot;, status=&quot;old&quot;, &amp;
+        action=&quot;read&quot;, iostat=ios, iomsg=msg)
+   if (ios /= 0) then
+      print *, &quot;cannot open config: &quot;, trim(msg)
+      print *, &quot;using defaults&quot;
+   else
+      read(u, nml=sim_config, iostat=ios, iomsg=msg)
+      if (ios /= 0) print *, &quot;namelist warning: &quot;, trim(msg)
+      close(u)
+   end if
+
+   print *, &quot;n_steps =&quot;, n_steps
+   print *, &quot;dt      =&quot;, dt
+   print *, &quot;gravity =&quot;, gravity
+end program namelist_demo
+</code></pre>
+<p>컴파일·실행:</p>
+<pre><code class="language-bash">!gfortran -O2 -std=f2018 -Wall namelist_demo.f90 -o namelist_demo
+!./namelist_demo
+</code></pre>
+<p>실행 결과: </p>
+<pre><code>cannot open config: Cannot open file 'config.nml': No such file or directory
+using defaults 
+n_steps = 100 
+dt = 1.0000000000000000E-002 
+gravity = 9.8100000000000005
+</code></pre>
+<p>물리적 디스크 상에 설정 파일(<code>config.nml</code>)이 존재하지 않는 예외 상황이 발생했으나, 프로그램이 비정상 종료되지 않고 사전에 정의된 기본값을 유지하며 실행을 지속한다.</p>
+<ul>
+<li>
+<p><strong>선제적 기본값 할당 (default hardening):</strong> 설정 파일을 연결하기 전 <code>n_steps = 100</code>, <code>dt = 0.01_real64</code>, <code>gravity = 9.81_real64</code>와 같은 기본 수치들을 메모리에 미리 할당하는 방어적 구조를 적용한다. 파일 손상이나 부재로 인해 <code>config.nml</code> 파일을 열 수 없는 입출력 오류가 발생하더라도, 프로그램은 비정상 종료 없이 안내 메시지를 출력하고 기본 설정값으로 하위 연산을 정상 수행한다.</p>
+</li>
+<li>
+<p><strong>동적 데이터 오버라이딩 (overriding):</strong> 파일 개설에 성공하면 <code>read(u, nml=sim_config)</code> 구문이 실행되어 네임리스트 구조를 파싱한다. 이때 외부 파일에 명시된 매개변수 값(<code>n_steps = 500</code>, <code>dt = 0.005</code> 등)이 기존 메모리에 설정되어 있던 기본값을 덮어쓰며 최신값으로 갱신된다.</p>
+</li>
+</ul>
+<p>외부 설정 파일의 값(<code>n_steps = 500</code>, <code>dt = 0.005</code> 등)을 적용하여 실행하려면, 현재 실행 디렉터리에 <code>config.nml</code> 파일이 존재해야 한다.</p>
+<pre><code>%%writefile config.nml
+&amp;sim_config
+   n_steps = 500
+   dt = 0.005
+   gravity = 9.80665
+/
+</code></pre>
+<p>설정 파일 생성 후 <code>./namelist_demo</code>를 재실행하면, 시스템은 기본값 대신 <code>config.nml</code> 파일의 매개변수를 자동으로 매칭하여 다음과 같이 변경된 값을 출력한다.</p>
+<pre><code>n_steps = 500 
+dt = 5.0000000000000001E-003
+gravity = 9.8066499999999994
+</code></pre>
+<h3>[예제] 외부 데이터 파일을 활용한 이동평균 산출</h3>
+<p>본 예제는 가변적인 csv 파일 데이터를 판독하여 3점 중심 이동평균(moving average) 필터로 노이즈를 제거한 뒤 결과 데이터를 저장하는 처리 과정을 나타낸다. <code>read</code> 구문으로 csv 파일의 쉼표 구분자를 분리하는 방식과 <code>rewind</code> 명령을 통해 파일 포인터를 첫 위치로 되돌려 동적 배열을 할당하는 제어 흐름을 다룬다.</p>
+<p>먼저 날짜와 일별 온도 데이터로 구성된 <code>sensor.csv</code> 파일을 작업 디렉터리에 준비한다. 파일의 내부 구조는 <code>day,temperature</code> 헤더 아래에 14개 행의 측정값이 순차적으로 나열된 형태를 취한다.</p>
+<pre><code>%%writefile sensor.csv
+day,temperature
+1,12.4
+2,13.1
+3,15.8
+4,14.2
+5,16.9
+6,18.3
+7,17.5
+8,19.1
+9,20.4
+10,18.8
+11,21.2
+12,22.6
+13,20.9
+14,23.4
+</code></pre>
+<p>제시된 프로그램은 <code>sensor.csv</code> 파일을 1차적으로 탐색하여 총 표본 수를 측정한 뒤 이에 맞추어 동적 배열을 할당한다. 이후 데이터를 배열에 로드하고 3점 이동평균 연산을 수행하여 평활화된 결과값을 <code>smoothed.csv</code>에 기록한다.</p>
+<pre><code class="language-fortran">%%writefile moving_avg.f90
+program moving_avg
+   use iso_fortran_env, only: real64
+   implicit none
+   integer, parameter :: half = 1          ! half-width (1 = 3-point window)
+   integer :: u, ios, n, i, lo, hi
+   integer,      allocatable :: day(:)
+   real(real64), allocatable :: temp(:), smooth(:)
+   character(len=200) :: header
+   integer :: d
+   real(real64) :: t
+
+   ! pass 1: count samples (skip one header line)
+   open(newunit=u, file=&quot;sensor.csv&quot;, status=&quot;old&quot;, action=&quot;read&quot;)
+   read(u, '(a)') header
+   n = 0
+   do
+      read(u, *, iostat=ios) d, t
+      if (is_iostat_end(ios)) exit
+      n = n + 1
+   end do
+
+   allocate(day(n), temp(n), smooth(n))
+
+   ! pass 2: read actual values
+   rewind(u)
+   read(u, '(a)') header
+   do i = 1, n
+      read(u, *) day(i), temp(i)
+   end do
+   close(u)
+
+   ! centered moving average (edges use whatever fits)
+   do i = 1, n
+      lo = max(1, i - half)
+      hi = min(n, i + half)
+      smooth(i) = sum(temp(lo:hi)) / real(hi - lo + 1, real64)
+   end do
+
+   ! write result as csv
+   open(newunit=u, file=&quot;smoothed.csv&quot;, status=&quot;replace&quot;, action=&quot;write&quot;)
+   write(u, '(a)') &quot;day,raw,smooth&quot;
+   do i = 1, n
+      write(u, '(i0,&quot;,&quot;,f8.3,&quot;,&quot;,f8.3)') day(i), temp(i), smooth(i)
+   end do
+   close(u)
+
+   print '(&quot;samples read: &quot;,i0)', n
+   print '(&quot;smoothed.csv written&quot;)'
+end program moving_avg
+</code></pre>
+<p>컴파일·실행:</p>
+<pre><code class="language-bash">!gfortran -O2 -std=f2018 -Wall moving_avg.f90 -o moving_avg
+!./moving_avg
+</code></pre>
+<p>실행 결과:</p>
+<pre><code>samples read: 14
+smoothed.csv written
+</code></pre>
+<p>이동 평균이 제대로 저장되었는지<code>!head ./smoothed.csv</code> 명령으로 확인해 보자.</p>
+<pre><code>day,raw,smooth 
+1, 12.400, 12.750 
+2, 13.100, 13.767 
+3, 15.800, 14.367 
+4, 14.200, 15.633 
+5, 16.900, 16.467 
+6, 18.300, 17.567 
+7, 17.500, 18.300 
+8, 19.100, 19.000 
+9, 20.400, 19.433
+</code></pre>
+<ul>
+<li>
+<p><strong>목록 지정 입력(<code>*</code>)의 쉼표 파싱:</strong> <code>read(u, *) d, t</code> 구문은 Fortran 내장 파서의 특징을 나타낸다. 별도의 서식을 지정하지 않아도 목록 지정 입력 메커니즘이 텍스트 내부의 공백과 쉼표(<code>,</code>)를 데이터 구분자(delimiter)로 인식하므로, csv 파일의 행 구조를 추가 파싱 작업 없이 정수 및 실수 변수로 대입한다.</p>
+</li>
+<li>
+<p><strong>이중 탐색(two-pass) 및 <code>rewind</code> 구조:</strong> 데이터를 배열에 동적으로 적재하기 위해 데이터 행의 개수(<code>n</code>)를 미리 파악해야 한다. 이에 따라 첫 번째 탐색(pass 1) 루프에서 파일 끝(EOF)까지 읽어 순수 데이터 개수만 카운트한다. 이후 <code>allocate(day(n), temp(n), smooth(n))</code> 구문을 실행하여 필요한 메모리 공간을 확보한 뒤, <code>rewind(u)</code> 명령으로 파일 읽기 포인터를 첫 행으로 재설정하여 두 번째 탐색(pass 2)에서 동적 배열에 데이터를 할당한다.</p>
+</li>
+<li>
+<p><strong>경계면 3점 이동평균 연산:</strong> 데이터의 중앙 위치를 중심으로 전후 레코드(<code>half = 1</code>)를 포함하여 평균을 계산한다. 이때 배열의 양 끝단인 1번째 및 <code>n</code>번째 레코드에서 인덱스 범위를 벗어나는 런타임 오류를 방지하기 위해, <code>max(1, i - half)</code>와 <code>min(n, i + half)</code> 제어 구조를 적용하여 유효한 인덱스 범위 내에서만 부분합(<code>sum</code>) 연산이 수행되도록 구성한다.</p>
+</li>
+</ul>
+<p>마지막으로 <code>"smoothed.csv"</code>를 시각화 해 보자. </p>
+<pre><code class="language-python">import csv
+import matplotlib.pyplot as plt
+
+day, raw, smooth = [], [], []
+with open(&quot;smoothed.csv&quot;) as f:
+    reader = csv.reader(f)
+    next(reader)                      # skip header
+    for row in reader:
+        day.append(int(row[0]))
+        raw.append(float(row[1]))
+        smooth.append(float(row[2]))
+
+plt.figure(figsize=(8, 5))
+plt.plot(day, raw, &quot;o--&quot;, alpha=0.5, label=&quot;raw&quot;)
+plt.plot(day, smooth, &quot;-&quot;, linewidth=2, label=&quot;3-point average&quot;)
+plt.xlabel(&quot;day&quot;); plt.ylabel(&quot;temperature&quot;)
+plt.title(&quot;Fortran smoothing, Python plotting&quot;)
+plt.legend(); plt.grid(True)
+plt.savefig(&quot;smoothed.png&quot;, dpi=120)
+plt.show()
+</code></pre>
+<p>아래 그림을 보면, 연한 점선과 원형 마커(<code>o--</code>)로 표현된 원시 기온 데이터(raw)는 센서 특유의 노이즈가 포함되어 있어 데이터의 거시적 경향성을 식별하기 어렵다. 반면, 3점 이동평균 필터를 거친 굵은 실선(3-point average) 데이터는 단기 변동성과 국소적 노이즈가 효과적으로 제거되어, 시간에 따른 전체적인 기온 상승 곡선이 완만하고 명확한 궤적으로 도출된다.</p>
+<p>![[Pasted image 20260714181245.png]]</p>
+<hr />
+<blockquote>
+<p>[!important]  <big><font color="crimson">오류 학습 </font></big> </p>
+</blockquote>
+<p>관측 데이터 파일의 첫 행에 포함된 열 이름(header)은 주요 메타데이터 정보를 담고 있으나, 수치 계산을 수행하는 연산부에서는 다루지 않는 문자열이다. 수치 데이터를 읽어 들이기 전 이런 헤더 행을 미리 스킵(skip)하지 않고 수치형 변수로 직접 파싱을 시도하면, 문자열을 수치로 변환하지 못해 런타임 오류가 발생하고 프로그램이 중단된다. </p>
+<h3>[예제]  헤더 누락 파일 연결 시  런타임 crash</h3>
+<p>본 예제에서는 헤더 행 누락 시 나타나는 예외 메커니즘을 확인하고, 사전 헤더 스킵 처리 구문을 통해 프로그램의 실행 안정성을 확보하는 방식을 다룬다.</p>
+<pre><code class="language-fortran">%%writefile skip_header.f90
+program skip_header
+   implicit none
+   integer :: u, d
+   real :: t
+
+   open(newunit=u, file=&quot;sensor.csv&quot;, status=&quot;old&quot;, action=&quot;read&quot;)
+   read(u, *) d, t          ! first line is the header &quot;day,temperature&quot;
+   print *, d, t
+   close(u)
+end program skip_header
+</code></pre>
+<p>컴파일:</p>
+<pre><code class="language-bash">!gfortran -O2 -std=f2018 -Wall skip_header.f90 -o skip_header
+
+</code></pre>
+<p>실행:</p>
+<pre><code>!./skip_header
+</code></pre>
+<p>실행하면 다음과 같이 에러를 출력하고 프로그램은 멈춘다.</p>
+<pre><code>At line 7 of file skip_header.f90
+Fortran runtime error: Bad integer for item 1 in list input
+
+Error termination. Backtrace: 
+#0 0x7cf7ce575960 in ???
+#1 0x7cf7ce5764d9 in ???
+#2 0x7cf7ce7c05eb in ???
+#3 0x7cf7ce7c35aa in ??? 
+#4 0x7cf7ce7c42aa in ???
+#5 0x5b16160852f6 in MAIN__ 
+#6 0x5b161608511e in main
+</code></pre>
+<p>문법적 결함이 없으므로 컴파일 단계는 정상적으로 완료된다. 그러나 프로그램 실행 시 <code>read(u, *) d, t</code> 구문이 작동하는 과정에서 첫 번째 변수 <code>d</code>가 정수형(<code>integer</code>)으로 선언되어 있어 정수 데이터의 입력을 대기한다. </p>
+<p>파일의 첫 행에 존재하는 텍스트가 영문 헤더인 <code>"day,temperature"</code>인 경우, 첫 번째 항목인 <code>"day"</code>를 정수로 변환하는 과정에서 형변환 규격 위반이 발생한다. 이에 따라 시스템은 <code>Bad integer for item 1</code> 에러를 반환하고 실행을 비정상 종료하며, 해당 오류의 <code>item 1</code>은 정수 변수 <code>d</code>를 가리킨다.</p>
+<h3>안전 설계: 헤더 스킵 및 입출력 예외 방어 로직 적용</h3>
+<p>이런 예외 상황을 방지하기 위해 두 가지 방어적 설계를 적용한다. </p>
+<p>첫째, 데이터 파싱을 수행하기 전에 헤더 판독용 문자열 변수(<code>header</code>)를 활용하여 첫 번째 행의 헤더 텍스트를 사전에 읽어 건너뛴다. </p>
+<p>둘째, 데이터 읽기 블록에 <code>iostat</code> 지정자를 지정하여 입출력 예외 발생 시 프로그램이 즉시 중단되지 않도록 예외 처리 제어 흐름을 구축한다.</p>
+<pre><code class="language-fortran">%%writefile skip_header_fixed.f90
+program skip_header_fixed
+   implicit none
+   integer :: u, d, ios
+   real :: t
+   character(len=200) :: header
+
+   open(newunit=u, file=&quot;sensor.csv&quot;, status=&quot;old&quot;, action=&quot;read&quot;)
+   read(u, '(a)') header          ! consume the header line first
+   read(u, *, iostat=ios) d, t
+   if (ios /= 0) then
+      print *, &quot;read failed, code =&quot;, ios
+   else
+      print *, d, t
+   end if
+   close(u)
+end program skip_header_fixed
+</code></pre>
+<p>컴파일·실행:</p>
+<pre><code class="language-bash">!gfortran -O2 -std=f2018 -Wall skip_header_fixed.f90 -o skip_header_fixed
+!./skip_header_fixed
+</code></pre>
+<p>실행 결과:</p>
+<pre><code>           1   12.3999996
+</code></pre>
+<p><code>read(u, '(a)') header</code> 구문이 파일 첫 행의 헤더 문자열을 판독하여 소모함에 따라, 다음 <code>read</code> 구문은 수치 데이터가 시작되는 두 번째 행으로 진입한다. 이를 통해 첫 번째 날짜 수치 <code>1</code>과 온도 수치 <code>12.4</code>를 예외 없이 정확히 읽어 올 수 있다.</p>
+<p>한편, 파일 입출력 시 자주 발생하는 또 다른 예외는 <code>status="old"</code>로 지정된 대상 파일이 디스크 상에 존재하지 않을 때 발생한다. 이때는 <code>read</code> 단계가 아닌 <code>open</code> 제어 단계에서 즉시 런타임 오류가 발생하고 실행이 중단된다. </p>
+<p>이런 문제를 예방하기 위해서는 모든 파일 개설(<code>open</code>) 및 읽기(<code>read</code>) 명령에 <code>iostat</code>과 <code>iomsg</code> 지정자를 함께 배치해야 한다. </p>
+<p>예외 발생 시 프로그램이 즉시 종료되는 것을 차단하고, 발생한 에러 원인을 분석하여 사용자에게 경고 메시지를 출력함과 동시에 사전에 준비된 기본값 시스템으로 제어 흐름을 전환하는 구조가 안정성을 높이는 방안이다.</p>
+<hr />
+<blockquote>
+<p>[!important] <big> <font color="green"> 요약 </font></big></p>
+</blockquote>
+<ul>
+<li><strong>문자형</strong>은 고정 길이가 기본이며 짧은 값은 오른쪽이 공백으로 채워진다. 연결은 <code>//</code>, 부분 문자열은 <code>s(i:j)</code>.</li>
+<li>자주 쓰는 내장 함수: <code>len</code>, <code>len_trim</code>, <code>trim</code>, <code>adjustl</code>, <code>index</code>, <code>scan</code>, <code>verify</code>, <code>repeat</code>.</li>
+<li><strong>할당가능 문자열</strong> <code>character(len=:), allocatable</code> 은 대입에 따라 길이가 자동으로 맞춰져 파일 입출력에 적합하다.</li>
+<li>파일은 <strong><code>open</code>(가급적 <code>newunit</code>) → 입출력 → <code>close</code></strong> 순서로 다루고, <code>status</code>·<code>action</code> 을 명시한다. <code>inquire</code> 로 존재·크기를 미리 점검한다.</li>
+<li>입출력은 <strong>접근</strong>(sequential / stream)과 <strong>형식</strong>(formatted / unformatted)의 두 축으로 갈린다. 텍스트 교환에는 서식·순차, 빠른 중간 저장에는 비서식을 쓰되 비서식의 이식성 한계를 기억한다.</li>
+<li>모든 입출력에 <strong><code>iostat</code></strong>(필요하면 <code>iomsg</code>)을 붙이고, <code>is_iostat_end</code> 로 EOF를 판별한다. 길이를 모르는 파일은 EOF까지 한 줄씩 읽는 관용구로 처리한다.</li>
+<li><strong><code>namelist</code></strong> 로 매개변수를 외부 설정 파일에서 읽되, 변수는 반드시 먼저 기본값으로 초기화한다.</li>
+</ul>
+<hr />
+<blockquote>
+<p>[!important] <big> <font color="green"> 연습 문제</font></big></p>
+</blockquote>
+<ol>
+<li><code>character(len=20) :: city = "Busan"</code> 을 선언하고 <code>len</code> 과 <code>len_trim</code> 의 결과를 출력해 차이를 확인하라.</li>
+<li>사용자에게 성과 이름을 따로 입력받아 <code>//</code> 로 이어 전체 이름을 만들어 출력하라.</li>
+<li>문자열 <code>"2025-06-14"</code> 에서 부분 문자열과 내부 읽기를 이용해 연·월·일을 각각 정수로 분리해 출력하라.</li>
+<li><code>character(len=:), allocatable</code> 문자열에 <code>"a"</code> 를 다섯 번 이어 붙여 <code>"aaaaa"</code> 를 만들고, 각 단계의 <code>len</code> 을 출력하라.</li>
+<li>임의의 파일 이름을 <code>inquire</code> 로 검사해 존재하면 크기를, 없으면 없다는 문구를 출력하는 프로그램을 작성하라.</li>
+<li>텍스트 파일 하나를 만들어 세 줄을 쓰고, 같은 프로그램에서 다시 열어 줄 수를 세어 출력하라.</li>
+<li>csv 파일(한 열, 실수 여러 줄)을 읽어 평균과 표준편차를 계산해 화면에 출력하라. 줄 수는 EOF로 판별하라.</li>
+<li><code>namelist</code> 로 <code>n</code>, <code>x_min</code>, <code>x_max</code> 를 읽어 들여 구간을 <code>n</code> 등분한 점들을 csv로 출력하는 프로그램을 작성하라. 설정 파일이 없으면 기본값으로 동작하게 하라.</li>
+<li>실수 배열을 비서식 스트림으로 저장한 뒤, 별도의 프로그램에서 다시 읽어 합을 구하라. 저장과 읽기의 <code>kind</code> 가 같아야 함을 확인하라.</li>
+<li>한 줄에 이름과 점수가 콤마로 적힌 csv를 읽어, 점수가 가장 높은 사람의 이름을 출력하라(문자열과 수치 입력을 한 <code>read</code> 로 처리).</li>
+</ol>
+</body>
+</html>

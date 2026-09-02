@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>부록E. C 언어 상호운용성</title>
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.6;
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        color: #24292e;
+        background-color: #ffffff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 24px;
+        margin-bottom: 16px;
+        font-weight: 600;
+        line-height: 1.25;
+    }
+    h1, h2 {
+        padding-bottom: 0.3em;
+        border-bottom: 1px solid #eaecef;
+    }
+    a { color: #0366d6; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    p, blockquote, ul, ol, dl, table, pre, details {
+        margin-top: 0;
+        margin-bottom: 16px;
+    }
+    /* 인용구 (옵시디언 Callout 형태 대응) */
+    blockquote {
+        padding: 0 1em;
+        color: #6a737d;
+        border-left: 0.25em solid #dfe2e5;
+        background-color: #f9f9f9;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+    /* 코드 블록 스타일 */
+    code {
+        padding: 0.2em 0.4em;
+        margin: 0;
+        font-size: 85%;
+        background-color: rgba(27,31,35,0.05);
+        border-radius: 3px;
+        font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    pre {
+        padding: 16px;
+        overflow: auto;
+        font-size: 85%;
+        line-height: 1.45;
+        background-color: #f6f8fa;
+        border-radius: 6px;
+    }
+    pre code {
+        background-color: transparent;
+        padding: 0;
+    }
+    /* 표(Table) 스타일 */
+    table {
+        border-spacing: 0;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    table th, table td {
+        padding: 6px 13px;
+        border: 1px solid #dfe2e5;
+    }
+    table tr:nth-child(2n) { background-color: #f6f8fa; }
+    img { max-width: 100%; box-sizing: border-box; }
+</style>
+</head>
+<body>
+<hr />
+<h2>부록 E. C 언어 상호운용성</h2>
+<h3>E.1 개념 설명</h3>
+<ul>
+<li><strong><code>iso_c_binding</code> 모듈</strong>: C와 호환되는 종류 매개변수(<code>c_int</code>, <code>c_double</code>, <code>c_char</code> 등)와 포인터형(<code>c_ptr</code>)을 제공한다. Fortran의 기본 <code>integer</code>/<code>real</code>이 C의 <code>int</code>/<code>double</code>과 같다는 보장은 없으므로, 상호운용 코드에서는 반드시 이 종류를 쓴다.</li>
+<li><strong><code>bind(c)</code> 속성</strong>: 프로시저·파생형이 C와 같은 호출 규약·메모리 배치를 따르게 한다. <code>name="..."</code>으로 C 쪽 심볼 이름을 정확히 지정한다.</li>
+<li><strong><code>value</code> 속성</strong>: C는 스칼라를 <strong>값으로</strong> 전달한다(Fortran 기본은 참조 전달). C 함수의 값 인수에는 <code>value</code>를 붙인다. 배열·포인터는 참조로 전달된다.</li>
+</ul>
+<h3>E.2 문법 규격</h3>
+<pre><code class="language-fortran">use iso_c_binding, only: c_int, c_double, ...
+
+interface
+   function ‹name›(‹args›) bind(c, name=&quot;‹c-symbol›&quot;) result(‹r›)
+      import :: ‹kinds›
+      ‹type›(‹c-kind›), value :: ‹scalar-arg›   ! 값 전달
+      ‹type›(‹c-kind›) :: ‹array-arg›(*)         ! 참조 전달
+   end function ‹name›
+end interface
+
+type, bind(c) :: ‹name›        ! C 구조체와 호환되는 파생형
+   ‹type›(‹c-kind›) :: ‹component›
+end type ‹name›
+</code></pre>
+<h3>E.3 예제 1 — C 함수(스칼라·배열) 호출</h3>
+<p>C로 작성한 두 함수를 Fortran에서 호출한다: 값 인수만 받는 <code>c_hypot</code>와, 배열을 참조로 받아 제자리에서 바꾸는 <code>c_scale</code>.</p>
+<p><strong>① C 소스</strong> </p>
+<pre><code class="language-c">#include &lt;math.h&gt;
+
+double c_hypot(double a, double b) {
+    return sqrt(a * a + b * b);
+}
+
+void c_scale(double *x, int n, double factor) {
+    for (int i = 0; i &lt; n; i++) {
+        x[i] = x[i] * factor;
+    }
+}
+</code></pre>
+<p><strong>① Fortran 소스</strong> </p>
+<pre><code class="language-fortran">%%writefile interop.f90
+module c_api
+   use iso_c_binding, only: c_double, c_int
+   implicit none
+
+   interface
+      pure function c_hypot(a, b) bind(c, name=&quot;c_hypot&quot;) result(r)
+         import :: c_double
+         real(c_double), value :: a, b
+         real(c_double) :: r
+      end function c_hypot
+
+      subroutine c_scale(x, n, factor) bind(c, name=&quot;c_scale&quot;)
+         import :: c_double, c_int
+         real(c_double), intent(inout) :: x(*)
+         integer(c_int), value :: n
+         real(c_double), value :: factor
+      end subroutine c_scale
+   end interface
+
+end module c_api
+
+program interop
+   use iso_c_binding, only: c_double, c_int
+   use c_api
+   implicit none
+   real(c_double) :: h
+   real(c_double) :: v(4)
+   integer :: i
+
+   h = c_hypot(3.0_c_double, 4.0_c_double)
+   print '(&quot;c_hypot(3,4) = &quot;, F6.3)', h
+
+   v = [(real(i, c_double), i = 1, 4)]
+   call c_scale(v, size(v, kind=c_int), 10.0_c_double)
+   print '(&quot;scaled = &quot;, 4F7.1)', v
+end program interop
+</code></pre>
+<p><strong>② 컴파일·실행</strong> — C는 <code>gcc</code>로 컴파일해 목적 파일을 만들고, gfortran으로 함께 링크한다.</p>
+<pre><code class="language-bash">!gcc -O2 -c cfuncs.c -o cfuncs.o
+!gfortran -O2 -std=f2018 -Wall interop.f90 cfuncs.o -o interop
+!./interop
+</code></pre>
+<p><strong>실행 결과</strong></p>
+<pre><code class="language-text">c_hypot(3,4) =  5.000
+scaled =   10.0   20.0   30.0   40.0
+</code></pre>
+<p><code>c_hypot</code>의 두 스칼라는 <code>value</code>로 값 전달, <code>c_scale</code>의 배열 <code>x(*)</code>는 참조 전달이라 C가 제자리에서 수정한 결과가 Fortran 쪽에 그대로 반영된다.</p>
+<h3>E.4 예제 2 — 구조체(파생형) 주고받기</h3>
+<p><code>bind(c)</code> 파생형은 C 구조체와 메모리 배치가 호환된다. 점 두 개를 값으로 넘겨 거리의 제곱을 받는다.</p>
+<p><strong>① C 소스</strong> </p>
+<pre><code class="language-c">struct point { double x; double y; };
+
+double point_dist(struct point p, struct point q) {
+    double dx = p.x - q.x;
+    double dy = p.y - q.y;
+    return dx * dx + dy * dy;
+}
+</code></pre>
+<p><strong>① Fortran 소스</strong></p>
+<pre><code class="language-fortran">%%writefile interop2.f90
+module c_point
+   use iso_c_binding, only: c_double
+   implicit none
+
+   type, bind(c) :: point_t
+      real(c_double) :: x
+      real(c_double) :: y
+   end type point_t
+
+   interface
+      pure function point_dist(p, q) bind(c, name=&quot;point_dist&quot;) result(d)
+         import :: point_t, c_double
+         type(point_t), value :: p, q
+         real(c_double) :: d
+      end function point_dist
+   end interface
+
+end module c_point
+
+program interop2
+   use iso_c_binding, only: c_double
+   use c_point
+   implicit none
+   type(point_t) :: a, b
+
+   a = point_t(0.0_c_double, 0.0_c_double)
+   b = point_t(3.0_c_double, 4.0_c_double)
+   print '(&quot;dist^2 = &quot;, F6.2)', point_dist(a, b)
+end program interop2
+</code></pre>
+<p><strong>② 컴파일·실행</strong></p>
+<pre><code class="language-bash">!gcc -O2 -c point.c -o point.o
+!gfortran -O2 -std=f2018 -Wall interop2.f90 point.o -o interop2
+!./interop2
+</code></pre>
+<p><strong>실행 결과</strong></p>
+<pre><code class="language-text">dist^2 =  25.00
+</code></pre>
+<p><code>bind(c)</code> 파생형의 구성 요소 순서와 종류가 C 구조체와 일치해야 한다. <code>bind(c)</code> 형에는 <code>allocatable</code>·<code>pointer</code> 성분이나 기본값을 둘 수 없다(C에 대응물이 없다).</p>
+</body>
+</html>

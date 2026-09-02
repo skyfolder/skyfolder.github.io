@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>부록C. 주요 내장 프로시저 레퍼런스</title>
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.6;
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        color: #24292e;
+        background-color: #ffffff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 24px;
+        margin-bottom: 16px;
+        font-weight: 600;
+        line-height: 1.25;
+    }
+    h1, h2 {
+        padding-bottom: 0.3em;
+        border-bottom: 1px solid #eaecef;
+    }
+    a { color: #0366d6; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    p, blockquote, ul, ol, dl, table, pre, details {
+        margin-top: 0;
+        margin-bottom: 16px;
+    }
+    /* 인용구 (옵시디언 Callout 형태 대응) */
+    blockquote {
+        padding: 0 1em;
+        color: #6a737d;
+        border-left: 0.25em solid #dfe2e5;
+        background-color: #f9f9f9;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+    /* 코드 블록 스타일 */
+    code {
+        padding: 0.2em 0.4em;
+        margin: 0;
+        font-size: 85%;
+        background-color: rgba(27,31,35,0.05);
+        border-radius: 3px;
+        font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    pre {
+        padding: 16px;
+        overflow: auto;
+        font-size: 85%;
+        line-height: 1.45;
+        background-color: #f6f8fa;
+        border-radius: 6px;
+    }
+    pre code {
+        background-color: transparent;
+        padding: 0;
+    }
+    /* 표(Table) 스타일 */
+    table {
+        border-spacing: 0;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    table th, table td {
+        padding: 6px 13px;
+        border: 1px solid #dfe2e5;
+    }
+    table tr:nth-child(2n) { background-color: #f6f8fa; }
+    img { max-width: 100%; box-sizing: border-box; }
+</style>
+</head>
+<body>
+<hr />
+<hr />
+<hr />
+<h2>부록 C. 주요 내장 프로시저 레퍼런스</h2>
+<h3>C.1 수학 함수</h3>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abs(x)</code></td>
+<td>절댓값(복소수면 크기)</td>
+</tr>
+<tr>
+<td><code>sqrt(x)</code></td>
+<td>제곱근</td>
+</tr>
+<tr>
+<td><code>exp(x)</code> / <code>log(x)</code> / <code>log10(x)</code></td>
+<td>지수, 자연로그, 상용로그</td>
+</tr>
+<tr>
+<td><code>sin/cos/tan(x)</code></td>
+<td>삼각함수(라디안)</td>
+</tr>
+<tr>
+<td><code>asin/acos/atan(x)</code></td>
+<td>역삼각함수</td>
+</tr>
+<tr>
+<td><code>atan2(y, x)</code></td>
+<td>사분면을 고려한 역탄젠트</td>
+</tr>
+<tr>
+<td><code>sinh/cosh/tanh(x)</code></td>
+<td>쌍곡선 함수</td>
+</tr>
+<tr>
+<td><code>hypot(x, y)</code></td>
+<td>빗변 길이(오버플로에 안전)</td>
+</tr>
+<tr>
+<td><code>max(a, b, ...)</code> / <code>min(a, b, ...)</code></td>
+<td>최댓값/최솟값</td>
+</tr>
+<tr>
+<td><code>mod(a, p)</code> / <code>modulo(a, p)</code></td>
+<td>나머지(부호 규칙이 다름)</td>
+</tr>
+<tr>
+<td><code>sign(a, b)</code></td>
+<td><code>b</code>의 부호를 <code>a</code>의 크기에 부여</td>
+</tr>
+<tr>
+<td><code>erf(x)</code> / <code>erfc(x)</code></td>
+<td>오차함수와 여오차함수</td>
+</tr>
+<tr>
+<td><code>gamma(x)</code> / <code>log_gamma(x)</code></td>
+<td>감마함수와 그 로그</td>
+</tr>
+</tbody>
+</table>
+<h3>C.2 형 변환·반올림</h3>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int(x [, kind])</code></td>
+<td>정수로 절단(0 방향)</td>
+</tr>
+<tr>
+<td><code>real(x [, kind])</code></td>
+<td>실수로 변환</td>
+</tr>
+<tr>
+<td><code>cmplx(x [, y] [, kind])</code></td>
+<td>복소수 생성</td>
+</tr>
+<tr>
+<td><code>aimag(z)</code> / <code>conjg(z)</code></td>
+<td>허수부 / 켤레복소수</td>
+</tr>
+<tr>
+<td><code>nint(x [, kind])</code></td>
+<td>가장 가까운 정수로 반올림</td>
+</tr>
+<tr>
+<td><code>floor(x)</code> / <code>ceiling(x)</code></td>
+<td>내림 / 올림(정수 반환)</td>
+</tr>
+<tr>
+<td><code>aint(x)</code> / <code>anint(x)</code></td>
+<td>절단 / 반올림(실수 반환)</td>
+</tr>
+<tr>
+<td><code>char(i)</code> / <code>ichar(c)</code></td>
+<td>정수↔문자 코드 변환</td>
+</tr>
+<tr>
+<td><code>achar(i)</code> / <code>iachar(c)</code></td>
+<td>ASCII 기준 변환</td>
+</tr>
+</tbody>
+</table>
+<h3>C.3 종류(kind)·수치 모델 조회</h3>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind(x)</code></td>
+<td>변수의 종류 매개변수 값</td>
+</tr>
+<tr>
+<td><code>selected_real_kind(p [, r])</code></td>
+<td>정밀도 <code>p</code>자리·지수범위 <code>r</code>를 만족하는 실수 종류</td>
+</tr>
+<tr>
+<td><code>selected_int_kind(r)</code></td>
+<td>자릿수 <code>r</code>를 담는 정수 종류</td>
+</tr>
+<tr>
+<td><code>precision(x)</code> / <code>range(x)</code></td>
+<td>표현 가능한 십진 정밀도 / 지수 범위</td>
+</tr>
+<tr>
+<td><code>huge(x)</code> / <code>tiny(x)</code></td>
+<td>최대 / 최소 양의 정규값</td>
+</tr>
+<tr>
+<td><code>epsilon(x)</code></td>
+<td>1.0과 그다음 표현값의 간격(기계 입실론)</td>
+</tr>
+<tr>
+<td><code>digits(x)</code> / <code>radix(x)</code></td>
+<td>유효 자릿수 / 기수</td>
+</tr>
+</tbody>
+</table>
+<h3>C.4 배열 함수</h3>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>size(array [, dim])</code></td>
+<td>전체 원소 수 또는 특정 차원 크기</td>
+</tr>
+<tr>
+<td><code>shape(array)</code></td>
+<td>형상(각 차원 크기 벡터)</td>
+</tr>
+<tr>
+<td><code>lbound/ubound(array [, dim])</code></td>
+<td>하한 / 상한 첨자</td>
+</tr>
+<tr>
+<td><code>sum/product(array [, dim] [, mask])</code></td>
+<td>합 / 곱</td>
+</tr>
+<tr>
+<td><code>maxval/minval(array [, dim] [, mask])</code></td>
+<td>최댓값 / 최솟값</td>
+</tr>
+<tr>
+<td><code>maxloc/minloc(array [, mask])</code></td>
+<td>최댓값 / 최솟값 위치</td>
+</tr>
+<tr>
+<td><code>count(mask [, dim])</code></td>
+<td>참인 원소 개수</td>
+</tr>
+<tr>
+<td><code>any/all(mask [, dim])</code></td>
+<td>하나라도 참 / 모두 참</td>
+</tr>
+<tr>
+<td><code>dot_product(a, b)</code></td>
+<td>벡터 내적</td>
+</tr>
+<tr>
+<td><code>matmul(a, b)</code></td>
+<td>행렬 곱</td>
+</tr>
+<tr>
+<td><code>transpose(matrix)</code></td>
+<td>전치</td>
+</tr>
+<tr>
+<td><code>reshape(source, shape [, pad] [, order])</code></td>
+<td>형상 재구성</td>
+</tr>
+<tr>
+<td><code>pack(array, mask [, vector])</code> / <code>unpack(...)</code></td>
+<td>마스크로 압축 / 복원</td>
+</tr>
+<tr>
+<td><code>merge(tsource, fsource, mask)</code></td>
+<td>마스크에 따른 선택</td>
+</tr>
+<tr>
+<td><code>cshift/eoshift(array, shift [, ...])</code></td>
+<td>순환 이동 / 끝채움 이동</td>
+</tr>
+<tr>
+<td><code>findloc(array, value [, ...])</code></td>
+<td>특정 값의 위치</td>
+</tr>
+<tr>
+<td><code>norm2(array [, dim])</code></td>
+<td>L2 노름</td>
+</tr>
+</tbody>
+</table>
+<h3>C.5 문자열 함수</h3>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>len(string)</code> / <code>len_trim(string)</code></td>
+<td>선언 길이 / 뒤 공백 제외 길이</td>
+</tr>
+<tr>
+<td><code>trim(string)</code></td>
+<td>뒤 공백 제거</td>
+</tr>
+<tr>
+<td><code>adjustl/adjustr(string)</code></td>
+<td>좌측 / 우측 정렬</td>
+</tr>
+<tr>
+<td><code>index(string, substring [, back])</code></td>
+<td>부분 문자열 위치</td>
+</tr>
+<tr>
+<td><code>scan(string, set [, back])</code></td>
+<td>집합 문자 중 첫 위치</td>
+</tr>
+<tr>
+<td><code>verify(string, set [, back])</code></td>
+<td>집합에 없는 첫 문자 위치</td>
+</tr>
+<tr>
+<td><code>repeat(string, n)</code></td>
+<td>문자열 <code>n</code>회 반복</td>
+</tr>
+<tr>
+<td><code>new_line(c)</code></td>
+<td>줄바꿈 문자</td>
+</tr>
+</tbody>
+</table>
+<h3>C.6 비트 연산(정수 대상)</h3>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>iand/ior/ieor(i, j)</code></td>
+<td>비트 and / or / xor</td>
+</tr>
+<tr>
+<td><code>not(i)</code></td>
+<td>비트 반전</td>
+</tr>
+<tr>
+<td><code>ishft(i, shift)</code> / <code>ishftc(i, shift)</code></td>
+<td>논리 이동 / 순환 이동</td>
+</tr>
+<tr>
+<td><code>ibset/ibclr(i, pos)</code></td>
+<td>특정 비트 set / clear</td>
+</tr>
+<tr>
+<td><code>btest(i, pos)</code></td>
+<td>특정 비트 검사</td>
+</tr>
+<tr>
+<td><code>bit_size(i)</code></td>
+<td>비트 수</td>
+</tr>
+<tr>
+<td><code>popcnt(i)</code> / <code>leadz(i)</code> / <code>trailz(i)</code></td>
+<td>1의 개수 / 앞 0 개수 / 뒤 0 개수</td>
+</tr>
+</tbody>
+</table>
+<h3>C.7 시스템·시간·난수(서브루틴 위주)</h3>
+<table>
+<thead>
+<tr>
+<th>프로시저</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>call cpu_time(t)</code></td>
+<td>CPU 시간(초)</td>
+</tr>
+<tr>
+<td><code>call system_clock(count, count_rate, count_max)</code></td>
+<td>벽시계 카운트</td>
+</tr>
+<tr>
+<td><code>call date_and_time([date], [time], [zone], [values])</code></td>
+<td>현재 날짜·시각</td>
+</tr>
+<tr>
+<td><code>call random_number(x)</code></td>
+<td><code>[0, 1)</code> 균등 난수(배열 가능)</td>
+</tr>
+<tr>
+<td><code>call random_seed([size], [put], [get])</code></td>
+<td>난수 씨앗 설정/조회</td>
+</tr>
+<tr>
+<td><code>command_argument_count()</code></td>
+<td>명령행 인수 개수(함수)</td>
+</tr>
+<tr>
+<td><code>call get_command_argument(n, value)</code></td>
+<td><code>n</code>번째 명령행 인수</td>
+</tr>
+<tr>
+<td><code>call move_alloc(from, to)</code></td>
+<td>할당 소유권 이전(복사 없음)</td>
+</tr>
+<tr>
+<td><code>is_iostat_end(stat)</code></td>
+<td>파일 끝 상태 판정(함수)</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
