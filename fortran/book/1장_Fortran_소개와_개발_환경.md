@@ -3,8 +3,6 @@
 layout: default
 title: 1장 Fortran 소개와 개발 환경
 ---
-
-
 <div align="center">
 
 <span style="font-size:0.9em; letter-spacing:0.35em; color:#2e7d32;">제 1 부 — 기초</span>
