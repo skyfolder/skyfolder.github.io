@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fortran 3장 실습</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fortquiz.css">
+</head>
+<body>
+
+<div id="app"></div>
+
+<!-- 공용 엔진 (1~14장이 함께 씁니다) -->
+<script src="fortquiz.js"></script>
+
+<!-- 이 챕터의 문제와 정답 -->
+<script src="fort_prac_03_problems.js"></script>
+<script src="answer/fort_prac_03_answers.js"></script>
+
+<script>
+  /* 새 챕터를 만들 때는 이 파일을 복사해 아래 두 줄과 위의 script 경로만 고칩니다. */
+  FortQuiz.start({
+    chapter: "03",
+    chapterTitle: "자료형과 변수"
+  });
+</script>
+</body>
+</html>
