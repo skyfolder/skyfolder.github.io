@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fortran 프로그래밍 수업자료 </title>
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --accent-green: #059669;
+      --accent-green-bg: #ecfdf5;
+      --accent-purple: #7e22ce;
+      --accent-purple-bg: #f3e8ff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Top Navigation */
+    .topnav {
+      display: flex;
+      justify-content: flex-start; /* 우측 정렬(flex-end)에서 좌측 정렬(flex-start)로 변경 */
+      margin-bottom: 24px;
+    }
+    
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      background-color: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    /* Header Section */
+    header {
+      margin-bottom: 36px;
+    }
+    
+    .header-title-container {
+      display: flex;
+      align-items: center;
+      gap: 12px; /* 이미지와 텍스트 사이의 간격 */
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 800px;
+    }
+
+    /* 3열 그리드 레이아웃 설정 */
+    .chapter-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개 챕터 배치 */
+      gap: 20px;
+    }
+
+    /* Individual Chapter Card */
+    .chapter-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .chapter-card:hover {
+      transform: translateY(-3px);
+      border-color: #cbd5e1;
+      box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Card Top Area */
+    .card-content {
+      margin-bottom: 16px;
+    }
+
+    .chapter-card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    /* Card Bottom Action Area */
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 70px; /* 버튼이 너무 작아지는 것 방지 */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 0.825rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .btn-download {
+      background-color: #eff6ff;
+      color: var(--primary-color);
+    }
+
+    .btn-download:hover {
+      background-color: var(--primary-color);
+      color: #ffffff;
+    }
+
+    .btn-book {
+      background-color: var(--accent-purple-bg);
+      color: var(--accent-purple);
+    }
+
+    .btn-book:hover {
+      background-color: var(--accent-purple);
+      color: #ffffff;
+    }
+
+    .btn-practice {
+      background-color: var(--accent-green-bg);
+      color: var(--accent-green);
+    }
+
+    .btn-practice:hover {
+      background-color: var(--accent-green);
+      color: #ffffff;
+    }
+
+    /* 반응형 레이아웃 */
+    @media (max-width: 1024px) {
+      .chapter-grid {
+        grid-template-columns: repeat(2, 1fr); /* 태블릿: 2열 */
+      }
+    }
+
+    @media (max-width: 640px) {
+      .chapter-grid {
+        grid-template-columns: 1fr; /* 모바일: 1열 */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="topnav">
+      <a href="index.html" class="nav-link">🏠 Home</a>
+    </div>
+
+    <header>
+      <div class="header-title-container">
+        <!-- 원하는 이미지 경로(src)를 지정해주세요. 가로 10 고정 -->
+        <img src="your-image-url.jpg" alt="책 로고" width="10">
+        <h1> <span style="color: blue;">예제</span>를 배우는 <span style="color: orange;">모두의 포트란</span></h1>
+      </div>
+      <p class="subtitle">
+        박창현 저
+        <!-- Welcome to the Fortran programming course materials. -->
+      </p>
+    </header>
+
+    <main class="chapter-grid">
+
+      <div class="chapter-card">
+        <div class="card-content">
+          <h3>1장 Fortran 소개와 개발환경</h3>
+          <p class="desc">컴퓨터의 작동 원리, Fortran의 역사, 개발 환경</p>
+        </div>
+        <div class="card-actions">
+          <a href="fortran/1장_Fortran_소개와_개발_환경.pdf" class="btn btn-download" download>📊 PPT</a>
+          <a href="fortran/book/1장_Fortran_소개와_개발_환경.html" class="btn btn-book" >📖 Book</a>            
+          <a href="fortran/practice/fort_prac_01.html" class="btn btn-practice">📝 Practice</a>
+        </div>
+      </div>
+
+      <div class="chapter-card">
+        <div class="card-content">
+          <h3>2장 프로그램 구조와 기본 문법</h3>
+          <p class="desc">소스 형식, 프로그램 골격, 식별자, implicit none</p>
+        </div>
+        <div class="card-actions">
+          <a href="fortran/2장_프로그램_구조와_기본_문법.pdf" class="btn btn-download" download>📊 PPT</a>
+          <a href="fortran/book/2장_프로그램_구조와_기본_문법.html" class="btn btn-book" >📖 Book</a>
+          <a href="fortran/practice/fort_prac_02.html" class="btn btn-practice">📝 Practice</a>
+        </div>
+      </div>
+
+      <div class="chapter-card">
+        <div class="card-content">
+          <h3>3장 자료형과 변수</h3>
+          <p class="desc">다섯 가지 자료형, kind와 정밀도, parameter 상수, 초기화</p>
+        </div>
+        <div class="card-actions">
+          <a href="fortran/3장_자료형과_변수.pdf" class="btn btn-download" download>📊 PPT</a>
+          <a href="fortran/book/3장_자료형과_변수.html" class="btn btn-book" >📖 Book</a>
+          <a href="fortran/practice/fort_prac_03.html" class="btn btn-practice">📝 Practice</a>
+        </div>
+      </div>
+
+      <div class="chapter-card">
+        <div class="card-content">
+          <h3>4장 연산자와 식</h3>
+          <p class="desc">산술·관계·논리 연산자, 우선순위, 형 변환, 수학 내장 함수</p>
+        </div>
+        <div class="card-actions">
+          <a href="fortran/4장_연산자와_식.pdf" class="btn btn-download" download>📊 PPT</a>
+          <a href="fortran/book/4장_연산자와_식.html" class="btn btn-book" >📖 Book</a>
+          <a href="fortran/practice/fort_prac_03.html" class="btn btn-practice">📝 Practice</a>
+        </div>
+      </div>
+
+      <div class="chapter-card">
+        <div class="card-content">
+          <h3>5장 제어 흐름</h3>
+          <p class="desc">if, select case, do, do while, do concurrent, stop</p>
+        </div>
+        <div class="card-actions">
+          <a href="fortran/5장_제어_흐름.pdf" class="btn btn-download" download>📊 PPT</a>
+          <a href="fortran/book/5장_제어_흐름.html" class="btn btn-book" >📖 Book</a>
+          <a href="fortran/practice/fort_prac_03.html" class="btn btn-practice">📝 Practice</a>
+        </div>
+      </div>
+
+      <div class="chapter-card">
+        <div class="card-content">
+          <h3>6장 입출력 기초와 서식</h3>
+          <p class="desc">목록 지정 입출력, 편집 기술자, csv 파일, NaN과 Inf</p>
+        </div>
+        <div class="card-actions">
+          <a href="fortran/6장_입출력_기초와_서식.pdf" class="btn btn-download" download>📊 PPT</a>
+          <a href="fortran/book/6장_입출력_기초와_서식.html" class="btn btn-book" >📖 Book</a>
+          <a href="fortran/practice/fort_prac_03.html" class="btn btn-practice">📝 Practice</a>
+        </div>
+      </div>
+
+      <div class="chapter-card">
+        <div class="card-content">
+          <h3>7장 배열 기초</h3>
+          <p class="desc">계수, 형상, 경계, 배열 생성자, 슬라이스, 열 우선 저장</p>
+        </div>
+        <div class="card-actions">
+          <a href="fortran/7장_배열_기초.pdf" class="btn btn-download" download>📊 PPT</a>
+          <a href="fortran/book/7장_배열_기초.html" class="btn btn-book" >📖 Book</a>
+          <a href="fortran/practice/fort_prac_03.html" class="btn btn-practice">📝 Practice</a>
+        </div>
+      </div>
+
+      <div class="chapter-card">
+        <div class="card-content">
+          <h3>8장 배열 연산</h3>
+          <p class="desc">전체 배열 연산, where 마스킹, 축약, reshape, matmul</p>
+        </div>
+        <div class="card-actions">
+          <a href="fortran/8장_배열_연산.pdf" class="btn btn-download" download>📊 PPT</a>
+          <a href="fortran/book/8장_배열_연산.html" class="btn btn-book" >📖 Book</a>
+          <a href="fortran/practice/fort_prac_03.html" class="btn btn-practice">📝 Practice</a>
+        </div>
+      </div>
+
+      <div class="chapter-card">
+        <div class="card-content">
+          <h3>9장 동적 배열과 메모리 할당</h3>
+          <p class="desc">allocatable, allocate, deallocate, 자동 재할당</p>
+        </div>
+        <div class="card-actions">
+          <a href="fortran/9장_동적_배열과_메모리_할당.pdf" class="btn btn-download" download>📊 PPT</a>
+          <a href="fortran/book/9장_동적_배열과_메모리_할당.html" class="btn btn-book" >📖 Book</a>
+          <a href="fortran/practice/fort_prac_03.html" class="btn btn-practice">📝 Practice</a>
+        </div>
+      </div>
+
+      <div class="chapter-card">
+        <div class="card-content">
+          <h3>10장 함수와 서브루틴</h3>
+          <p class="desc">function, subroutine, contains, result, recursive</p>
+        </div>
+        <div class="card-actions">
+          <a href="fortran/10장_함수와_서브루틴.pdf" class="btn btn-download" download>📊 PPT</a>
+          <a href="fortran/book/10장_함수와_서브루틴.html" class="btn btn-book" >📖 Book</a>
+          <a href="fortran/practice/fort_prac_03.html" class="btn btn-practice">📝 Practice</a>
+        </div>
+      </div>
+
+      <div class="chapter-card">
+        <div class="card-content">
+          <h3>11장 인수 전달과 인터페이스</h3>
+          <p class="desc">intent, optional, 키워드 인수, 가정형상 배열, interface</p>
+        </div>
+        <div class="card-actions">
+          <a href="fortran/11장_인수_전달과_인터페이스.pdf" class="btn btn-download" download>📊 PPT</a>
+          <a href="fortran/book/11장_인수_전달과_인터페이스.html" class="btn btn-book" >📖 Book</a>
+          <a href="fortran/practice/fort_prac_03.html" class="btn btn-practice">📝 Practice</a>
+        </div>
+      </div>
+
+      <div class="chapter-card">
+        <div class="card-content">
+          <h3>12장 모듈과 프로그램 구조</h3>
+          <p class="desc">module, use, public/private, 모듈 변수, contains</p>
+        </div>
+        <div class="card-actions">
+          <a href="fortran/12장_모듈과_프로그램_구성.pdf" class="btn btn-download" download>📊 PPT</a>
+          <a href="fortran/book/12장_모듈과_프로그램_구성.html" class="btn btn-book" >📖 Book</a>
+          <a href="fortran/practice/fort_prac_03.html" class="btn btn-practice">📝 Practice</a>
+        </div>
+      </div>
+
+      <div class="chapter-card">
+        <div class="card-content">
+          <h3>13장 파생형과 포인터</h3>
+          <p class="desc">type, % 접근, 형 생성자, pointer/target, 연결 리스트</p>
+        </div>
+        <div class="card-actions">
+          <a href="fortran/13장_파생형과_포인터.pdf" class="btn btn-download" download>📊 PPT</a>
+          <a href="fortran/book/13장_파생형과_포인터.html" class="btn btn-book" >📖 Book</a>
+          <a href="fortran/practice/fort_prac_03.html" class="btn btn-practice">📝 Practice</a>
+        </div>
+      </div>
+
+      <div class="chapter-card">
+        <div class="card-content">
+          <h3>14장 문자열과 파일 입출력</h3>
+          <p class="desc">character, open/close/inquire, access, form, iostat, namelist </p>
+        </div>
+        <div class="card-actions">
+          <a href="fortran/14장_문자열과_파일_입출력.pdf" class="btn btn-download" download>📊 PPT</a>
+          <a href="fortran/book/14장_문자열과_파일_입출력.html" class="btn btn-book" >📖 Book</a>
+          <a href="fortran/practice/fort_prac_03.html" class="btn btn-practice">📝 Practice</a>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+</body>
+</html>
