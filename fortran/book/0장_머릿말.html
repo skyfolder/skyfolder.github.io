@@ -73,6 +73,25 @@
     table tr:nth-child(2n) { background-color: #f6f8fa; }
     img { max-width: 100%; box-sizing: border-box; }
 </style>
+    <style>
+  body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+</style>
+<script>
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+  });
+  document.addEventListener('copy', function(e) {
+    e.preventDefault();
+  });
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault();
+  });
+</script>
 </head>
 <body>
 <p><br></p>
