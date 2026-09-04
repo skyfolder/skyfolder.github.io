@@ -1,8 +1,5 @@
 ---
 
----
----
-
 ## 부록 A. Colab·gfortran 사용법
 
 ### Colab 소개
