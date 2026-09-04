@@ -1,7 +1,5 @@
 ---
 
----
----
 ## 부록 B. matplotlib 빠른 입문 — 본문 Python 코드 읽기
 
 ## B.1 matplotlib이란 무엇인가
