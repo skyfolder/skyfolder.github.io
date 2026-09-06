@@ -379,7 +379,7 @@
       '<div class="actions">' +
         '<button class="btn btn-primary" data-act="grade">채점하기</button>' +
         (p.hint ? '<button class="btn" data-act="hint">' + (s.hintOpen ? '힌트 접기' : '힌트 보기') + '</button>' : '') +
-        '<button class="btn btn-quiet" data-act="reveal">해설 보기</button>' +
+    <!--    '<button class="btn btn-quiet" data-act="reveal">해설 보기</button>' +   -->
         (!isChoice ? '<button class="btn btn-quiet" data-act="reset">지우기</button>' : '') +
         '<span class="shortcut">Ctrl + Enter</span>' +
       '</div>' +
