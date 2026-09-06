@@ -187,3 +187,5 @@ button{font-family:var(--mono);font-size:12.5px;cursor:pointer}
   .masthead h1{letter-spacing:.16em}
   .tally{margin-left:0;width:100%;gap:12px}
 }
+
+[data-act="reveal"] { display: none; }
