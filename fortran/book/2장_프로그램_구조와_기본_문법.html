@@ -282,7 +282,7 @@ end program seconds_per_day
 <pre><code> seconds in a day =       86400
 </code></pre>
 <p>Fortran에서는 선언부와 실행부의 순서가 엄격하게 정해져 있어, 선언부가 모두 끝난 후에만 실행부 코드를 적을 수 있다. 예제처럼 <strong>선언부와 실행부 사이에 빈 줄을 한 칸 두어 물리적으로 분리</strong>해주면, 코드의 전체적인 구조가 한눈에 들어오는 좋은 코딩 습관을 기를 수 있다.</p>
-<h3>[예제] 문장 구조: 세미콜론과 여러 줄 잇기기</h3>
+<h3>[예제] 문장 구조: 세미콜론과 여러 줄 잇기</h3>
 <p>현대 Fortran은 한 줄에 하나의 명령 문장을 적는 것이 기본 원칙이다. 하지만 필요에 따라 한 줄에 여러 문장을 작성하거나, 반대로 하나의 문장이 너무 길어 여러 줄로 나누어 적어야 할 때가 있다. 아래 예제를 통해 세미콜론(<code>;</code>)과 줄잇기 문자(<code>&amp;</code>)의 활용법을 알아보자.</p>
 <pre><code class="language-fortran">%%writefile statement_demo.f90
 program statement_demo
