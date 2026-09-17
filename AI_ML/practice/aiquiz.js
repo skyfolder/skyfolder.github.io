@@ -134,10 +134,10 @@
           '<input class="ans" id="g-sid" autocomplete="off"></div>' +
         (msg ? '<div class="verdict no"><p>' + esc(msg) + '</p></div>' : '') +
         '<div class="row"><button class="b" id="g-go">시작</button></div>' +
-        '<div class="note">문항은 모두 ' + P.problems.length + '개이며 한 문항에 1점이다. ' +
-        '틀린 답을 냈더라도 고쳐서 다시 낼 수 있고, 맞힐 때까지 몇 번이든 시도할 수 있다. ' +
-        '시도 횟수는 결과 파일에 함께 기록된다. ' +
-        '마지막 화면에서 결과 파일을 내려받아 제출한다.</div>' +
+        '<div class="note">문항은 모두 ' + P.problems.length + '개이며 한 문항에 1점씩 배당합니다. ' +
+        '오답은 횟수에 상관없이 수정할 수 있습니다.  ' +
+        '시도 횟수는 결과 파일에 함께 기록됩니다. ' +
+        '마지막 화면에서 결과 파일을 내려받아 제출합니다.</div>' +
       '</div></div></div>';
 
     el('g-go').onclick = begin;
@@ -148,7 +148,7 @@
   function begin() {
     var n = el('g-name').value.trim();
     var s = el('g-sid').value.trim();
-    if (!n || !s) { gate('이름과 학번을 모두 적어야 시작할 수 있다.'); return; }
+    if (!n || !s) { gate('이름과 학번을 기입해야 시작할 수 있습니다.'); return; }
     who = { name: n, sid: s };
     at = 0;
     frame();
@@ -194,8 +194,8 @@
 
     var ok = S.filter(function (x) { return x.status === 'ok'; }).length;
     var fixing = S.filter(function (x) { return x.tries > 0 && x.status !== 'ok'; }).length;
-    h += '<div class="tally"><b>' + ok + '</b> / ' + P.problems.length + ' 맞힘<br>' +
-         '고치는 중 ' + fixing + '개</div>';
+    h += '<div class="tally"><b>' + ok + '</b> / ' + P.problems.length + ' 정답<br>' +
+         '수정 중 ' + fixing + '개</div>';
 
     var box = el('pad');
     box.innerHTML = h;
@@ -243,7 +243,7 @@
     h += '<div class="row">';
     if (!done) {
       h += '<button class="b" id="mark">' +
-           (s.tries > 0 ? '고쳐서 다시 제출' : '제출하고 채점') + '</button>';
+           (s.tries > 0 ? '수정 후 다시 제출' : '제출하고 채점') + '</button>';
       if (p.hint) { h += '<button class="b ghost" id="hint">힌트</button>'; }
     }
     h += '<span class="spacer"></span>';
@@ -256,8 +256,8 @@
       h += '<div class="verdict ok"><h5>맞혔다</h5><p>' +
            esc(decodeText((A[p.id] || {}).e || '')) + '</p></div>';
     } else if (s.status === 'no') {
-      h += '<div class="verdict no"><h5>아직 답이 아니다</h5>' +
-           '<p>위의 답을 고쳐서 다시 제출한다. 맞힐 때까지 몇 번이든 시도할 수 있다.</p></div>';
+      h += '<div class="verdict no"><h5>정답이 아닙니다</h5>' +
+           '<p>수정해서 다시 제출합니다. 몇 번이든 시도할 수 있습니다.</p></div>';
     }
     if (!done && (s.hintOpen || s.tries >= 2) && p.hint) {
       h += '<div class="verdict hint"><h5>힌트</h5><p>' + p.hint + '</p></div>';
@@ -332,8 +332,8 @@
         '<h2>' + esc(who.name) + ' · ' + esc(who.sid) + '</h2>' +
         '<div class="big">' + ok + '<span class="of"> / ' + total + '</span></div>' +
         (left > 0
-          ? '<div class="verdict hint"><h5>아직 ' + left + '문항이 남았다</h5>' +
-            '<p>왼쪽의 번호를 눌러 그 문항으로 돌아가 다시 풀 수 있다. 다 풀고 나서 파일을 내려받는다.</p></div>'
+          ? '<div class="verdict hint"><h5>아직 ' + left + '문항이 남았습니다</h5>' +
+            '<p>왼쪽 패널에서 문항으로 돌아가 다시 풀 수 있습니다. 다 풀고 나서 파일을 내려습니다.</p></div>'
           : '') +
         '<div class="row"><button class="b" id="save">결과 파일 내려받기</button>' +
           '<button class="b quiet" id="back">문항으로 돌아가기</button></div>' +
@@ -380,8 +380,8 @@
     if (!root.PROBLEMS || !root.ANSWERS) {
       document.getElementById('app').innerHTML =
         '<div class="wrap"><div class="gate"><div class="card">' +
-        '<h1>문제 파일을 찾지 못했다</h1>' +
-        '<p class="sub">저장소를 통째로 내려받았는지, answer 폴더가 이 HTML 파일과 같은 위치에 있는지 확인한다.</p>' +
+        '<h1>문제 파일을 찾지 못했습니다</h1>' +
+        '<p class="sub">저장소 전체를 내려받았는지, 정답 폴더가 이 HTML 파일과 같은 위치에 있는지 확인합니다.</p>' +
         '</div></div></div>';
       return;
     }
