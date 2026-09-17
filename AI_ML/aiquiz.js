@@ -134,10 +134,10 @@
           '<input class="ans" id="g-sid" autocomplete="off"></div>' +
         (msg ? '<div class="verdict no"><p>' + esc(msg) + '</p></div>' : '') +
         '<div class="row"><button class="b" id="g-go">시작</button></div>' +
-        '<div class="note">문항은 모두 ' + P.problems.length + '개이며 한 문항에 1점이다. ' +
-        '틀린 답을 냈더라도 고쳐서 다시 낼 수 있고, 맞힐 때까지 몇 번이든 시도할 수 있다. ' +
-        '시도 횟수는 결과 파일에 함께 기록된다. ' +
-        '마지막 화면에서 결과 파일을 내려받아 제출한다.</div>' +
+        '<div class="note">문항은 모두 ' + P.problems.length + '개이며 한 문항에 1점. ' +
+        '틀린 답은 수정해서 다시 제출 할 있습니다. ' +
+        '시도 횟수는 결과 파일에 함께 기록됩니다. ' +
+        '마지막 화면에서 결과 파일을 내려받아 제출합니다.</div>' +
       '</div></div></div>';
 
     el('g-go').onclick = begin;
@@ -148,7 +148,7 @@
   function begin() {
     var n = el('g-name').value.trim();
     var s = el('g-sid').value.trim();
-    if (!n || !s) { gate('이름과 학번을 모두 적어야 시작할 수 있다.'); return; }
+    if (!n || !s) { gate('이름과 학번을 모두 적어야 시작할 수 있습니다.'); return; }
     who = { name: n, sid: s };
     at = 0;
     frame();
