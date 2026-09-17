@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>제출물 검증</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../aiquiz.css">
+</head>
+<body>
+
+<div class="top">
+  <span class="course">대기과학을 위한 인공지능</span>
+  <span class="chap">제출물 검증</span>
+</div>
+
+<div class="wrap">
+  <div class="gate">
+    <div class="card">
+      <h1>결과 파일 검증</h1>
+      <p class="sub">학생이 낸 점수 파일을 그대로 붙여 넣으면 서명이 본문과 맞는지 확인한다.</p>
+
+      <div class="f">
+        <label for="src">결과 파일 내용</label>
+        <textarea class="ans" id="src" rows="14" spellcheck="false"></textarea>
+      </div>
+
+      <div class="row">
+        <button class="b" id="go">검증</button>
+        <button class="b quiet" id="pick">파일 열기</button>
+        <input type="file" id="f" accept=".txt" hidden>
+      </div>
+
+      <div id="out"></div>
+
+      <div class="note">
+        서명은 이름, 학번, 제출 시각, 점수, 문항별 결과를 모두 합쳐 만든 값이다.
+        한 글자라도 고치면 서명이 어긋난다.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var SALT = 'atmos-ai-2026';
+function pad8(n) { var s = (n >>> 0).toString(16); while (s.length < 8) { s = '0' + s; } return s; }
+function hash(s) {
+  var a = 0x811c9dc5 >>> 0, b = 5381 >>> 0, t = SALT + '|' + s;
+  for (var i = 0; i < t.length; i++) {
+    var c = t.charCodeAt(i);
+    a = (a ^ c) >>> 0; a = Math.imul(a, 0x01000193) >>> 0;
+    b = ((Math.imul(b, 33) ^ c) >>> 0);
+  }
+  return pad8(a) + pad8(b);
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"]/g, function (c) {
+    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c];
+  });
+}
+
+document.getElementById('pick').onclick = function () { document.getElementById('f').click(); };
+document.getElementById('f').onchange = function (e) {
+  var file = e.target.files[0];
+  if (!file) { return; }
+  var r = new FileReader();
+  r.onload = function () { document.getElementById('src').value = r.result; check(); };
+  r.readAsText(file, 'utf-8');
+};
+document.getElementById('go').onclick = check;
+
+function check() {
+  var text = document.getElementById('src').value.replace(/\r\n/g, '\n');
+  var out = document.getElementById('out');
+  var i = text.lastIndexOf('\n\n서명: ');
+
+  if (i < 0) {
+    out.innerHTML = '<div class="verdict no"><h5>서명을 찾지 못했다</h5>' +
+      '<p>파일 끝의 서명 줄이 지워졌거나 형식이 바뀐 파일이다.</p></div>';
+    return;
+  }
+
+  var body = text.slice(0, i);
+  var sign = text.slice(i).replace(/^\n\n서명: /, '').trim();
+  var mine = hash(body);
+
+  var name  = (body.match(/^이름: (.*)$/m) || [])[1] || '';
+  var sid   = (body.match(/^학번: (.*)$/m) || [])[1] || '';
+  var score = (body.match(/^점수: (.*)$/m) || [])[1] || '';
+  var when  = (body.match(/^제출: (.*)$/m) || [])[1] || '';
+
+  if (sign === mine) {
+    out.innerHTML = '<div class="verdict ok"><h5>서명이 맞다</h5>' +
+      '<p>' + esc(name) + ' · ' + esc(sid) + '</p>' +
+      '<pre>점수 ' + esc(score) + '\n제출 ' + esc(when) + '</pre></div>';
+  } else {
+    out.innerHTML = '<div class="verdict no"><h5>서명이 맞지 않는다</h5>' +
+      '<p>파일 내용이 만들어진 뒤에 고쳐졌다.</p>' +
+      '<pre>파일의 서명 ' + esc(sign) + '\n본문의 서명 ' + mine + '</pre></div>';
+  }
+}
+</script>
+</body>
+</html>
