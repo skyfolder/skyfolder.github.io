@@ -1,88 +1,387 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>대기과학을 위한 인공지능 — 실습</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="aiquiz.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대기과학을 위한 인공지능 수업자료</title>
+<style>
+  :root {
+    --primary-color: #2563eb;
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --accent-green: #059669;
+    --accent-green-bg: #ecfdf5;
+    --accent-purple: #7e22ce;
+    --accent-purple-bg: #f3e8ff;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Top Navigation */
+  .topnav {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+  }
+
+  .nav-link {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+
+  .nav-link:hover {
+    background-color: #e2e8f0;
+    color: var(--text-main);
+  }
+
+  /* Header Section */
+  header {
+    margin-bottom: 36px;
+  }
+
+  .header-title-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    max-width: 800px;
+  }
+
+  /* 3열 그리드 레이아웃 설정 */
+  .chapter-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  /* Individual Chapter Card */
+  .chapter-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  }
+
+  .chapter-card:hover {
+    transform: translateY(-3px);
+    border-color: #cbd5e1;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Card Top Area */
+  .card-content {
+    margin-bottom: 16px;
+  }
+
+  .chapter-card h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
+  .desc {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  /* Card Bottom Action Area */
+  .card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border-color);
+  }
+
+  .btn {
+    flex: 1;
+    min-width: 70px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 0.825rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .btn-download {
+    background-color: #eff6ff;
+    color: var(--primary-color);
+  }
+
+  .btn-download:hover {
+    background-color: var(--primary-color);
+    color: #ffffff;
+  }
+
+  .btn-book {
+    background-color: var(--accent-purple-bg);
+    color: var(--accent-purple);
+  }
+
+  .btn-book:hover {
+    background-color: var(--accent-purple);
+    color: #ffffff;
+  }
+
+  .btn-practice {
+    background-color: var(--accent-green-bg);
+    color: var(--accent-green);
+  }
+
+  .btn-practice:hover {
+    background-color: var(--accent-green);
+    color: #ffffff;
+  }
+
+  /* 아직 올라오지 않은 자료 */
+  .btn-soon {
+    background-color: #f1f5f9;
+    color: #94a3b8;
+    cursor: default;
+  }
+
+  /* 반응형 레이아웃 */
+  @media (max-width: 1024px) {
+    .chapter-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .chapter-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
 </head>
 <body>
 
-<header class="hero">
-  <svg viewBox="0 0 1200 260" preserveAspectRatio="none" aria-hidden="true">
-    <g fill="none" stroke="#3f6d87" stroke-width="1.2">
-      <path d="M-20 40 C 180 8, 360 96, 560 64 S 940 4, 1220 52"/>
-      <path d="M-20 78 C 190 44, 380 132, 570 100 S 950 40, 1220 90"/>
-      <path d="M-20 116 C 200 80, 400 168, 580 136 S 960 76, 1220 128"/>
-      <path d="M-20 154 C 210 116, 420 204, 590 172 S 970 112, 1220 166"/>
-      <path d="M-20 192 C 220 152, 440 240, 600 208 S 980 148, 1220 204"/>
-      <path d="M-20 230 C 230 188, 460 276, 610 244 S 990 184, 1220 242"/>
-    </g>
-    <g fill="none" stroke="#6fa8c4" stroke-width="1.6" stroke-dasharray="5 7">
-      <path d="M-20 97 C 195 62, 390 150, 575 118 S 955 58, 1220 109"/>
-    </g>
-  </svg>
-  <div class="in">
-    <p class="eyebrow">학부 강의 실습</p>
-    <h1>대기과학을 위한 인공지능</h1>
-    <p>장마다 문제를 풀고 그 자리에서 채점을 받는다. 마지막에 점수 파일을 내려받아 제출한다.</p>
+<div class="container">
+
+  <div class="topnav">
+    <a href="index.html" class="nav-link">🏠 Home</a>
   </div>
-</header>
 
-<div class="wrap">
-  <h3 class="sec">Practice</h3>
-  <div class="chs" id="list"></div>
+  <header>
+    <div class="header-title-container">
+      <!-- 가로 크기 100 고정 규칙 유지 -->
+      <img src="AI_ML/book_image.jpg" alt="책 로고" width="100" onerror="this.style.display='none'">
+      <div class="header-text">
+        <h1><span style="color: deepskyblue;">대기과학</span><span style="color: grey;">을 위한</span><span style="color: orange;"> 인공지능</span></h1>
+        <p class="subtitle">
+          박창현 저
+        </p>
+      </div>
+    </div>
+  </header>
 
-  <h3 class="sec">강사용</h3>
-  <a class="ch" href="answer/verify_score.html">
-    <span class="no">검증</span>
-    <span><b>제출물 검증</b><small>학생이 낸 결과 파일의 서명과 본문을 대조한다</small></span>
-    <span class="go">열기</span>
-  </a>
+  <main class="chapter-grid">
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>1장 인공지능과 대기과학</h3>
+        <p class="desc">인공지능의 범주, 대기과학에서의 쓰임, 학습의 뜻</p>
+      </div>
+      <div class="card-actions">
+        <span class="btn btn-soon">📝 준비 중</span>
+      </div>
+    </div>
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>2장 Python 기초와 Colab 환경</h3>
+        <p class="desc">Colab 노트북, 변수와 자료형, 리스트, 출력</p>
+      </div>
+      <div class="card-actions">
+        <span class="btn btn-soon">📝 준비 중</span>
+      </div>
+    </div>
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>3장 제어문과 함수</h3>
+        <p class="desc">조건문, 반복문, 함수 정의, 모듈 가져오기</p>
+      </div>
+      <div class="card-actions">
+        <span class="btn btn-soon">📝 준비 중</span>
+      </div>
+    </div>
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>4장 자료구조와 파일 입출력</h3>
+        <p class="desc">리스트, 딕셔너리, csv 읽고 쓰기</p>
+      </div>
+      <div class="card-actions">
+        <span class="btn btn-soon">📝 준비 중</span>
+      </div>
+    </div>
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>5장 NumPy와 배열 연산</h3>
+        <p class="desc">ndarray, 모양과 차원, 브로드캐스팅, 통계 함수</p>
+      </div>
+      <div class="card-actions">
+        <span class="btn btn-soon">📝 준비 중</span>
+      </div>
+    </div>
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>6장 Pandas와 기상 데이터 다루기</h3>
+        <p class="desc">DataFrame, 결측값, 시각화로 데이터 살펴보기</p>
+      </div>
+      <div class="card-actions">
+        <span class="btn btn-soon">📝 준비 중</span>
+      </div>
+    </div>
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>7장 머신러닝 기초: 사이킷런과 선형 회귀</h3>
+        <p class="desc">지도·비지도·강화 학습, 계수와 절편, MSE와 결정계수, 경사 하강법과 학습률</p>
+      </div>
+      <div class="card-actions">
+        <!-- <a href="AI_ML/7장_머신러닝_기초_사이킷런과_선형회귀.pdf" class="btn btn-download" download>📊 PPT</a> -->
+        <!-- <a href="AI_ML/book/7장_머신러닝_기초.html" class="btn btn-book">📖 Book</a> -->
+        <a href="AI_ML/practice/Ch07_AI_선형회귀.html" class="btn btn-practice">📝 Practice</a>
+      </div>
+    </div>
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>8장 분류: 로지스틱 회귀와 kNN</h3>
+        <p class="desc">분류 문제, 결정 경계, 정확도와 혼동 행렬</p>
+      </div>
+      <div class="card-actions">
+        <span class="btn btn-soon">📝 준비 중</span>
+      </div>
+    </div>
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>9장 의사결정 나무와 앙상블</h3>
+        <p class="desc">트리의 분할 기준, 과적합, 랜덤 포레스트</p>
+      </div>
+      <div class="card-actions">
+        <span class="btn btn-soon">📝 준비 중</span>
+      </div>
+    </div>
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>10장 비지도 학습: 군집화와 차원 축소</h3>
+        <p class="desc">k-평균, 주성분 분석, 기상 자료의 패턴 찾기</p>
+      </div>
+      <div class="card-actions">
+        <span class="btn btn-soon">📝 준비 중</span>
+      </div>
+    </div>
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>11장 인공 신경망 기초</h3>
+        <p class="desc">퍼셉트론, 활성화 함수, 순전파와 역전파</p>
+      </div>
+      <div class="card-actions">
+        <span class="btn btn-soon">📝 준비 중</span>
+      </div>
+    </div>
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>12장 딥러닝: 케라스와 다층 퍼셉트론</h3>
+        <p class="desc">모델 구성, 손실 함수와 최적화기, 학습 곡선</p>
+      </div>
+      <div class="card-actions">
+        <span class="btn btn-soon">📝 준비 중</span>
+      </div>
+    </div>
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>13장 합성곱 신경망과 기상 영상</h3>
+        <p class="desc">합성곱과 풀링, 위성·레이더 영상의 특징 추출</p>
+      </div>
+      <div class="card-actions">
+        <span class="btn btn-soon">📝 준비 중</span>
+      </div>
+    </div>
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>14장 시계열 예측과 순환 신경망</h3>
+        <p class="desc">시계열 자료의 구성, RNN과 LSTM, 예보 실험</p>
+      </div>
+      <div class="card-actions">
+        <span class="btn btn-soon">📝 준비 중</span>
+      </div>
+    </div>
+
+    <div class="chapter-card">
+      <div class="card-content">
+        <h3>강사용. 제출물 검증</h3>
+        <p class="desc">학생이 낸 결과 파일의 서명과 본문을 대조한다</p>
+      </div>
+      <div class="card-actions">
+        <a href="AI_ML/practice/answer/verify_score.html" class="btn btn-download">🔎 검증</a>
+      </div>
+    </div>
+
+  </main>
+
 </div>
-
-<script>
-/* ------------------------------------------------------------
-   장 목록. 새 장을 올릴 때 file 에 경로를 채우면 바로 열린다.
-   file 이 비어 있으면 준비 중으로 표시된다.
-   ------------------------------------------------------------ */
-var CHAPTERS = [
-  { no: "01", title: "인공지능과 대기과학",              count: "",   file: "" },
-  { no: "02", title: "Python 기초와 Colab 환경",         count: "",   file: "" },
-  { no: "03", title: "제어문과 함수",                    count: "",   file: "" },
-  { no: "04", title: "자료구조와 파일 입출력",           count: "",   file: "" },
-  { no: "05", title: "NumPy와 배열 연산",                count: "",   file: "" },
-  { no: "06", title: "Pandas와 기상 데이터 다루기",      count: "",   file: "" },
-  { no: "07", title: "머신러닝 기초: 사이킷런과 선형 회귀",
-              count: "이론 15 · 코딩 20 — 35문항", file: "Ch07_AI_선형회귀.html" },
-  { no: "08", title: "분류: 로지스틱 회귀와 kNN",        count: "",   file: "" },
-  { no: "09", title: "의사결정 나무와 앙상블",           count: "",   file: "" },
-  { no: "10", title: "비지도 학습: 군집화와 차원 축소",  count: "",   file: "" },
-  { no: "11", title: "인공 신경망 기초",                 count: "",   file: "" },
-  { no: "12", title: "딥러닝: 케라스와 다층 퍼셉트론",   count: "",   file: "" },
-  { no: "13", title: "합성곱 신경망과 기상 영상",        count: "",   file: "" },
-  { no: "14", title: "시계열 예측과 순환 신경망",        count: "",   file: "" }
-];
-
-(function () {
-  var h = CHAPTERS.map(function (c) {
-    if (c.file) {
-      return '<a class="ch" href="' + c.file + '">' +
-        '<span class="no">CH ' + c.no + '</span>' +
-        '<span><b>' + c.title + '</b><small>' + c.count + '</small></span>' +
-        '<span class="go">시작</span></a>';
-    }
-    return '<div class="ch soon">' +
-      '<span class="no">CH ' + c.no + '</span>' +
-      '<span><b>' + c.title + '</b><small>준비 중</small></span>' +
-      '<span class="go">준비 중</span></div>';
-  }).join('');
-  document.getElementById('list').innerHTML = h;
-})();
-</script>
 
 </body>
 </html>
