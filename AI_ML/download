@@ -1,1 +1,2 @@
-answer/*.src.js
+answer/*_answers.src.js
+answer/build_*.html

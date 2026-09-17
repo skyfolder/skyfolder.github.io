@@ -4,11 +4,15 @@
    하는 일
      1) 이름과 학번을 받는다
      2) 문항을 한 개씩 보여 주고 답을 받는다
-     3) 입력을 정규화한 뒤 해시로 만들어 정답 해시와 대조한다
-     4) 끝나면 서명이 붙은 결과 파일을 내려 준다
+     3) 입력을 채점 규칙대로 정규화한 뒤 지문으로 바꾸어 정답 지문과 대조한다
+     4) 틀리면 그 자리에서 고쳐 다시 낼 수 있다. 맞히면 그 문항을 닫고 해설을 연다
+     5) 끝나면 서명이 붙은 결과 파일을 내려 준다
 
    정답 평문은 이 파일에도, 문제 파일에도 없다.
-   answer/ChNN_answers.js 에 해시와 가려 둔 해설만 들어 있다.
+   answer/ChNN_answers.js 에 지문과 가려 둔 해설만 들어 있다.
+
+   AIQ.digest 와 AIQ.encodeText 는 정답 생성 도구(build_NN.html)가 함께 쓴다.
+   채점 규칙이나 SALT 를 고치면 모든 장의 정답 파일을 다시 만들어야 한다.
    ============================================================ */
 
 (function (root) {
@@ -16,34 +20,24 @@
 
   var SALT = 'atmos-ai-2026';
 
-  /* ---------- 해시 ---------- */
-  /* 정답 생성 도구(build_NN.html)와 반드시 같은 식이어야 한다. */
+  /* ---------- 지문 ---------- */
 
-  function hash(s) {
-    var a = 0x811c9dc5 >>> 0;
-    var b = 5381 >>> 0;
-    var t = SALT + '|' + s;
-    for (var i = 0; i < t.length; i++) {
-      var c = t.charCodeAt(i);
-      a = (a ^ c) >>> 0;
-      a = Math.imul(a, 0x01000193) >>> 0;
-      b = ((Math.imul(b, 33) ^ c) >>> 0);
-    }
-    return pad8(a) + pad8(b);
-  }
   function pad8(n) {
     var s = (n >>> 0).toString(16);
     while (s.length < 8) { s = '0' + s; }
     return s;
   }
 
-  function unhide(s) {
-    try {
-      var bin = atob(s);
-      var bytes = new Uint8Array(bin.length);
-      for (var i = 0; i < bin.length; i++) { bytes[i] = bin.charCodeAt(i); }
-      return new TextDecoder('utf-8').decode(bytes);
-    } catch (e) { return ''; }
+  function fingerprint(s) {
+    var a = 0x811c9dc5 >>> 0;
+    var b = 5381 >>> 0;
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charCodeAt(i);
+      a = (a ^ c) >>> 0;
+      a = Math.imul(a, 0x01000193) >>> 0;
+      b = ((Math.imul(b, 33) ^ c) >>> 0);
+    }
+    return pad8(a) + pad8(b);
   }
 
   /* ---------- 정규화 ---------- */
@@ -59,7 +53,7 @@
     var t = squeeze(s);
     t = t.replace(/[\u2018\u2019\u201c\u201d]/g, "'");
     t = t.replace(/"/g, "'");
-    t = t.replace(/#.*$/gm, '');          /* 주석 제거 */
+    t = t.replace(/#.*$/gm, '');
     t = t.replace(/\s+/g, '');
     t = t.replace(/;+$/, '');
     return t;
@@ -79,15 +73,47 @@
     return normText(v);
   }
 
+  /* 장 번호와 문항 번호를 함께 섞는다. 같은 답이 같은 지문으로 보이지 않는다. */
+  function digest(ch, id, type, value) {
+    return fingerprint(SALT + '|' + ch + '|' + id + '|' + normalize(type, value));
+  }
+
+  function encodeText(s) {
+    var bytes = new TextEncoder().encode(String(s));
+    var bin = '';
+    for (var i = 0; i < bytes.length; i++) { bin += String.fromCharCode(bytes[i]); }
+    return btoa(bin);
+  }
+
+  function decodeText(s) {
+    try {
+      var bin = atob(s);
+      var bytes = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) { bytes[i] = bin.charCodeAt(i); }
+      return new TextDecoder('utf-8').decode(bytes);
+    } catch (e) { return ''; }
+  }
+
+  root.AIQ = {
+    digest: digest,
+    encodeText: encodeText,
+    decodeText: decodeText,
+    normalize: normalize
+  };
+
   /* ---------- 상태 ---------- */
 
-  var CFG, P, A, S, who = { name: '', sid: '' }, at = 0, started = false;
+  var CFG, P, A, S, who = { name: '', sid: '' }, at = 0;
 
   function el(id) { return document.getElementById(id); }
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (c) {
       return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c];
     });
+  }
+  function labelOf(key) {
+    var found = (P.sections || []).filter(function (x) { return x.key === key; })[0];
+    return found ? found.label : key;
   }
 
   /* ---------- 시작 화면 ---------- */
@@ -109,8 +135,9 @@
         (msg ? '<div class="verdict no"><p>' + esc(msg) + '</p></div>' : '') +
         '<div class="row"><button class="b" id="g-go">시작</button></div>' +
         '<div class="note">문항은 모두 ' + P.problems.length + '개이며 한 문항에 1점이다. ' +
-        '답을 제출하면 바로 채점되고 해설이 열린다. ' +
-        '마지막 화면에서 점수 파일을 내려받아 제출한다.</div>' +
+        '틀린 답을 냈더라도 고쳐서 다시 낼 수 있고, 맞힐 때까지 몇 번이든 시도할 수 있다. ' +
+        '시도 횟수는 결과 파일에 함께 기록된다. ' +
+        '마지막 화면에서 결과 파일을 내려받아 제출한다.</div>' +
       '</div></div></div>';
 
     el('g-go').onclick = begin;
@@ -123,7 +150,6 @@
     var s = el('g-sid').value.trim();
     if (!n || !s) { gate('이름과 학번을 모두 적어야 시작할 수 있다.'); return; }
     who = { name: n, sid: s };
-    started = true;
     at = 0;
     frame();
     draw();
@@ -148,28 +174,28 @@
   /* ---------- 이동판 ---------- */
 
   function pad() {
-    var byTag = {}, order = [];
+    var byKey = {}, order = [];
     P.problems.forEach(function (p, i) {
-      if (!byTag[p.tag]) { byTag[p.tag] = []; order.push(p.tag); }
-      byTag[p.tag].push(i);
+      if (!byKey[p.section]) { byKey[p.section] = []; order.push(p.section); }
+      byKey[p.section].push(i);
     });
 
     var h = '';
-    order.forEach(function (tag) {
-      h += '<h4>' + esc(tag) + '</h4><div class="dots">';
-      byTag[tag].forEach(function (i) {
-        var st = S[i].status;
-        h += '<button data-i="' + i + '" class="' +
-             (i === at ? 'on ' : '') + (st === 'ok' ? 'ok' : st === 'no' ? 'no' : '') +
-             '">' + (i + 1) + '</button>';
+    order.forEach(function (key) {
+      h += '<h4>' + esc(labelOf(key)) + '</h4><div class="dots">';
+      byKey[key].forEach(function (i) {
+        var cls = i === at ? 'on ' : '';
+        if (S[i].status === 'ok') { cls += 'ok'; }
+        else if (S[i].tries > 0) { cls += 'no'; }
+        h += '<button data-i="' + i + '" class="' + cls + '">' + (i + 1) + '</button>';
       });
       h += '</div>';
     });
 
     var ok = S.filter(function (x) { return x.status === 'ok'; }).length;
-    var done = S.filter(function (x) { return x.status; }).length;
-    h += '<div class="tally"><b>' + ok + '</b> / ' + P.problems.length + ' 정답<br>' +
-         '푼 문항 ' + done + '개</div>';
+    var fixing = S.filter(function (x) { return x.tries > 0 && x.status !== 'ok'; }).length;
+    h += '<div class="tally"><b>' + ok + '</b> / ' + P.problems.length + ' 맞힘<br>' +
+         '고치는 중 ' + fixing + '개</div>';
 
     var box = el('pad');
     box.innerHTML = h;
@@ -177,7 +203,7 @@
       b.onclick = function () { keep(); at = +b.dataset.i; draw(); };
     });
 
-    el('bar').style.width = (done / P.problems.length * 100) + '%';
+    el('bar').style.width = (ok / P.problems.length * 100) + '%';
   }
 
   /* ---------- 문항 그리기 ---------- */
@@ -185,13 +211,15 @@
   function draw() {
     if (at >= P.problems.length) { finish(); return; }
 
-    var p = P.problems[at], s = S[at], locked = !!s.status;
+    var p = P.problems[at], s = S[at], done = s.status === 'ok';
     var h = '';
 
     h += '<div class="card">';
     h += '<div class="kicker"><span class="n">' + (at + 1) + '</span>' +
-         '<span class="tag">' + esc(p.tag) + '</span>' +
-         '<span>' + esc(p.topic || '') + '</span></div>';
+         '<span class="tag">' + esc(labelOf(p.section)) + '</span>' +
+         '<span>' + esc(p.topic || '') + '</span>' +
+         (s.tries > 0 ? '<span class="tries">시도 ' + s.tries + '회</span>' : '') +
+         '</div>';
     h += '<h2>' + esc(p.title) + '</h2>';
     h += '<div class="ask">' + p.question + '</div>';
 
@@ -200,35 +228,39 @@
       p.options.forEach(function (o, k) {
         h += '<label class="' + (s.value === String(k) ? 'sel' : '') + '">' +
              '<input type="radio" name="pick" value="' + k + '"' +
-             (s.value === String(k) ? ' checked' : '') + (locked ? ' disabled' : '') + '>' +
+             (s.value === String(k) ? ' checked' : '') + (done ? ' disabled' : '') + '>' +
              '<span>' + o + '</span></label>';
       });
       h += '</div>';
     } else if (p.type === 'code') {
       h += '<textarea class="ans" id="in" rows="5" spellcheck="false"' +
-           (locked ? ' disabled' : '') + '>' + esc(s.value) + '</textarea>';
+           (done ? ' disabled' : '') + '>' + esc(s.value) + '</textarea>';
     } else {
       h += '<input class="ans" id="in" spellcheck="false" autocomplete="off"' +
-           (locked ? ' disabled' : '') + ' value="' + esc(s.value) + '">';
+           (done ? ' disabled' : '') + ' value="' + esc(s.value) + '">';
     }
 
     h += '<div class="row">';
-    if (!locked) { h += '<button class="b" id="mark">제출하고 채점</button>'; }
-    if (p.hint && !locked) { h += '<button class="b ghost" id="hint">힌트</button>'; }
+    if (!done) {
+      h += '<button class="b" id="mark">' +
+           (s.tries > 0 ? '고쳐서 다시 제출' : '제출하고 채점') + '</button>';
+      if (p.hint) { h += '<button class="b ghost" id="hint">힌트</button>'; }
+    }
     h += '<span class="spacer"></span>';
     if (at > 0) { h += '<button class="b quiet" id="prev">이전</button>'; }
-    h += '<button class="b ' + (locked ? '' : 'quiet') + '" id="next">' +
+    h += '<button class="b ' + (done ? '' : 'quiet') + '" id="next">' +
          (at === P.problems.length - 1 ? '결과 보기' : '다음') + '</button>';
     h += '</div>';
 
-    if (s.hintOpen && p.hint) {
-      h += '<div class="verdict hint"><h5>힌트</h5><p>' + p.hint + '</p></div>';
+    if (done) {
+      h += '<div class="verdict ok"><h5>맞혔다</h5><p>' +
+           esc(decodeText((A[p.id] || {}).e || '')) + '</p></div>';
+    } else if (s.status === 'no') {
+      h += '<div class="verdict no"><h5>아직 답이 아니다</h5>' +
+           '<p>위의 답을 고쳐서 다시 제출한다. 맞힐 때까지 몇 번이든 시도할 수 있다.</p></div>';
     }
-    if (locked) {
-      var a = A[p.id] || {};
-      h += '<div class="verdict ' + s.status + '">' +
-           '<h5>' + (s.status === 'ok' ? '정답이다' : '틀렸다') + '</h5>' +
-           '<p>' + esc(unhide(a.e || '')) + '</p></div>';
+    if (!done && (s.hintOpen || s.tries >= 2) && p.hint) {
+      h += '<div class="verdict hint"><h5>힌트</h5><p>' + p.hint + '</p></div>';
     }
     h += '</div>';
 
@@ -243,7 +275,7 @@
           });
         };
       });
-    } else if (!locked) {
+    } else if (!done) {
       var box = el('in');
       box.focus();
       if (p.type !== 'code') {
@@ -252,12 +284,12 @@
     }
 
     if (el('mark')) { el('mark').onclick = mark; }
-    if (el('hint')) { el('hint').onclick = function () { S[at].hintOpen = true; draw(); }; }
+    if (el('hint')) { el('hint').onclick = function () { keep(); S[at].hintOpen = true; draw(); }; }
     if (el('prev')) { el('prev').onclick = function () { keep(); at--; draw(); }; }
     if (el('next')) { el('next').onclick = function () { keep(); at++; draw(); }; }
 
     pad();
-    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+    window.scrollTo(0, 0);
   }
 
   function keep() {
@@ -273,10 +305,10 @@
     var p = P.problems[at], s = S[at];
     if (!String(s.value).trim()) { return; }
 
-    var mine = hash(p.id + '|' + normalize(p.type, s.value));
+    var mine = digest(CFG.chapter, p.id, p.type, s.value);
     var list = (A[p.id] && A[p.id].h) || [];
+    s.tries++;
     s.status = list.indexOf(mine) >= 0 ? 'ok' : 'no';
-    s.hintOpen = false;
     draw();
   }
 
@@ -285,10 +317,12 @@
   function finish() {
     var ok = S.filter(function (x) { return x.status === 'ok'; }).length;
     var total = P.problems.length;
+    var left = total - ok;
 
     var rows = P.problems.map(function (p, i) {
-      return '<tr><td class="s">' + (i + 1) + '</td><td>' + esc(p.tag) + '</td>' +
+      return '<tr><td class="s">' + (i + 1) + '</td><td>' + esc(labelOf(p.section)) + '</td>' +
              '<td>' + esc(p.title) + '</td>' +
+             '<td class="s">' + S[i].tries + '</td>' +
              '<td class="s">' + (S[i].status === 'ok' ? '1' : '0') + '</td></tr>';
     }).join('');
 
@@ -297,10 +331,14 @@
         '<div class="kicker"><span class="tag">채점 끝</span></div>' +
         '<h2>' + esc(who.name) + ' · ' + esc(who.sid) + '</h2>' +
         '<div class="big">' + ok + '<span class="of"> / ' + total + '</span></div>' +
+        (left > 0
+          ? '<div class="verdict hint"><h5>아직 ' + left + '문항이 남았다</h5>' +
+            '<p>왼쪽의 번호를 눌러 그 문항으로 돌아가 다시 풀 수 있다. 다 풀고 나서 파일을 내려받는다.</p></div>'
+          : '') +
         '<div class="row"><button class="b" id="save">결과 파일 내려받기</button>' +
           '<button class="b quiet" id="back">문항으로 돌아가기</button></div>' +
-        '<table class="breakdown"><thead><tr><th>번호</th><th>구분</th><th>문항</th><th>점수</th></tr></thead>' +
-        '<tbody>' + rows + '</tbody></table>' +
+        '<table class="breakdown"><thead><tr><th>번호</th><th>구분</th><th>문항</th>' +
+        '<th>시도</th><th>점수</th></tr></thead><tbody>' + rows + '</tbody></table>' +
       '</div>';
 
     el('save').onclick = function () { save(ok, total); };
@@ -316,13 +354,14 @@
     lines.push('제출: ' + new Date().toISOString());
     lines.push('점수: ' + ok + ' / ' + total);
     lines.push('');
-    lines.push('번호\t구분\t결과');
+    lines.push('번호\t구분\t시도\t결과');
     P.problems.forEach(function (p, i) {
-      lines.push((i + 1) + '\t' + p.tag + '\t' + (S[i].status === 'ok' ? 'O' : 'X'));
+      lines.push((i + 1) + '\t' + labelOf(p.section) + '\t' + S[i].tries + '\t' +
+                 (S[i].status === 'ok' ? 'O' : 'X'));
     });
     var body = lines.join('\n');
     lines.push('');
-    lines.push('서명: ' + hash(body));
+    lines.push('서명: ' + fingerprint(SALT + '|' + body));
 
     var blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
     var a = document.createElement('a');
@@ -331,6 +370,8 @@
     a.click();
     URL.revokeObjectURL(a.href);
   }
+
+  root.AIQ.sign = function (body) { return fingerprint(SALT + '|' + body); };
 
   /* ---------- 진입 ---------- */
 
@@ -347,11 +388,11 @@
     P = root.PROBLEMS;
     A = root.ANSWERS;
     S = P.problems.map(function () {
-      return { value: '', status: null, hintOpen: false };
+      return { value: '', status: null, hintOpen: false, tries: 0 };
     });
     gate('');
   }
 
-  root.AIQuiz = { start: start, _hash: hash, _norm: normalize };
+  root.AIQuiz = { start: start };
 
 })(typeof window !== 'undefined' ? window : globalThis);
