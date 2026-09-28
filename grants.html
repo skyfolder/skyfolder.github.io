@@ -1,219 +1,190 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> 수주 및 참여 프로젝트</title>
-<style>
-    .fund-container {
-        max-width: 800px;
-        margin: 0 auto;
-        font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
-    }
-
-    /* 제목과 버튼을 감싸는 헤더 영역 추가 */
-    .fund-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 2px solid #2c3e50;
-        padding-bottom: 10px;
-        margin-bottom: 20px;
-    }
-
-    .fund-title-main {
-        font-size: 1.5rem;
-        color: #333;
-        margin: 0; /* 기존 마진, 패딩, 보더는 부모(fund-header)로 이동 */
-    }
-
-    /* 돌아가기 버튼 스타일 추가 */
-    .btn-home {
-        display: inline-block;
-        padding: 8px 16px;
-        background-color: #2c3e50;
-        color: #ffffff;
-        text-decoration: none;
-        border-radius: 5px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        transition: background-color 0.2s ease;
-    }
-
-    .btn-home:hover {
-        background-color: #1a252f;
-    }
-
-    .fund-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .fund-item {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        background: #f8f9fa;
-        border: 1px solid #e9ecef;
-        border-radius: 8px;
-        margin-bottom: 15px;
-        padding: 20px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .fund-item:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    }
-
-    .fund-year {
-        flex: 0 0 80px;
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #2980b9;
-    }
-
-    .fund-content {
-        flex: 1 1 300px;
-        padding: 0 20px;
-        border-left: 2px solid #e9ecef;
-    }
-
-    .fund-topic {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #2c3e50;
-        margin: 0 0 8px 0;
-        line-height: 1.4;
-    }
-
-    .fund-agency {
-        font-size: 0.9rem;
-        color: #6c757d;
-        display: inline-block;
-        background: #e2e3e5;
-        padding: 3px 8px;
-        border-radius: 4px;
-        margin-right: 10px;
-    }
-
-    .fund-amount {
-        flex: 0 0 120px;
-        text-align: right;
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: #3c86e7;
-    }
-    
-
-    /* 모바일 환경을 위한 반응형 처리 */
-    @media (max-width: 600px) {
-        .fund-header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 10px;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주요 연구 프로젝트</title>
+    <!-- 웹 폰트 (Pretendard) 적용 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --bg-color: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
         }
-        .btn-home {
-            align-self: flex-end;
-        }
-        .fund-item {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        .fund-year {
-            margin-bottom: 10px;
-            flex: none;
-        }
-        .fund-content {
-            border-left: none;
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
             padding: 0;
-            margin-bottom: 15px;
-            flex: none;
-            width: 100%;
         }
-        .fund-amount {
-            text-align: left;
-            flex: none;
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
         }
-    }
-</style>
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background-color: #eff6ff;
+            transition: all 0.2s ease;
+        }
+
+        .back-link:hover {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .grant-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .grant-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .grant-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            border-color: #cbd5e1;
+        }
+
+        .grant-period {
+            display: inline-block;
+            background-color: #f1f5f9;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            align-self: flex-start;
+        }
+
+        .grant-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-main);
+            word-break: keep-all;
+            margin-top: 0.2rem;
+        }
+
+        .grant-funder {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* 펀딩 기관 앞의 아이콘 느낌 포인트 */
+        .grant-funder::before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+        }
+
+        /* 모바일 대응 */
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .grant-title {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<div class="fund-container">
-    <div class="fund-header">
-        <h2 class="fund-title-main">주요 연구 프로젝트</h2>
-        <a href="https://skyfolder.github.io/index.html" class="btn-home">메인으로 돌아가기</a>
-    </div>
+<div class="container">
+    <header class="header">
+        <h2>주요 연구 프로젝트</h2>
+        <a href="https://skyfolder.github.io/index.html" class="back-link">← 메인으로 돌아가기</a>
+    </header>
     
-    <ul class="fund-list">
-        <li class="fund-item">
-            <div class="fund-year">2023-2026</div> 
-            <div class="fund-content">
-                <h3 class="fund-topic">AFOLU 산림농지 부문 탄소 기여도 산정을 위한 한국형 식생 탄소-기상 연동 시스템 구축</h3>
-                <span class="fund-agency">한국연구재단 창의도전연구 (2.1억)</span>
-            </div>
-            <div class="fund-amount"> </div>
+    <ul class="grant-list">
+        <!-- Project 1 -->
+        <li class="grant-card">
+            <div class="grant-period">2023-2026</div> 
+            <h3 class="grant-title">AFOLU 산림농지 부문 탄소 기여도 산정을 위한 한국형 식생 탄소-기상 연동 시스템 구축</h3>
+            <span class="grant-funder">한국연구재단 창의도전연구 (2.1억)</span>
         </li>
-        </li> <li class="fund-item">
-            <div class="fund-year">2014-2017</div> 
-            <div class="fund-content">
-                <h3 class="fund-topic">연안 도심 대기 중 미세플라스틱의 발생원 추정 및 대기 경계층 내 이동 특성에 관한 연구</h3>
-                <span class="fund-agency">한국연구재단 중견연구</span>
-            </div>
-            <div class="fund-amount"></div>
+
+        <!-- Project 2 -->
+        <li class="grant-card">
+            <div class="grant-period">2014-2017</div> 
+            <h3 class="grant-title">연안 도심 대기 중 미세플라스틱의 발생원 추정 및 대기 경계층 내 이동 특성에 관한 연구</h3>
+            <span class="grant-funder">한국연구재단 중견연구</span>
         </li> 
 
-        <li class="fund-item">
-            <div class="fund-year">2020-2023</div>  
-            <div class="fund-content">
-                <h3 class="fund-topic">딥러닝을 활용한 안개 발생의 시공간적 특성 분석과 가시거리 예측</h3>
-                <span class="fund-agency">한국연구재단 창의도전연구 (1.8억)</span>
-            </div>
-            <div class="fund-amount"></div>
-        </li> <li class="fund-item">
-            <div class="fund-year">2017-2020</div>  
-            <div class="fund-content">
-                <h3 class="fund-topic">고해상도 대기 탄소 수치 시뮬레이션 시스템 개발과 동아시아 지역 이산화탄소 복사강제력 평가</h3>
-                <span class="fund-agency">한국연구재단 기본연구 (1.5억)</span>
-            </div>
-            <div class="fund-amount"> </div>
-        </li> <li class="fund-item">
-            <div class="fund-year">2014-2017</div> 
-            <div class="fund-content">
-                <h3 class="fund-topic">이산화탄소와 기상모델의 접합을 이용한 한반도 식생의 이산화탄소 흡수율 진단</h3>
-                <span class="fund-agency">한국연구재단 기본연구 (1.5억)</span>
-            </div>
-            <div class="fund-amount"></div>
+        <!-- Project 3 -->
+        <li class="grant-card">
+            <div class="grant-period">2020-2023</div>  
+            <h3 class="grant-title">딥러닝을 활용한 안개 발생의 시공간적 특성 분석과 가시거리 예측</h3>
+            <span class="grant-funder">한국연구재단 창의도전연구 (1.8억)</span>
         </li> 
-<!--
-        <li class="fund-item">
-            <div class="fund-year">2010-2011</div> 
-            <div class="fund-content">
-                <h3 class="fund-topic">CalNex 2010 </h3>
-                <span class="fund-agency"> National Oceanic and Atmospheric Administration(NOAA)</span>
-            </div>
-            <div class="fund-amount"></div>            
-        </li> 
-        <li class="fund-item">
-            <div class="fund-year">2009-2010</div> 
-            <div class="fund-content">
-                <h3 class="fund-topic">BEARPEX 2009 Campaign </h3>
-                <span class="fund-agency"> National Aeronautics and Space Administration (NASA) & National Science Foundation (NSF)</span>
-            </div>
-            <div class="fund-amount"></div>            
-        </li> 
-        <li class="fund-item">
-            <div class="fund-year">2006-2009</div> 
-            <div class="fund-content">
-                <h3 class="fund-topic">TEXAQS 2006</h3>
-                <span class="fund-agency"> Public Education Funding of Texas </span>
-            </div>
-            <div class="fund-amount"></div>
-        </li>
--->
 
+        <!-- Project 4 -->
+        <li class="grant-card">
+            <div class="grant-period">2017-2020</div>  
+            <h3 class="grant-title">고해상도 대기 탄소 수치 시뮬레이션 시스템 개발과 동아시아 지역 이산화탄소 복사강제력 평가</h3>
+            <span class="grant-funder">한국연구재단 기본연구 (1.5억)</span>
+        </li> 
+
+        <!-- Project 5 -->
+        <li class="grant-card">
+            <div class="grant-period">2014-2017</div> 
+            <h3 class="grant-title">이산화탄소와 기상모델의 접합을 이용한 한반도 식생의 이산화탄소 흡수율 진단</h3>
+            <span class="grant-funder">한국연구재단 기본연구 (1.5억)</span>
+        </li>
     </ul>
 </div>
 
