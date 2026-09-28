@@ -2,7 +2,7 @@
    aiquiz.js — "대기과학을 위한 인공지능" 실습 공용 엔진
 
    하는 일
-     1) 이름과 학번을 받는다
+     1) 이름과 학번을 입력 받는다
      2) 문항을 한 개씩 보여 주고 답을 받는다
      3) 입력을 채점 규칙대로 정규화한 뒤 지문으로 바꾸어 정답 지문과 대조한다
      4) 틀리면 그 자리에서 고쳐 다시 낼 수 있다. 맞히면 그 문항을 닫고 해설을 연다
@@ -253,7 +253,7 @@
     h += '</div>';
 
     if (done) {
-      h += '<div class="verdict ok"><h5>맞혔다</h5><p>' +
+      h += '<div class="verdict ok"><h5>정답입니다</h5><p>' +
            esc(decodeText((A[p.id] || {}).e || '')) + '</p></div>';
     } else if (s.status === 'no') {
       h += '<div class="verdict no"><h5>정답이 아닙니다</h5>' +
@@ -333,7 +333,7 @@
         '<div class="big">' + ok + '<span class="of"> / ' + total + '</span></div>' +
         (left > 0
           ? '<div class="verdict hint"><h5>아직 ' + left + '문항이 남았습니다</h5>' +
-            '<p>왼쪽 패널에서 문항으로 돌아가 다시 풀 수 있습니다. 다 풀고 나서 파일을 내려습니다.</p></div>'
+            '<p>왼쪽 패널에서 문항으로 돌아가 다시 풀 수 있습니다. 문제를 다 풀고 나서 파일을 내려습니다.</p></div>'
           : '') +
         '<div class="row"><button class="b" id="save">결과 파일 내려받기</button>' +
           '<button class="b quiet" id="back">문항으로 돌아가기</button></div>' +
