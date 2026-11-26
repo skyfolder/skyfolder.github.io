@@ -1,192 +1,555 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>주요 연구 프로젝트</title>
-    <!-- 웹 폰트 (Pretendard) 적용 -->
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --bg-color: #f8fafc;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --card-bg: #ffffff;
-            --border-color: #e2e8f0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>주요 연구 프로젝트 | Research Grants</title>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <!-- Pretendard Webfont -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
 
-        body {
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            padding: 2rem 1rem;
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            navy: '#0f2942',
+          },
+          boxShadow: {
+            'sky-soft': '0 8px 24px rgba(14, 116, 144, 0.06)',
+            'sky-hover': '0 14px 32px rgba(14, 165, 233, 0.12)',
+          }
         }
+      }
+    };
+  </script>
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+  <style>
+    /* Bright, airy sky-to-lime ambient background */
+    body {
+      background: linear-gradient(160deg, #f4faff 0%, #f8fdf9 52%, #f6fdf2 100%);
+      color: #475569;
+    }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border-color);
-        }
+    /* Hero pastel sky-blue to light-green gradient */
+    .hero-pastel {
+      background: linear-gradient(135deg, #e0f2fe 0%, #eef9f2 52%, #ecfccb 100%);
+    }
 
-        .header h2 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-main);
-            letter-spacing: -0.5px;
-        }
+    /* Smooth card entrance animation */
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-card {
+      animation: fadeSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
 
-        .back-link {
-            text-decoration: none;
-            color: var(--primary-color);
-            font-weight: 500;
-            font-size: 0.95rem;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            background-color: #eff6ff;
-            transition: all 0.2s ease;
-        }
-
-        .back-link:hover {
-            background-color: #dbeafe;
-            color: #1d4ed8;
-        }
-
-        .grant-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-        }
-
-        .grant-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .grant-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-            border-color: #cbd5e1;
-        }
-
-        .grant-period {
-            display: inline-block;
-            background-color: #f1f5f9;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            align-self: flex-start;
-        }
-
-        .grant-title {
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: var(--text-main);
-            word-break: keep-all;
-            margin-top: 0.2rem;
-        }
-
-        .grant-funder {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* 펀딩 기관 앞의 아이콘 느낌 포인트 */
-        .grant-funder::before {
-            content: "";
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background-color: var(--primary-color);
-            border-radius: 50%;
-        }
-
-        /* 모바일 대응 */
-        @media (max-width: 600px) {
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-            .grant-title {
-                font-size: 1.1rem;
-            }
-        }
-    </style>
+    /* Custom subtle border glow on card hover */
+    .grant-card {
+      border: 1px solid #e2f1f8;
+      box-shadow: 0 8px 24px rgba(14, 116, 144, 0.06);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+    .grant-card:hover {
+      transform: translateY(-3px);
+      border-color: #7dd3fc;
+      box-shadow: 0 14px 30px rgba(2, 132, 199, 0.10), 0 4px 12px rgba(132, 204, 22, 0.08);
+    }
+  </style>
 </head>
-<body>
 
-<div class="container">
-    <header class="header">
-        <h2>주요 연구 프로젝트</h2>
-        <a href="https://skyfolder.github.io/index.html" class="back-link">← 메인으로 돌아가기</a>
+<body class="relative min-h-screen flex flex-col antialiased selection:bg-sky-200/70 selection:text-sky-900 overflow-x-hidden">
+
+  <!-- Soft Translucent Organic Pastel Blurs in Background -->
+  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
+    <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-[#bae6fd]/45 blur-3xl"></div>
+    <div class="absolute top-1/4 -right-24 w-[28rem] h-[28rem] rounded-full bg-[#d9f99d]/40 blur-3xl"></div>
+    <div class="absolute bottom-0 left-1/3 w-80 h-80 rounded-full bg-[#bae6fd]/30 blur-3xl"></div>
+  </div>
+
+  <!-- Main Wrapper -->
+  <div class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-14">
+
+    <!-- Top Navigation Bar -->
+    <nav class="flex items-center justify-between mb-6">
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/85 backdrop-blur-md border border-sky-100 text-sm font-semibold text-[#0f2942] shadow-sm hover:bg-white hover:border-sky-300 hover:text-sky-700 transition-all">
+        <span aria-hidden="true" class="text-sky-600">←</span>
+        <span>메인으로 돌아가기</span>
+      </a>
+      <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/70 border border-sky-100/80 text-xs font-medium text-slate-500">
+        <span class="w-2 h-2 rounded-full bg-gradient-to-r from-sky-400 to-lime-400"></span>
+        Research Grants Portfolio
+      </span>
+    </nav>
+
+    <!-- Airy Pastel Hero Section -->
+    <header class="relative overflow-hidden hero-pastel rounded-3xl border border-white/90 shadow-sky-soft px-6 py-8 sm:px-10 sm:py-11 mb-8">
+      <!-- Subtle decorative atmospheric wave lines -->
+      <svg class="absolute inset-0 w-full h-full opacity-35 pointer-events-none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 300">
+        <path d="M-50,230 C180,150 380,290 640,180 C840,95 960,190 1080,140" fill="none" stroke="#ffffff" stroke-width="2" />
+        <path d="M-50,180 C200,100 410,240 670,130 C860,50 980,140 1080,90" fill="none" stroke="#ffffff" stroke-width="1.5" />
+      </svg>
+
+      <div class="relative z-10 max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 backdrop-blur-sm border border-sky-200/70 text-sky-700 text-xs font-semibold tracking-wide mb-4">
+          <svg class="w-3.5 h-3.5 text-lime-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+          </svg>
+          Atmospheric &amp; Environmental Science
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#0f2942]">
+          주요 연구 프로젝트
+        </h1>
+        <p class="mt-3 text-base sm:text-lg text-slate-600 leading-relaxed">
+          대기·환경과학 및 기후·탄소 순환 분야의 주요 국책 연구과제 수행 이력
+        </p>
+      </div>
     </header>
-    
-    <ul class="grant-list">
-        <!-- Project 1 -->
-        <li class="grant-card">
-            <div class="grant-period">2023-2026</div> 
-            <h3 class="grant-title">AFOLU 산림농지 부문 탄소 기여도 산정을 위한 한국형 식생 탄소-기상 연동 시스템 구축</h3>
-            <span class="grant-funder">한국연구재단 창의도전연구 (2.1억원)</span>
-        </li>
 
-        <!-- Project 2 -->
-        <li class="grant-card">
-            <div class="grant-period">2014-2017</div> 
-            <h3 class="grant-title">연안 도심 대기 중 미세플라스틱의 발생원 추정 및 대기 경계층 내 이동 특성에 관한 연구</h3>
-            <span class="grant-funder">한국연구재단 중견연구</span>
-        </li> 
+    <!-- KPI Summary Cards (4 Cards) -->
+    <section aria-label="연구과제 요약" class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 mb-10">
+      <!-- KPI 1 -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-[#e2f1f8] shadow-sky-soft flex items-start justify-between gap-3">
+        <div>
+          <p class="text-xs font-semibold text-slate-500">총 연구과제</p>
+          <p class="mt-1.5 text-2xl sm:text-3xl font-bold text-[#0f2942] tracking-tight">
+            5<span class="text-base font-semibold text-slate-400 ml-0.5">건</span>
+          </p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-sky-100/90 text-sky-600 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+      </div>
 
-        <!-- Project 3 -->
-        <li class="grant-card">
-            <div class="grant-period">2020-2023</div>  
-            <h3 class="grant-title">딥러닝을 활용한 안개 발생의 시공간적 특성 분석과 가시거리 예측</h3>
-            <span class="grant-funder">한국연구재단 창의도전연구 (1.8억원)</span>
-        </li> 
+      <!-- KPI 2 -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-[#e2f1f8] shadow-sky-soft flex items-start justify-between gap-3">
+        <div>
+          <p class="text-xs font-semibold text-slate-500">공개 연구비 합계</p>
+          <p class="mt-1.5 text-2xl sm:text-3xl font-bold text-lime-700 tracking-tight">
+            6.9<span class="text-base font-semibold text-lime-600 ml-0.5">억원+</span>
+          </p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-lime-100/90 text-lime-700 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+      </div>
 
-        <!-- Project 4 -->
-        <li class="grant-card">
-            <div class="grant-period">2017-2020</div>  
-            <h3 class="grant-title">고해상도 대기 탄소 수치 시뮬레이션 시스템 개발과 동아시아 지역 이산화탄소 복사강제력 평가</h3>
-            <span class="grant-funder">한국연구재단 기본연구 (1.5억원)</span>
-        </li> 
+      <!-- KPI 3 -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-[#e2f1f8] shadow-sky-soft flex items-start justify-between gap-3">
+        <div>
+          <p class="text-xs font-semibold text-slate-500">연구 수행 기간</p>
+          <p class="mt-1.5 text-xl sm:text-2xl font-bold text-[#0f2942] tracking-tight leading-9 tabular-nums">
+            2014–2026
+          </p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-sky-100/90 text-sky-600 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+      </div>
 
-        <!-- Project 5 -->
-        <li class="grant-card">
-            <div class="grant-period">2014-2017</div> 
-            <h3 class="grant-title">이산화탄소와 기상모델의 접합을 이용한 한반도 식생의 이산화탄소 흡수율 진단</h3>
-            <span class="grant-funder">한국연구재단 기본연구 (1.5억원)</span>
-        </li>
-    </ul>
-</div>
+      <!-- KPI 4 -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-[#e2f1f8] shadow-sky-soft flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <p class="text-xs font-semibold text-slate-500">주요 지원기관</p>
+          <p class="mt-1.5 text-lg sm:text-xl font-bold text-[#0f2942] tracking-tight leading-9 truncate">
+            한국연구재단
+          </p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-lime-100/90 text-lime-700 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+        </div>
+      </div>
+    </section>
 
+    <!-- Interactive Controls Bar -->
+    <section aria-label="필터 및 보기 설정" class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/85 backdrop-blur-md rounded-2xl p-3.5 sm:p-4 border border-[#e2f1f8] shadow-sm mb-8">
+      <!-- Filter Pills -->
+      <div id="filterPills" class="flex flex-wrap items-center gap-2" role="group" aria-label="사업 유형 필터">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Sort & View Toggle -->
+      <div class="flex flex-wrap items-center justify-between sm:justify-end gap-2.5">
+        <!-- Sort Dropdown -->
+        <div class="relative">
+          <label for="sortSelect" class="sr-only">정렬 기준</label>
+          <select id="sortSelect" class="appearance-none pl-3.5 pr-9 py-2 rounded-xl text-sm font-semibold bg-sky-50/70 text-[#0f2942] border border-sky-200/80 hover:border-sky-300 focus:outline-none focus:ring-2 focus:ring-sky-400/40 transition-colors cursor-pointer">
+            <option value="newest">최신순</option>
+            <option value="oldest">오래된순</option>
+            <option value="budget">연구비순</option>
+          </select>
+          <svg class="w-4 h-4 text-sky-600 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+
+        <!-- View Switcher -->
+        <div class="inline-flex p-1 rounded-xl bg-sky-50/90 border border-sky-100" role="group" aria-label="보기 방식 선택">
+          <button id="viewTimelineBtn" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all" aria-pressed="true">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+            </svg>
+            <span>타임라인 뷰</span>
+          </button>
+          <button id="viewGridBtn" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all" aria-pressed="false">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+            <span>카드 그리드 뷰</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grants Display Container -->
+    <main id="grantsContainer" aria-live="polite">
+      <!-- Dynamically rendered by JS -->
+    </main>
+  </div>
+
+  <!-- Minimalist Light Footer -->
+  <footer class="mt-auto border-t border-sky-100/90 bg-white/50 backdrop-blur-sm py-7">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+      <p>© Research Portfolio · Atmospheric &amp; Environmental Science</p>
+      <a href="index.html" class="font-medium text-sky-700 hover:text-lime-700 transition-colors">
+        ← 메인으로 돌아가기
+      </a>
+    </div>
+  </footer>
+
+  <!-- Application Script -->
+  <script>
+    // Research Grant Entries
+    const GRANTS_DATA = [
+      {
+        id: 1,
+        period: '2023–2026',
+        startYear: 2023,
+        title: 'AFOLU 산림농지 부문 탄소 기여도 산정을 위한 한국형 식생 탄소-기상 연동 시스템 구축',
+        agencyProgram: '한국연구재단 창의도전연구',
+        category: '창의도전연구',
+        amountDisplay: '2.1억원',
+        amountValue: 2.1,
+        tags: ['탄소중립', 'AFOLU', '기상모델'],
+        isLatest: true
+      },
+      {
+        id: 2,
+        period: '2020–2023',
+        startYear: 2020,
+        title: '딥러닝을 활용한 안개 발생의 시공간적 특성 분석과 가시거리 예측',
+        agencyProgram: '한국연구재단 창의도전연구',
+        category: '창의도전연구',
+        amountDisplay: '1.8억원',
+        amountValue: 1.8,
+        tags: ['딥러닝', '안개예측', '시공간분석'],
+        isLatest: false
+      },
+      {
+        id: 3,
+        period: '2017–2020',
+        startYear: 2017,
+        title: '고해상도 대기 탄소 수치 시뮬레이션 시스템 개발과 동아시아 지역 이산화탄소 복사강제력 평가',
+        agencyProgram: '한국연구재단 기본연구',
+        category: '기본연구',
+        amountDisplay: '1.5억원',
+        amountValue: 1.5,
+        tags: ['수치시뮬레이션', '대기탄소', '복사강제력'],
+        isLatest: false
+      },
+      {
+        id: 4,
+        period: '2014–2017',
+        startYear: 2014,
+        title: '연안 도심 대기 중 미세플라스틱의 발생원 추정 및 대기 경계층 내 이동 특성에 관한 연구',
+        agencyProgram: '한국연구재단 중견연구',
+        category: '중견연구',
+        amountDisplay: null,
+        amountValue: 0,
+        tags: ['미세플라스틱', '대기경계층', '연안도심'],
+        isLatest: false
+      },
+      {
+        id: 5,
+        period: '2014–2017',
+        startYear: 2014,
+        title: '이산화탄소와 기상모델의 접합을 이용한 한반도 식생의 이산화탄소 흡수율 진단',
+        agencyProgram: '한국연구재단 기본연구',
+        category: '기본연구',
+        amountDisplay: '1.5억원',
+        amountValue: 1.5,
+        tags: ['이산화탄소', '식생흡수율', '기상모델접합'],
+        isLatest: false
+      }
+    ];
+
+    // Pastel Badge Styles per Category
+    const CATEGORY_STYLES = {
+      '창의도전연구': 'bg-[#e0f2fe] text-[#0369a1] border border-sky-200/80',
+      '중견연구': 'bg-[#ccfbf1] text-[#0f766e] border border-teal-200/80',
+      '기본연구': 'bg-[#ecfccb] text-[#4d7c0f] border border-lime-200/90'
+    };
+
+    // App State
+    const state = {
+      filter: '전체',
+      sort: 'newest',
+      view: 'timeline' // 'timeline' | 'grid'
+    };
+
+    // DOM Elements
+    const filterPillsEl = document.getElementById('filterPills');
+    const sortSelectEl = document.getElementById('sortSelect');
+    const viewTimelineBtn = document.getElementById('viewTimelineBtn');
+    const viewGridBtn = document.getElementById('viewGridBtn');
+    const grantsContainerEl = document.getElementById('grantsContainer');
+
+    /**
+     * Render Filter Pills with Counts
+     */
+    function renderFilters() {
+      const categories = ['전체', '창의도전연구', '중견연구', '기본연구'];
+
+      filterPillsEl.innerHTML = categories.map((cat) => {
+        const count = cat === '전체'
+          ? GRANTS_DATA.length
+          : GRANTS_DATA.filter((g) => g.category === cat).length;
+        const isActive = state.filter === cat;
+
+        const btnClass = isActive
+          ? 'bg-[#0284c7] text-white border-[#0284c7] shadow-sm'
+          : 'bg-white text-slate-600 border-sky-100 hover:bg-sky-50 hover:border-sky-200 hover:text-sky-800';
+
+        return `
+          <button type="button" data-filter="${cat}" aria-pressed="${isActive}"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold border transition-all cursor-pointer ${btnClass}">
+            <span>${cat}</span>
+            <span class="${isActive ? 'text-sky-100' : 'text-slate-400'} text-xs font-bold">(${count})</span>
+          </button>
+        `;
+      }).join('');
+
+      filterPillsEl.querySelectorAll('button[data-filter]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.filter = btn.getAttribute('data-filter');
+          renderFilters();
+          renderGrants();
+        });
+      });
+    }
+
+    /**
+     * Update Active View Toggle Styling
+     */
+    function updateViewButtons() {
+      const activeClasses = ['bg-white', 'text-[#0284c7]', 'shadow-sm'];
+      const inactiveClasses = ['text-slate-500', 'hover:text-[#0f2942]'];
+
+      if (state.view === 'timeline') {
+        viewTimelineBtn.classList.add(...activeClasses);
+        viewTimelineBtn.classList.remove(...inactiveClasses);
+        viewTimelineBtn.setAttribute('aria-pressed', 'true');
+
+        viewGridBtn.classList.remove(...activeClasses);
+        viewGridBtn.classList.add(...inactiveClasses);
+        viewGridBtn.setAttribute('aria-pressed', 'false');
+      } else {
+        viewGridBtn.classList.add(...activeClasses);
+        viewGridBtn.classList.remove(...inactiveClasses);
+        viewGridBtn.setAttribute('aria-pressed', 'true');
+
+        viewTimelineBtn.classList.remove(...activeClasses);
+        viewTimelineBtn.classList.add(...inactiveClasses);
+        viewTimelineBtn.setAttribute('aria-pressed', 'false');
+      }
+    }
+
+    /**
+     * Filter and Sort Grants
+     */
+    function getFilteredAndSortedGrants() {
+      const filtered = state.filter === '전체'
+        ? [...GRANTS_DATA]
+        : GRANTS_DATA.filter((g) => g.category === state.filter);
+
+      filtered.sort((a, b) => {
+        if (state.sort === 'newest') {
+          if (b.startYear !== a.startYear) return b.startYear - a.startYear;
+          return a.id - b.id;
+        }
+        if (state.sort === 'oldest') {
+          if (a.startYear !== b.startYear) return a.startYear - b.startYear;
+          return a.id - b.id;
+        }
+        if (state.sort === 'budget') {
+          if (b.amountValue !== a.amountValue) return b.amountValue - a.amountValue;
+          return b.startYear - a.startYear;
+        }
+        return 0;
+      });
+
+      return filtered;
+    }
+
+    /**
+     * Build Single Grant Card HTML
+     */
+    function createGrantCard(grant, index, isGrid) {
+      const categoryBadgeClass = CATEGORY_STYLES[grant.category] || 'bg-sky-50 text-sky-700';
+
+      const amountBadgeHTML = grant.amountDisplay
+        ? `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ecfccb] text-[#4d7c0f] border border-lime-300/70 text-xs sm:text-sm font-bold shrink-0">
+             <span class="w-1.5 h-1.5 rounded-full bg-[#65a30d]"></span>
+             ${grant.amountDisplay}
+           </span>`
+        : `<span class="inline-flex items-center px-3 py-1 rounded-full bg-slate-100/90 text-slate-500 border border-slate-200/80 text-xs font-medium shrink-0">
+             지원금액 비공개
+           </span>`;
+
+      const tagsHTML = grant.tags.map((tag) => `
+        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-sky-50/80 text-sky-700/90 border border-sky-100">
+          #${tag}
+        </span>
+      `).join('');
+
+      const topAccentStrip = isGrid
+        ? `<div class="h-1.5 w-full bg-gradient-to-r from-[#38bdf8] via-[#7dd3fc] to-[#a3e635]"></div>`
+        : '';
+
+      return `
+        <article class="animate-card grant-card bg-white rounded-2xl overflow-hidden flex flex-col justify-between" style="animation-delay: ${index * 45}ms">
+          ${topAccentStrip}
+          <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <!-- Top Metadata Row -->
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3.5">
+                <div class="flex flex-wrap items-center gap-2">
+                  <!-- Period Badge -->
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-sky-50 text-[#0284c7] border border-sky-100 tabular-nums">
+                    <svg class="w-3.5 h-3.5 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    ${grant.period}
+                  </span>
+
+                  <!-- Program Type Pill -->
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold ${categoryBadgeClass}">
+                    ${grant.category}
+                  </span>
+                </div>
+
+                <!-- Amount Pill -->
+                ${amountBadgeHTML}
+              </div>
+
+              <!-- Research Title -->
+              <h2 class="text-base sm:text-lg font-bold text-[#0f2942] leading-snug">
+                ${grant.title}
+              </h2>
+
+              <!-- Agency / Program -->
+              <div class="mt-3 flex items-center gap-2 text-sm text-slate-500">
+                <svg class="w-4 h-4 text-sky-500/80 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                <span class="font-medium text-slate-600">${grant.agencyProgram}</span>
+              </div>
+            </div>
+
+            <!-- Keyword Tags -->
+            <div class="mt-5 pt-4 border-t border-sky-100/70 flex flex-wrap gap-1.5">
+              ${tagsHTML}
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    /**
+     * Render Grants in Timeline or Card Grid View
+     */
+    function renderGrants() {
+      const grants = getFilteredAndSortedGrants();
+
+      if (grants.length === 0) {
+        grantsContainerEl.innerHTML = `
+          <div class="text-center py-16 px-4 rounded-2xl bg-white border border-[#e2f1f8] shadow-sky-soft">
+            <p class="text-slate-500 text-sm">선택한 조건에 해당하는 연구과제가 없습니다.</p>
+          </div>
+        `;
+        return;
+      }
+
+      if (state.view === 'timeline') {
+        grantsContainerEl.innerHTML = `
+          <div class="relative pl-7 sm:pl-11 space-y-6 before:content-[''] before:absolute before:left-[11px] sm:before:left-[15px] before:top-4 before:bottom-4 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-[#38bdf8] before:via-[#7dd3fc] before:to-[#a3e635]">
+            ${grants.map((grant, idx) => `
+              <div class="relative">
+                <!-- Glowing Pastel Timeline Node -->
+                <span class="absolute -left-7 sm:-left-11 top-6 flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full ${grant.isLatest ? 'bg-lime-200/70' : 'bg-sky-100/90'} shadow-sm">
+                  <span class="w-3 h-3 rounded-full ${grant.isLatest ? 'bg-gradient-to-tr from-[#0284c7] to-[#84cc16] ring-4 ring-lime-200/70' : 'bg-[#38bdf8] ring-4 ring-sky-100'}"></span>
+                </span>
+                ${createGrantCard(grant, idx, false)}
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else {
+        grantsContainerEl.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            ${grants.map((grant, idx) => createGrantCard(grant, idx, true)).join('')}
+          </div>
+        `;
+      }
+    }
+
+    // Event Listeners
+    sortSelectEl.addEventListener('change', (e) => {
+      state.sort = e.target.value;
+      renderGrants();
+    });
+
+    viewTimelineBtn.addEventListener('click', () => {
+      if (state.view !== 'timeline') {
+        state.view = 'timeline';
+        updateViewButtons();
+        renderGrants();
+      }
+    });
+
+    viewGridBtn.addEventListener('click', () => {
+      if (state.view !== 'grid') {
+        state.view = 'grid';
+        updateViewButtons();
+        renderGrants();
+      }
+    });
+
+    // Initialize
+    renderFilters();
+    updateViewButtons();
+    renderGrants();
+  </script>
 </body>
 </html>
