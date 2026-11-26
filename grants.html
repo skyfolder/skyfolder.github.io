@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publications &amp; Presentations | Research Portfolio</title>
+
+  <!-- Pretendard & Inter Webfonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            navy: '#0f2942',
+          },
+          boxShadow: {
+            'sky-soft': '0 8px 24px rgba(14, 116, 144, 0.06)',
+            'sky-hover': '0 14px 32px rgba(2, 132, 199, 0.11)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Bright, airy sky-blue to pastel-lime ambient background */
+    body {
+      background: linear-gradient(160deg, #f4faff 0%, #f8fdf9 52%, #f6fdf2 100%);
+      color: #475569;
+    }
+
+    /* Subtle atmospheric dot pattern overlay */
+    .bg-dot-pattern {
+      background-image: radial-gradient(rgba(2, 132, 199, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* Hero pastel sky-blue to light-green gradient */
+    .hero-pastel {
+      background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 55%, #ecfccb 100%);
+    }
+
+    /* Smooth card entrance animation */
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-card {
+      animation: fadeSlideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    /* Publication card styling & hover elevation */
+    .pub-card {
+      border: 1px solid #e0f2fe;
+      box-shadow: 0 8px 24px rgba(14, 116, 144, 0.055);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+    .pub-card:hover {
+      transform: translateY(-3px);
+      border-color: #7dd3fc;
+      box-shadow: 0 14px 30px rgba(2, 132, 199, 0.10), 0 4px 12px rgba(132, 204, 22, 0.08);
+    }
+
+    /* Author highlight style */
+    .author-highlight {
+      color: #0369a1;
+      font-weight: 700;
+      background: linear-gradient(180deg, transparent 58%, #bae6fd 58%, #d9f99d 100%);
+      padding: 0 3px;
+      border-radius: 4px;
+    }
+
+    /* Subtle pulse for NEW badge */
+    @keyframes gentlePulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.72; }
+    }
+    .badge-new-pulse {
+      animation: gentlePulse 2.4s ease-in-out infinite;
+    }
+  </style>
+</head>
+
+<body class="relative min-h-screen flex flex-col antialiased selection:bg-sky-200/70 selection:text-sky-900 overflow-x-hidden">
+
+  <!-- Soft Translucent Organic Pastel Blurs & Atmospheric Dots -->
+  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-dot-pattern" aria-hidden="true">
+    <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-[#bae6fd]/45 blur-3xl"></div>
+    <div class="absolute top-1/4 -right-24 w-[28rem] h-[28rem] rounded-full bg-[#d9f99d]/40 blur-3xl"></div>
+    <div class="absolute bottom-0 left-1/3 w-80 h-80 rounded-full bg-[#bae6fd]/30 blur-3xl"></div>
+  </div>
+
+  <!-- Sticky Frosted Glass Top Navigation Bar -->
+  <nav class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-sky-100/90 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+      <!-- Researcher Brand / Title -->
+      <a href="index.html" class="inline-flex items-center gap-2.5 group min-w-0">
+        <span class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#38bdf8] to-[#a3e635] flex items-center justify-center text-white font-extrabold text-sm shadow-sm shrink-0">
+          CP
+        </span>
+        <div class="truncate">
+          <p class="text-sm font-extrabold text-[#0f2942] leading-tight truncate group-hover:text-[#0284c7] transition-colors">
+            Changhyun Park
+          </p>
+          <p class="text-[11px] font-medium text-slate-500 hidden sm:block leading-tight">
+            Atmospheric &amp; Environmental Science
+          </p>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <div class="flex items-center gap-2 shrink-0">
+        <a href="index.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/90 border border-sky-100 text-xs sm:text-sm font-semibold text-[#0f2942] shadow-sm hover:bg-sky-50 hover:border-sky-300 hover:text-[#0284c7] transition-all">
+          <span aria-hidden="true" class="text-sky-600">←</span>
+          <span>메인으로 돌아가기</span>
+        </a>
+        <a href="grants.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[#ecfccb]/70 border border-lime-200/90 text-xs sm:text-sm font-semibold text-[#3f6212] shadow-sm hover:bg-[#ecfccb] hover:border-lime-300 transition-all">
+          <span class="w-2 h-2 rounded-full bg-gradient-to-r from-sky-400 to-lime-500"></span>
+          <span class="hidden sm:inline">연구과제 (Grants)</span>
+          <span class="sm:hidden">Grants</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <div class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-9 pb-14">
+
+    <!-- Airy Pastel Hero Section -->
+    <header class="relative overflow-hidden hero-pastel rounded-3xl border border-white/90 shadow-sky-soft px-6 py-8 sm:px-10 sm:py-11 mb-8">
+      <!-- Subtle decorative atmospheric contour lines -->
+      <svg class="absolute inset-0 w-full h-full opacity-40 pointer-events-none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 300">
+        <path d="M-50,235 C180,155 380,290 640,180 C840,95 960,190 1080,140" fill="none" stroke="#ffffff" stroke-width="2" />
+        <path d="M-50,185 C200,105 410,240 670,130 C860,50 980,140 1080,90" fill="none" stroke="#ffffff" stroke-width="1.5" />
+        <path d="M-50,130 C230,65 440,185 700,85 C880,20 990,95 1080,55" fill="none" stroke="#ffffff" stroke-width="1" />
+      </svg>
+
+      <div class="relative z-10 max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/85 backdrop-blur-sm border border-sky-200/70 text-[#0284c7] text-xs font-bold tracking-wider mb-4">
+          <svg class="w-3.5 h-3.5 text-[#65a30d]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          Research Output · 2003 – 2025
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0f2942]">
+          Publications &amp; Presentations
+        </h1>
+        <p class="mt-3 text-base sm:text-lg text-[#334e68] leading-relaxed">
+          국내·외 학술지 게재 논문 및 주요 학술대회·세미나 발표 실적
+        </p>
+      </div>
+    </header>
+
+    <!-- KPI Summary Bar (4 Cards) -->
+    <section aria-label="연구실적 요약" class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 mb-9">
+      <!-- KPI 1: Total Output -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-[#e0f2fe] shadow-sky-soft flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <p class="text-xs font-semibold text-slate-500">총 연구실적</p>
+          <p class="mt-1.5 text-2xl sm:text-3xl font-bold text-[#0f2942] tracking-tight tabular-nums">
+            <span id="kpiTotal">47</span><span class="text-base font-semibold text-slate-400 ml-0.5">편</span>
+          </p>
+          <p id="kpiTotalSub" class="mt-1 text-[11px] font-medium text-slate-500">학술지 24 · 학회·세미나 23</p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-sky-100/90 text-[#0284c7] flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- KPI 2: Journal Articles -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-[#e0f2fe] shadow-sky-soft flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <p class="text-xs font-semibold text-slate-500">학술지 논문</p>
+          <p class="mt-1.5 text-2xl sm:text-3xl font-bold text-[#0369a1] tracking-tight tabular-nums">
+            <span id="kpiJournal">24</span><span class="text-base font-semibold text-sky-400 ml-0.5">편</span>
+          </p>
+          <p id="kpiJournalSub" class="mt-1 text-[11px] font-medium text-slate-500">국제 18 · 국내 6</p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-[#e0f2fe] text-[#0369a1] flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- KPI 3: Conference Presentations -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-[#e0f2fe] shadow-sky-soft flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <p class="text-xs font-semibold text-slate-500">학술대회·세미나</p>
+          <p class="mt-1.5 text-2xl sm:text-3xl font-bold text-[#0f766e] tracking-tight tabular-nums">
+            <span id="kpiConf">23</span><span class="text-base font-semibold text-teal-500 ml-0.5">편</span>
+          </p>
+          <p id="kpiConfSub" class="mt-1 text-[11px] font-medium text-slate-500">대기환경 13 · 기상 8 · 기타 2</p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-[#ccfbf1] text-[#0f766e] flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- KPI 4: 1st / Corresponding Author (Dynamically Calculated) -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-[#e0f2fe] shadow-sky-soft flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <p class="text-xs font-semibold text-slate-500">주저자 (제1·교신)</p>
+          <p class="mt-1.5 text-2xl sm:text-3xl font-bold text-[#3f6212] tracking-tight tabular-nums">
+            <span id="kpiLead">-</span><span class="text-base font-semibold text-[#65a30d] ml-0.5">편</span>
+          </p>
+          <p id="kpiLeadSub" class="mt-1 text-[11px] font-medium text-slate-500">Park, C. · 박창현</p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-[#ecfccb] text-[#3f6212] flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Controls Bar -->
+    <section aria-label="논문 및 학술발표 검색 및 필터" class="bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-[#e0f2fe] shadow-sky-soft mb-8 space-y-4">
+      <!-- Primary Segmented Tabs -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-sky-100/80">
+        <div id="primaryTabs" class="inline-flex flex-wrap p-1 rounded-xl bg-sky-50/90 border border-sky-100 gap-1" role="tablist" aria-label="실적 유형 선택">
+          <!-- Populated dynamically by JS -->
+        </div>
+
+        <!-- View Switcher -->
+        <div class="inline-flex p-1 rounded-xl bg-sky-50/90 border border-sky-100 self-start sm:self-auto" role="group" aria-label="보기 방식 선택">
+          <button id="viewTimelineBtn" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer" aria-pressed="true">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+            </svg>
+            <span>타임라인 뷰</span>
+          </button>
+          <button id="viewGridBtn" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer" aria-pressed="false">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+            <span>카드 그리드 뷰</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Middle Row: Live Search Input + Sort Dropdown -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <!-- Live Search Input -->
+        <div class="relative flex-1">
+          <label for="searchInput" class="sr-only">논문 및 발표 검색</label>
+          <svg class="w-4 h-4 text-sky-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="제목, 저자(Park, 박창현), 학술지·학회명, 연도, 키워드 검색..."
+            class="w-full pl-10 pr-9 py-2.5 rounded-xl text-sm bg-sky-50/55 text-[#0f172a] placeholder:text-slate-400 border border-sky-100 focus:bg-white focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-300/40 transition-all"
+          />
+          <button
+            id="clearSearchBtn"
+            type="button"
+            aria-label="검색어 지우기"
+            class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-lg text-slate-400 hover:text-sky-700 hover:bg-sky-100/70 transition-colors"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Sort Dropdown -->
+        <div class="relative shrink-0 self-end md:self-auto">
+          <label for="sortSelect" class="sr-only">정렬 기준</label>
+          <select id="sortSelect" class="appearance-none pl-3.5 pr-9 py-2.5 rounded-xl text-sm font-semibold bg-sky-50/70 text-[#0f2942] border border-sky-200/80 hover:border-sky-300 focus:outline-none focus:ring-2 focus:ring-sky-400/40 transition-colors cursor-pointer">
+            <option value="newest">최신순</option>
+            <option value="oldest">오래된순</option>
+          </select>
+          <svg class="w-4 h-4 text-[#0284c7] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Secondary Filter Pills & Result Count -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-sky-100/80">
+        <div id="filterPills" class="flex flex-wrap items-center gap-2" role="group" aria-label="세부 분류 필터">
+          <!-- Populated dynamically by JS -->
+        </div>
+        <div id="resultCount" class="text-xs font-semibold text-slate-500 shrink-0 tabular-nums">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Publications List / Grid Container -->
+    <main id="publicationsContainer" aria-live="polite">
+      <!-- Populated dynamically by JS -->
+    </main>
+
+    <!-- Legend Note -->
+    <div class="mt-8 flex items-center justify-end text-xs text-slate-500">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 border border-sky-100">
+        <span class="font-bold text-[#0284c7]">*</span>
+        <span>교신저자 (Corresponding Author)</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Minimalist Light Footer -->
+  <footer class="mt-auto border-t border-sky-100/90 bg-white/60 backdrop-blur-sm py-7">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <p>© Research Portfolio · Atmospheric &amp; Environmental Science</p>
+      <div class="flex items-center gap-4">
+        <a href="grants.html" class="font-medium text-[#4d7c0f] hover:text-[#0284c7] transition-colors">
+          연구과제 (Grants)
+        </a>
+        <span class="text-slate-300">|</span>
+        <a href="index.html" class="font-medium text-[#0284c7] hover:text-[#4d7c0f] transition-colors">
+          ← 메인으로 돌아가기
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Gentle Pastel Toast Notification -->
+  <div
+    id="toast"
+    role="status"
+    aria-live="polite"
+    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 translate-y-3 transition-all duration-300"
+  >
+    <div class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-white/95 backdrop-blur-md border border-lime-300 shadow-lg text-sm font-semibold text-[#0f2942]">
+      <span class="w-5 h-5 rounded-full bg-[#ecfccb] text-[#65a30d] flex items-center justify-center shrink-0">
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </span>
+      <span id="toastMessage">인용 정보가 클립보드에 복사되었습니다.</span>
+    </div>
+  </div>
+
+  <!-- Application Script -->
+  <script>
+    /**
+     * Complete Publications & Conference Presentations Dataset (47 Entries)
+     * - 24 Journal Articles (18 International, 6 Domestic)
+     * - 23 Conference & Seminar Presentations (13 한국대기환경학회, 8 한국기상학회, 1 국제학술대회, 1 초청세미나)
+     */
+    const PUBLICATIONS_DATA = [
+      // === JOURNAL ARTICLES (24) ===
+      {
+        id: 1,
+        kind: 'journal',
+        category: 'intl',
+        year: 2025,
+        month: 6,
+        dateLabel: '2025',
+        venue: 'Mach. Learn. Knowl. Extr.',
+        pages: null,
+        isNew: true,
+        firstOrCorr: true,
+        tags: ['Machine Learning', 'Time-Series', 'Tall Tower'],
+        title: 'Significance of Time-Series Consistency in Evaluating Machine Learning Models for Gap-Filling Multi-Level Very Tall Tower Data',
+        koreanTitle: null,
+        authors: 'Park, C.'
+      },
+      {
+        id: 2,
+        kind: 'journal',
+        category: 'intl',
+        year: 2025,
+        month: 5,
+        dateLabel: '2025',
+        venue: 'Environ. Poll.',
+        pages: null,
+        isNew: true,
+        firstOrCorr: false,
+        tags: ['Volcanic Emissions', 'Sulfur', 'Long-Range Transport'],
+        title: 'Long-range transport and transformation of volcanic sulfur emissions: A modeling study of the 2020 Nishinoshima event',
+        koreanTitle: null,
+        authors: 'Park, J., W. Jeon, W.-J. Lee, J. Moon, D. Kim, M. Heo, C. Park, Y. Jeong, J.-W. Yoo, H. Choe, C.-Y. Yang'
+      },
+      {
+        id: 3,
+        kind: 'journal',
+        category: 'domestic',
+        year: 2023,
+        month: 8,
+        dateLabel: '2023',
+        venue: 'J. Korean Earth Sci. Soc.',
+        pages: null,
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['Machine Learning', 'Fog Prediction', 'Visibility'],
+        title: 'Comparison of Machine Learning Model Performance based on Observation Methods using Naked-eye and Visibility-meter',
+        koreanTitle: '머신러닝을 이용한 안개 예측 시 목측과 시정계 계측 방법에 따른 모델 성능 차이 비교',
+        authors: 'Park, C., S.-H. Lee'
+      },
+      {
+        id: 4,
+        kind: 'journal',
+        category: 'domestic',
+        year: 2023,
+        month: 6,
+        dateLabel: '2023',
+        venue: 'J. Korean Earth Sci. Soc.',
+        pages: null,
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['WRF', 'Fine Dust', 'Topography'],
+        title: 'A Study on the Generation of Fine Dust and Topographical Inflow Characteristics Using Atmospheric Modeling (WRF)',
+        koreanTitle: '대기모델링(WRF)을 이용한 미세먼지의 발생과 지형학적 유입 특성 연구',
+        authors: 'Choi, H.J., C. Park, K. Lee'
+      },
+      {
+        id: 5,
+        kind: 'journal',
+        category: 'intl',
+        year: 2021,
+        month: 6,
+        dateLabel: '2021',
+        venue: 'Atmos. Environ.',
+        pages: null,
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['CO₂ Flux', 'BSWO', 'Source Estimation'],
+        title: 'Characteristics of atmospheric CO2 fluxes and the estimation of their potential sources around Boseong Standard Weather Observatory (BSWO)',
+        koreanTitle: null,
+        authors: 'Park, C., Y.-T. Lee, S.-H. Lee'
+      },
+      {
+        id: 6,
+        kind: 'journal',
+        category: 'intl',
+        year: 2020,
+        month: 7,
+        dateLabel: '2020',
+        venue: 'PLoS ONE',
+        pages: null,
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['WRF-VPRM', 'CO₂ Simulation', 'KORUS-AQ'],
+        title: 'Numerical simulation of atmospheric CO2 concentration and flux over the Korean Peninsula using WRF-VPRM model during Korus-AQ 2016 campaign',
+        koreanTitle: null,
+        authors: 'Park, C.*, S.-Y. Park, K.R. Gurney, C. Gerbig, J. P. DiGangi, Y. Choi, and H.W. Lee'
+      },
+      {
+        id: 7,
+        kind: 'journal',
+        category: 'domestic',
+        year: 2020,
+        month: 4,
+        dateLabel: '2020',
+        venue: 'J. Environ. Sci. Int.',
+        pages: null,
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['Air Pollution', 'Meteorology', 'Public Health'],
+        title: 'Effects of meteorology and air pollution on respiratory disease affecting vulnerable populations',
+        koreanTitle: '기상 및 대기질이 건강취약집단에 미치는 영향',
+        authors: 'Kang, D., C. Park, W.-S. Jung, K.O. Lee and H.W. Lee'
+      },
+      {
+        id: 8,
+        kind: 'journal',
+        category: 'intl',
+        year: 2019,
+        month: 6,
+        dateLabel: '2019',
+        venue: 'Atmos. Environ.',
+        pages: null,
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['WRF-CMAQ', 'Aerosol Feedback', 'Coupled Model'],
+        title: 'Investigating the regional difference of aerosol feedback effects over South Korea using the WRF-CMAQ two-way coupled modeling system',
+        koreanTitle: null,
+        authors: 'Yoo, J.-W., W. Jeon, S.-Y. Park, C. Park, J. Jung, S.-H. Lee, H. W. Lee'
+      },
+      {
+        id: 9,
+        kind: 'journal',
+        category: 'intl',
+        year: 2018,
+        month: 6,
+        dateLabel: '2018',
+        venue: 'J. Appl. Meteorol. Climatol.',
+        pages: null,
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['WRF-VPRM', 'CalNex 2010', 'CO₂ Budget'],
+        title: 'CO2 transport, variability, and budget over the southern California air basin using the high-resolution WRF-VPRM model during the CalNex 2010 campaign',
+        koreanTitle: null,
+        authors: 'Park, C.*, C. Gerbig, S. Newman, R. Ahmadov, S. Feng, K.R. Gurney, G. R. Carmichael, S.-Y. Park, H.-W. Lee, M. Goulden, J. Stutz, J. Peischl, and T. Ryerson'
+      },
+      {
+        id: 10,
+        kind: 'journal',
+        category: 'intl',
+        year: 2018,
+        month: 4,
+        dateLabel: '2018',
+        venue: 'Atmos. Environ.',
+        pages: null,
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['Ozone', 'Adjoint Sensitivity', 'Air Quality'],
+        title: 'Adjoint sensitivity of inland ozone to its precursors and meteorological and chemical influences',
+        koreanTitle: null,
+        authors: 'Park, S.-Y., C. Park, J.-W. You, S.-H. Lee and H. W. Lee'
+      },
+      {
+        id: 11,
+        kind: 'journal',
+        category: 'domestic',
+        year: 2017,
+        month: 8,
+        dateLabel: '2017',
+        venue: 'J. Environ. Sci. Int.',
+        pages: null,
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['Atmospheric CO₂', 'Coastal Basin', 'Meteorology-Vegetation'],
+        title: 'Simulation of atmospheric CO2 over coastal basin areas using meteorology-vegetation model',
+        koreanTitle: null,
+        authors: 'Park, C.* and H.W. Lee'
+      },
+      {
+        id: 12,
+        kind: 'journal',
+        category: 'domestic',
+        year: 2017,
+        month: 5,
+        dateLabel: '2017',
+        venue: 'J. Environ. Sci. Int.',
+        pages: null,
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['Aircraft Observation', 'CO₂ Simulation', 'Coastal Basin'],
+        title: 'Comparison of aircraft observations and simulation results of atmospheric CO2 over coastal basin areas',
+        koreanTitle: null,
+        authors: 'Park, C.*, K.O. Lee and W.S. Jung'
+      },
+      {
+        id: 13,
+        kind: 'journal',
+        category: 'intl',
+        year: 2016,
+        month: 6,
+        dateLabel: '2016',
+        venue: 'Atmos. Environ.',
+        pages: null,
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['Anthropogenic Heat', 'Surface Energy Balance', 'Urban Climate'],
+        title: 'Comparative estimates of anthropogenic heat emission in relation to surface energy balance of a subtropical urban neighborhood',
+        koreanTitle: null,
+        authors: 'Park, C., G.W. Schade*, N.D. Werner, D.J. Sailor, and C.H. Kim'
+      },
+      {
+        id: 14,
+        kind: 'journal',
+        category: 'intl',
+        year: 2016,
+        month: 3,
+        dateLabel: '2016',
+        venue: 'J. Environ. Qual.',
+        pages: null,
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['CO₂ Flux', 'Urban Emissions', 'Houston'],
+        title: 'Anthropogenic and biogenic features of long-term measured CO2 flux in north downtown Houston, Texas',
+        koreanTitle: null,
+        authors: 'Park, C.* and H.W. Lee'
+      },
+      {
+        id: 36,
+        kind: 'journal',
+        category: 'intl',
+        year: 2014,
+        month: 8,
+        dateLabel: '2014',
+        venue: 'J. Renew. Sustain. Energy',
+        pages: '6, 042012',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['CALMET', 'Wind Modeling', 'Wind Power Density'],
+        title: 'Correction of surface characteristics to diagnostic wind modeling and its impact on potentials of wind power density',
+        koreanTitle: null,
+        authors: 'Kim, D.H., H.W. Lee*, S.Y. Park, J.W. Yu, C. Park, and J.H. Park'
+      },
+      {
+        id: 37,
+        kind: 'journal',
+        category: 'domestic',
+        year: 2014,
+        month: 6,
+        dateLabel: '2014',
+        venue: 'J. Environ. Sci. Int.',
+        pages: '23(6), 1085–1093',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['WRF', 'Small Wind Power', 'Busan'],
+        title: 'A Study on the Application of Small Wind Power System using Meteorological Simulation Data in Pusan',
+        koreanTitle: '기상수치모의 자료를 이용한 부산지역의 소형풍력발전 시스템 적용에 관한 연구',
+        authors: 'Lee, K., K. Lee, D. Kang, C. Park, and W.-S. Jung*'
+      },
+      {
+        id: 38,
+        kind: 'journal',
+        category: 'intl',
+        year: 2014,
+        month: 5,
+        dateLabel: '2014',
+        venue: 'Atmos. Environ.',
+        pages: '89, 10–21',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['Ozone Formation', 'WRF-CMAQ', 'NOx/VOCs Ratio'],
+        title: 'A study on high ozone formation mechanism associated with change of NOx/VOCs ratio at a rural area in the Korean Peninsula',
+        koreanTitle: null,
+        authors: 'Jeon, W.-B., S.-H. Lee*, H. Lee, C. Park, D.-H. Kim, and S.-Y. Park'
+      },
+      {
+        id: 39,
+        kind: 'journal',
+        category: 'intl',
+        year: 2014,
+        month: 1,
+        dateLabel: '2014',
+        venue: 'Atmos. Environ.',
+        pages: '82, 24–35',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['VOC Flux', 'ME-2', 'Footprint Analysis'],
+        title: 'Estimation of VOC emission factors from flux measurements using a receptor model and footprint analysis',
+        koreanTitle: null,
+        authors: 'Kota, S.H., C. Park, M.C. Hale, N.D. Werner, G.W. Schade, and Q. Ying*'
+      },
+      {
+        id: 40,
+        kind: 'journal',
+        category: 'intl',
+        year: 2012,
+        month: 9,
+        dateLabel: '2012',
+        venue: 'Atmos. Chem. Phys.',
+        pages: '12, 8009–8020',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['OH Radical', 'BVOC Oxidation', 'BEARPEX'],
+        title: 'Insights into hydroxyl measurements and atmospheric oxidation in a California forest',
+        koreanTitle: null,
+        authors: 'Mao, J.*, X. Ren, L. Zhang, D.M. Van Duin, R.C. Cohen, J.-H. Park, A.H. Goldstein, F. Paulot, M.R. Beaver, J.D. Crounse, P.O. Wennberg, J.P. DiGangi, S.B. Henry, F.N. Keutsch, C. Park, G.W. Schade, G.M. Wolfe, J.A. Thornton, and W.H. Brune'
+      },
+      {
+        id: 41,
+        kind: 'journal',
+        category: 'intl',
+        year: 2012,
+        month: 8,
+        dateLabel: '2012',
+        venue: 'Environ. Sci. Technol.',
+        pages: '46, 9437–9446',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['SOA', 'MBO', 'Organosulfates'],
+        title: 'Organosulfates as Tracers for Secondary Organic Aerosol (SOA) Formation from 2-Methyl-3-Buten-2-ol (MBO) in the Atmosphere',
+        koreanTitle: null,
+        authors: 'Zhang, H., D.R. Worton, M. Lewandowski, J. Ortega, C.L. Rubitschun, J.-H. Park, K. Kristensen, P. Campuzano-Jost, D.A. Day, M. Jaoui, J.H. Offenberg, T.E. Kleindienst, J. Gilman, W.C. Kuster, J. de Gouw, C. Park, G.W. Schade, A.A. Frossard, L. Russell, L. Kaser, W. Jud, A. Hansel, L. Cappellin, T. Karl, M. Glasius, A. Guenther, A.H. Goldstein, J.H. Seinfeld, A. Gold, R.M. Kamens, and J.D. Surratt*'
+      },
+      {
+        id: 42,
+        kind: 'journal',
+        category: 'intl',
+        year: 2012,
+        month: 7,
+        dateLabel: '2012',
+        venue: 'Atmos. Chem. Phys.',
+        pages: '12, 5773–5785',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['Organic Nitrates', 'CIMS', 'BEARPEX 2009'],
+        title: 'Importance of biogenic precursors to the budget of organic nitrates: observations of multifunctional organic nitrates by CIMS and TD-LIF during BEARPEX 2009',
+        koreanTitle: null,
+        authors: 'Beaver, M.R.*, J.M. St. Clair, F. Paulot, K.M. Spencer, J.D. Crounse, B.W. LaFranchi, K.E. Min, S.E. Pusede, P.J. Wooldridge, G.W. Schade, C. Park, R.C. Cohen, and P.O. Wennberg'
+      },
+      {
+        id: 43,
+        kind: 'journal',
+        category: 'intl',
+        year: 2011,
+        month: 11,
+        dateLabel: '2011',
+        venue: 'J. Geophys. Res.',
+        pages: '116, D21303',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['Isoprene Flux', 'MACR/MVK', 'REA-GC-FID'],
+        title: 'Characteristics of the flux of isoprene and its oxidation products in an urban area',
+        koreanTitle: null,
+        authors: 'Park, C., G.W. Schade, and I. Boedeker'
+      },
+      {
+        id: 44,
+        kind: 'journal',
+        category: 'intl',
+        year: 2011,
+        month: 10,
+        dateLabel: '2011',
+        venue: 'J. Air Waste Manage. Assoc.',
+        pages: '61, 1070–1081',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['TexAQS II', 'Rural Ozone', 'Urban Plume'],
+        title: 'Rural Southeast Texas Air Quality Measurements during the 2006 Texas Air Quality Study',
+        koreanTitle: null,
+        authors: 'Schade, G.W., S. Khan, C. Park, and I. Boedeker'
+      },
+      {
+        id: 45,
+        kind: 'journal',
+        category: 'intl',
+        year: 2010,
+        month: 7,
+        dateLabel: '2010',
+        venue: 'Atmos. Environ.',
+        pages: '44, 2605–2614',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['VOC Flux', 'REA', 'GC-FID', 'Houston'],
+        title: 'Flux measurements of volatile organic compounds by the relaxed eddy accumulation method combined with a GC-FID system in urban Houston, Texas',
+        koreanTitle: null,
+        authors: 'Park, C., G.W. Schade*, and I. Boedeker'
+      },
+
+      // === CONFERENCE & SEMINAR PRESENTATIONS (23) ===
+      {
+        id: 15,
+        kind: 'conference',
+        category: 'kosae',
+        year: 2025,
+        month: 10,
+        dateLabel: '2025.10',
+        venue: '한국대기환경학회 학술대회논문집',
+        pages: 'pp. 299',
+        isNew: true,
+        firstOrCorr: true,
+        tags: ['VOC 플럭스', '관측망', '도시배출원'],
+        title: '도시 내 다원적 배출원의 준실시간 감시를 위한 VOC 플럭스 관측망 구축 제안',
+        koreanTitle: null,
+        authors: '박창현, 허민, 박재형 외 1명'
+      },
+      {
+        id: 46,
+        kind: 'conference',
+        category: 'seminar',
+        year: 2023,
+        month: 12,
+        dateLabel: '2023.12',
+        venue: '한국해양과학기술원(KIOST) 항만 대기오염 배출량 조사와 대기-화학 시뮬레이션 학술 세미나',
+        pages: '초청발표',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['탄소 플럭스', '중규모 모델링', 'KIOST'],
+        title: '탄소 플럭스 측정과 중규모 탄소 모델링 소개',
+        koreanTitle: null,
+        authors: '박창현'
+      },
+      {
+        id: 16,
+        kind: 'conference',
+        category: 'kosae',
+        year: 2023,
+        month: 10,
+        dateLabel: '2023.10',
+        venue: '한국대기환경학회 학술대회논문집',
+        pages: 'pp. 254',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['CO₂ 플럭스', 'GIS', '배출량 인벤토리'],
+        title: '하향식 이산화탄소 플럭스 관측과 지리 정보시스템을 이용한 상향식 배출량 인벤토리 검증',
+        koreanTitle: null,
+        authors: '박창현, 박재형, 김동진'
+      },
+      {
+        id: 17,
+        kind: 'conference',
+        category: 'kosae',
+        year: 2023,
+        month: 10,
+        dateLabel: '2023.10',
+        venue: '한국대기환경학회 학술대회논문집',
+        pages: 'pp. 206',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['WRF-VPRM', '지역규모', 'CO₂ 모델링'],
+        title: 'WRF-VPRM 모델을 이용한 지역규모 이산화탄소 모델링',
+        koreanTitle: null,
+        authors: '박창현'
+      },
+      {
+        id: 18,
+        kind: 'conference',
+        category: 'kosae',
+        year: 2023,
+        month: 10,
+        dateLabel: '2023.10',
+        venue: '한국대기환경학회 학술대회논문집',
+        pages: 'pp. 205',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['탄소 플럭스', '미기상학', '도시기후'],
+        title: '도시 내 탄소 플럭스 측정 방법에 대한 미기상학적 이론 배경과 실제',
+        koreanTitle: null,
+        authors: '박창현'
+      },
+      {
+        id: 19,
+        kind: 'conference',
+        category: 'kosae',
+        year: 2019,
+        month: 11,
+        dateLabel: '2019.11',
+        venue: '한국대기환경학회 학술대회논문집',
+        pages: 'pp. 169',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['보성 타워', 'CO₂ 농도', '플럭스 분석'],
+        title: '보성 종합 기상 관측 타워에서 2015~2018년간 관측된 CO₂ 농도 및 플럭스 분석',
+        koreanTitle: null,
+        authors: '박창현, 이영태, 문정혁'
+      },
+      {
+        id: 20,
+        kind: 'conference',
+        category: 'kosae',
+        year: 2019,
+        month: 11,
+        dateLabel: '2019.11',
+        venue: '한국대기환경학회 학술대회논문집',
+        pages: 'pp. 104',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['대기질 감시망', '배출원 추정', '데이터 통합'],
+        title: '대기질 감시망과 기상 관측망 불일치로 인한 국지 배출원 추정 오류로 살펴본 관측 데이터 통합관리의 필요성',
+        koreanTitle: null,
+        authors: '박창현, 지민서, 이화운'
+      },
+      {
+        id: 21,
+        kind: 'conference',
+        category: 'kms',
+        year: 2018,
+        month: 10,
+        dateLabel: '2018.10',
+        venue: '한국기상학회 학술대회 논문집',
+        pages: 'pp. 371',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['KORUS-AQ', 'WRF', '식생 CO₂ 흡수량'],
+        title: 'KORUS-AQ 2016 캠페인 기간 중 WRF 모델을 이용한 한반도 식생의 이산화탄소 흡수량 산정',
+        koreanTitle: null,
+        authors: '박창현, 이태진, 지효은 외 2명'
+      },
+      {
+        id: 22,
+        kind: 'conference',
+        category: 'kms',
+        year: 2018,
+        month: 10,
+        dateLabel: '2018.10',
+        venue: '한국기상학회 학술대회 논문집',
+        pages: 'pp. 373',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['KORUS-AQ', '항공기 관측', 'CO₂ 모델 평가'],
+        title: 'KORUS-AQ 2016 캠페인 기간 중 항공기 관측 자료를 이용한 CO₂ 모델 평가',
+        koreanTitle: null,
+        authors: '박창현, 유정우, 문정혁 외 1명'
+      },
+      {
+        id: 47,
+        kind: 'conference',
+        category: 'intl_conf',
+        year: 2016,
+        month: 8,
+        dateLabel: '2016.08',
+        venue: '17th IUAPPA World Clean Air Congress & 9th CAA Better Air Quality Conference (Busan, Korea)',
+        pages: 'PG3–PG4',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['VPRM', 'CO₂ Flux', 'Megacity'],
+        title: 'Usability of CO2 flux sites for Vegetation Photosynthesis and Respiration Model over Mixed Vegetation Areas in a Megacity',
+        koreanTitle: null,
+        authors: 'Park, C.*, H.W. Lee, and C. Gerbig'
+      },
+      {
+        id: 23,
+        kind: 'conference',
+        category: 'kosae',
+        year: 2015,
+        month: 11,
+        dateLabel: '2015.11',
+        venue: '한국대기환경학회 학술대회논문집',
+        pages: 'pp. 126',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['대기경계층', '항공기 관측', '불확실성 평가'],
+        title: '경계층 내 대기 모델 결과와 항공기 관측 비교의 불확실성 평가',
+        koreanTitle: null,
+        authors: '박창현, 이화운'
+      },
+      {
+        id: 24,
+        kind: 'conference',
+        category: 'kms',
+        year: 2015,
+        month: 10,
+        dateLabel: '2015.10',
+        venue: '한국기상학회 학술대회 논문집',
+        pages: 'pp. 918–919',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['발자국 가중치', '폐열 배출량', '도시열섬'],
+        title: '발자국-가중치 기법을 이용한 개선된 폐열 배출량 산정법',
+        koreanTitle: null,
+        authors: '박창현, 이화운, D. J. Sailor'
+      },
+      {
+        id: 25,
+        kind: 'conference',
+        category: 'kms',
+        year: 2014,
+        month: 10,
+        dateLabel: '2014.10',
+        venue: '한국기상학회 학술대회 논문집',
+        pages: 'pp. 401–402',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['에너지 플럭스', 'CO₂ 플럭스', '도시관측'],
+        title: '도시 내 에너지 및 이산화탄소 플럭스 측정과 그 활용',
+        koreanTitle: null,
+        authors: '박창현, 이귀옥, 김동혁 외 2명'
+      },
+      {
+        id: 26,
+        kind: 'conference',
+        category: 'kms',
+        year: 2014,
+        month: 4,
+        dateLabel: '2014.04',
+        venue: '한국기상학회 학술대회 논문집',
+        pages: 'pp. 134–135',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['역궤적 분석', '대기경계층', '발원지'],
+        title: '역궤적 분석을 통한 발원지 대기경계층 특성연구',
+        koreanTitle: null,
+        authors: '박재형, 이순환, 박창현 외 2명'
+      },
+      {
+        id: 27,
+        kind: 'conference',
+        category: 'kosae',
+        year: 2013,
+        month: 8,
+        dateLabel: '2013.08',
+        venue: '한국대기환경학회 학술대회논문집',
+        pages: 'pp. 234',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['CO₂ 플럭스', '식생 탄소 모델', '도시 인근'],
+        title: '도시 인근 지역에서의 이산화탄소 플럭스 측정과 접합된 식생 탄소 모델 결과 비교',
+        koreanTitle: null,
+        authors: '박창현, 이화운, 김동혁 외 2명'
+      },
+      {
+        id: 28,
+        kind: 'conference',
+        category: 'kosae',
+        year: 2013,
+        month: 8,
+        dateLabel: '2013.08',
+        venue: '한국대기환경학회 학술대회논문집',
+        pages: 'pp. 191',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['미세먼지', 'HYSPLIT', '군집분석'],
+        title: '봄철 고농도 미세먼지 사례에 대한 HYSPLIT 군집분석',
+        koreanTitle: null,
+        authors: '박재형, 이화운, 박창현 외 2명'
+      },
+      {
+        id: 29,
+        kind: 'conference',
+        category: 'kosae',
+        year: 2013,
+        month: 8,
+        dateLabel: '2013.08',
+        venue: '한국대기환경학회 학술대회논문집',
+        pages: 'pp. 59',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['고농도 오존', '수송 공기', '교외 지역'],
+        title: '수송 공기의 변질에 의한 교외 지역 고농도 오존 사례 분석',
+        koreanTitle: null,
+        authors: '전원배, 이화운, 이순환 외 1명'
+      },
+      {
+        id: 30,
+        kind: 'conference',
+        category: 'kms',
+        year: 2012,
+        month: 11,
+        dateLabel: '2012.11',
+        venue: '한국기상학회 학술대회 논문집',
+        pages: 'pp. 558–559',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['미세먼지', '역궤적 분석', '안면도'],
+        title: '청원과 안면도에서 발생한 고농도 미세먼지 사례에 대한 역궤적 분석',
+        koreanTitle: null,
+        authors: '박재형, 이화운, 박창현 외 1명'
+      },
+      {
+        id: 31,
+        kind: 'conference',
+        category: 'kosae',
+        year: 2012,
+        month: 5,
+        dateLabel: '2012.05',
+        venue: '한국대기환경학회 학술대회논문집',
+        pages: 'pp. 36',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['기상-식생 모델', 'CO₂ 모델링', '대도시'],
+        title: '대도시 지역에서의 기상-식생 모델을 이용한 이산화탄소 모델링',
+        koreanTitle: null,
+        authors: '박창현, 이화운, Qinbin Li 외 1명'
+      },
+      {
+        id: 32,
+        kind: 'conference',
+        category: 'kosae',
+        year: 2004,
+        month: 4,
+        dateLabel: '2004.04',
+        venue: '한국대기환경학회 학술대회논문집',
+        pages: 'pp. 222–223',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['안개', '인천국제공항', '수치모의'],
+        title: '인천국제공항 건설 후 안개발생 변화에 관한 대기환경변화 Ⅱ - 안개분류 및 안개관련 기상요소 수치모의 -',
+        koreanTitle: null,
+        authors: '이화운, 임헌호, 박창현 외 1명'
+      },
+      {
+        id: 33,
+        kind: 'conference',
+        category: 'kms',
+        year: 2004,
+        month: 3,
+        dateLabel: '2004.03',
+        venue: '한국기상학회 학술대회 논문집',
+        pages: 'pp. 238–239',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['영종도', '안개', '기상요소 수치모의'],
+        title: '영종도 신공항 건설에 따른 안개 발생에 미치는 기상 요소 수치모의',
+        koreanTitle: null,
+        authors: '이화운, 임헌호, 박창현 외 1명'
+      },
+      {
+        id: 34,
+        kind: 'conference',
+        category: 'kms',
+        year: 2004,
+        month: 3,
+        dateLabel: '2004.03',
+        venue: '한국기상학회 학술대회 논문집',
+        pages: 'pp. 36–37',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['집중호우', '하층제트', '수치연구'],
+        title: '집중호우의 관련된 하층제트의 민감도에 관한 수치연구',
+        koreanTitle: null,
+        authors: '이순환, 류찬수, 박창현'
+      },
+      {
+        id: 35,
+        kind: 'conference',
+        category: 'kosae',
+        year: 2003,
+        month: 10,
+        dateLabel: '2003.10',
+        venue: '한국대기환경학회 학술대회논문집',
+        pages: 'pp. 55–56',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['인천국제공항', '안개', '대기환경변화'],
+        title: '인천국제공항 건설 후 안개발생 변화에 관한 대기환경변화',
+        koreanTitle: null,
+        authors: '이화운, 정우식, 이순환 외 2명'
+      }
+    ];
+
+    // Primary Tab Definitions
+    const PRIMARY_TABS = [
+      { key: 'all', label: '전체' },
+      { key: 'journal', label: '학술지 논문' },
+      { key: 'conference', label: '학술대회·세미나' }
+    ];
+
+    // Secondary Filter Pills
+    const SECONDARY_FILTERS = [
+      { key: 'all', label: '전체', kindScope: null, predicate: () => true },
+      { key: 'intl', label: '국제학술지', kindScope: 'journal', predicate: (p) => p.category === 'intl' },
+      { key: 'domestic', label: '국내학술지', kindScope: 'journal', predicate: (p) => p.category === 'domestic' },
+      { key: 'kosae', label: '한국대기환경학회', kindScope: 'conference', predicate: (p) => p.category === 'kosae' },
+      { key: 'kms', label: '한국기상학회', kindScope: 'conference', predicate: (p) => p.category === 'kms' },
+      { key: 'intl_seminar', label: '국제학회·세미나', kindScope: 'conference', predicate: (p) => p.category === 'intl_conf' || p.category === 'seminar' },
+      { key: 'firstOrCorr', label: '제1·교신저자', kindScope: null, predicate: (p) => p.firstOrCorr }
+    ];
+
+    // Category Badge Styles
+    const CATEGORY_META = {
+      intl: {
+        label: '국제학술지',
+        badgeClass: 'bg-[#e0f2fe] text-[#0369a1] border border-sky-200/80'
+      },
+      domestic: {
+        label: '국내학술지',
+        badgeClass: 'bg-[#ecfccb] text-[#3f6212] border border-lime-200/90'
+      },
+      kosae: {
+        label: '한국대기환경학회',
+        badgeClass: 'bg-[#ccfbf1] text-[#0f766e] border border-teal-200/80'
+      },
+      kms: {
+        label: '한국기상학회',
+        badgeClass: 'bg-[#dcfce7] text-[#15803d] border border-emerald-200/80'
+      },
+      intl_conf: {
+        label: '국제학술대회',
+        badgeClass: 'bg-[#e0f2fe] text-[#0284c7] border border-sky-300/80'
+      },
+      seminar: {
+        label: '초청세미나',
+        badgeClass: 'bg-[#f0fdf4] text-[#4d7c0f] border border-lime-300/80'
+      }
+    };
+
+    // Application State
+    const state = {
+      tab: 'all',          // 'all' | 'journal' | 'conference'
+      filter: 'all',       // secondary filter key
+      search: '',
+      sort: 'newest',      // 'newest' | 'oldest'
+      view: 'timeline'     // 'timeline' | 'grid'
+    };
+
+    // DOM References
+    const kpiTotalEl = document.getElementById('kpiTotal');
+    const kpiTotalSubEl = document.getElementById('kpiTotalSub');
+    const kpiJournalEl = document.getElementById('kpiJournal');
+    const kpiJournalSubEl = document.getElementById('kpiJournalSub');
+    const kpiConfEl = document.getElementById('kpiConf');
+    const kpiConfSubEl = document.getElementById('kpiConfSub');
+    const kpiLeadEl = document.getElementById('kpiLead');
+
+    const primaryTabsEl = document.getElementById('primaryTabs');
+    const filterPillsEl = document.getElementById('filterPills');
+    const searchInputEl = document.getElementById('searchInput');
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+    const sortSelectEl = document.getElementById('sortSelect');
+    const viewTimelineBtn = document.getElementById('viewTimelineBtn');
+    const viewGridBtn = document.getElementById('viewGridBtn');
+    const resultCountEl = document.getElementById('resultCount');
+    const publicationsContainerEl = document.getElementById('publicationsContainer');
+    const toastEl = document.getElementById('toast');
+    const toastMessageEl = document.getElementById('toastMessage');
+
+    let toastTimer = null;
+
+    /**
+     * Escape HTML special characters safely
+     */
+    function escapeHTML(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    /**
+     * Highlight main researcher name (Park, C.*, Park, C., C. Park, 박창현)
+     */
+    function formatAuthors(authorsStr) {
+      const safe = escapeHTML(authorsStr);
+      return safe.replace(/(Park,\s*C\.\*?|C\.\s*Park\*?|박창현)/g, '<span class="author-highlight">$1</span>');
+    }
+
+    /**
+     * Update KPI Summary Dashboard dynamically from PUBLICATIONS_DATA
+     */
+    function updateKPIs() {
+      const total = PUBLICATIONS_DATA.length;
+      const journals = PUBLICATIONS_DATA.filter((p) => p.kind === 'journal').length;
+      const intlJournals = PUBLICATIONS_DATA.filter((p) => p.category === 'intl').length;
+      const domJournals = PUBLICATIONS_DATA.filter((p) => p.category === 'domestic').length;
+      const conferences = PUBLICATIONS_DATA.filter((p) => p.kind === 'conference').length;
+      const kosaeCount = PUBLICATIONS_DATA.filter((p) => p.category === 'kosae').length;
+      const kmsCount = PUBLICATIONS_DATA.filter((p) => p.category === 'kms').length;
+      const otherConfCount = PUBLICATIONS_DATA.filter((p) => p.category === 'intl_conf' || p.category === 'seminar').length;
+      const leadCount = PUBLICATIONS_DATA.filter((p) => p.firstOrCorr).length;
+
+      kpiTotalEl.textContent = total;
+      if (kpiTotalSubEl) kpiTotalSubEl.textContent = `학술지 ${journals} · 학회·세미나 ${conferences}`;
+      kpiJournalEl.textContent = journals;
+      if (kpiJournalSubEl) kpiJournalSubEl.textContent = `국제 ${intlJournals} · 국내 ${domJournals}`;
+      kpiConfEl.textContent = conferences;
+      if (kpiConfSubEl) kpiConfSubEl.textContent = `대기환경 ${kosaeCount} · 기상 ${kmsCount} · 기타 ${otherConfCount}`;
+      kpiLeadEl.textContent = leadCount;
+    }
+
+    /**
+     * Render Primary Segmented Tabs (All / Journals / Conferences)
+     */
+    function renderPrimaryTabs() {
+      primaryTabsEl.innerHTML = PRIMARY_TABS.map((t) => {
+        const count = t.key === 'all'
+          ? PUBLICATIONS_DATA.length
+          : PUBLICATIONS_DATA.filter((p) => p.kind === t.key).length;
+        const isActive = state.tab === t.key;
+        const activeStyle = isActive
+          ? 'bg-white text-[#0284c7] shadow-sm'
+          : 'text-slate-600 hover:text-[#0f2942]';
+
+        return `
+          <button
+            type="button"
+            role="tab"
+            data-tab="${t.key}"
+            aria-selected="${isActive}"
+            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${activeStyle}"
+          >
+            <span>${t.label}</span>
+            <span class="px-1.5 py-0.5 rounded-md text-[11px] font-bold ${isActive ? 'bg-sky-100 text-[#0284c7]' : 'bg-white/70 text-slate-500'} tabular-nums">
+              ${count}
+            </span>
+          </button>
+        `;
+      }).join('');
+
+      primaryTabsEl.querySelectorAll('button[data-tab]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const nextTab = btn.getAttribute('data-tab');
+          if (state.tab !== nextTab) {
+            state.tab = nextTab;
+            state.filter = 'all';
+            renderPrimaryTabs();
+            renderSecondaryFilters();
+            renderPublications();
+          }
+        });
+      });
+    }
+
+    /**
+     * Render Secondary Filter Pills scoped to the active primary tab
+     */
+    function renderSecondaryFilters() {
+      const basePool = state.tab === 'all'
+        ? PUBLICATIONS_DATA
+        : PUBLICATIONS_DATA.filter((p) => p.kind === state.tab);
+
+      const visibleFilters = SECONDARY_FILTERS.filter((f) => {
+        if (!f.kindScope) return true;
+        if (state.tab === 'all') return true;
+        return f.kindScope === state.tab;
+      });
+
+      filterPillsEl.innerHTML = visibleFilters.map((f) => {
+        const count = basePool.filter(f.predicate).length;
+        const isActive = state.filter === f.key;
+        const btnClass = isActive
+          ? 'bg-[#0284c7] text-white border-[#0284c7] shadow-sm'
+          : 'bg-white text-slate-600 border-sky-100 hover:bg-sky-50 hover:border-sky-200 hover:text-[#0369a1]';
+
+        return `
+          <button
+            type="button"
+            data-filter="${f.key}"
+            aria-pressed="${isActive}"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${btnClass}"
+          >
+            <span>${f.label}</span>
+            <span class="${isActive ? 'text-sky-100' : 'text-slate-400'} text-[11px] font-bold tabular-nums">(${count})</span>
+          </button>
+        `;
+      }).join('');
+
+      filterPillsEl.querySelectorAll('button[data-filter]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.filter = btn.getAttribute('data-filter');
+          renderSecondaryFilters();
+          renderPublications();
+        });
+      });
+    }
+
+    /**
+     * Update View Switcher Button States
+     */
+    function updateViewButtons() {
+      const activeClasses = ['bg-white', 'text-[#0284c7]', 'shadow-sm'];
+      const inactiveClasses = ['text-slate-500', 'hover:text-[#0f2942]'];
+
+      if (state.view === 'timeline') {
+        viewTimelineBtn.classList.add(...activeClasses);
+        viewTimelineBtn.classList.remove(...inactiveClasses);
+        viewTimelineBtn.setAttribute('aria-pressed', 'true');
+
+        viewGridBtn.classList.remove(...activeClasses);
+        viewGridBtn.classList.add(...inactiveClasses);
+        viewGridBtn.setAttribute('aria-pressed', 'false');
+      } else {
+        viewGridBtn.classList.add(...activeClasses);
+        viewGridBtn.classList.remove(...inactiveClasses);
+        viewGridBtn.setAttribute('aria-pressed', 'true');
+
+        viewTimelineBtn.classList.remove(...activeClasses);
+        viewTimelineBtn.classList.add(...inactiveClasses);
+        viewTimelineBtn.setAttribute('aria-pressed', 'false');
+      }
+    }
+
+    /**
+     * Return Filtered and Sorted Publications List
+     */
+    function getFilteredAndSorted() {
+      const filterObj = SECONDARY_FILTERS.find((f) => f.key === state.filter) || SECONDARY_FILTERS[0];
+      const q = state.search.trim().toLowerCase();
+
+      const filtered = PUBLICATIONS_DATA.filter((p) => {
+        if (state.tab !== 'all' && p.kind !== state.tab) return false;
+        if (!filterObj.predicate(p)) return false;
+
+        if (q) {
+          const haystack = [
+            p.title,
+            p.koreanTitle || '',
+            p.authors,
+            p.venue,
+            String(p.year),
+            p.dateLabel,
+            p.pages || '',
+            (p.tags || []).join(' ')
+          ].join(' ').toLowerCase();
+          if (!haystack.includes(q)) return false;
+        }
+        return true;
+      });
+
+      filtered.sort((a, b) => {
+        const scoreA = a.year * 100 + (a.month || 0);
+        const scoreB = b.year * 100 + (b.month || 0);
+        if (state.sort === 'newest') {
+          if (scoreB !== scoreA) return scoreB - scoreA;
+          return a.id - b.id;
+        } else {
+          if (scoreA !== scoreB) return scoreA - scoreB;
+          return b.id - a.id;
+        }
+      });
+
+      return filtered;
+    }
+
+    /**
+     * Format Plain-Text Citation String for Clipboard
+     */
+    function buildCitation(pub) {
+      const pagesPart = pub.pages ? `, ${pub.pages}` : '';
+      return `${pub.authors} (${pub.dateLabel}). ${pub.title}. ${pub.venue}${pagesPart}.`;
+    }
+
+    /**
+     * Copy Text to Clipboard Safely (iFrame compatible fallback)
+     */
+    function copyToClipboard(text) {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-9999px';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        if (ok) {
+          showToast('인용 정보가 클립보드에 복사되었습니다.');
+          return;
+        }
+      } catch (err) {
+        // Fallback below
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text)
+          .then(() => showToast('인용 정보가 클립보드에 복사되었습니다.'))
+          .catch(() => showToast('복사에 실패했습니다. 다시 시도해 주세요.'));
+      } else {
+        showToast('복사에 실패했습니다. 다시 시도해 주세요.');
+      }
+    }
+
+    /**
+     * Show Temporary Toast Notification
+     */
+    function showToast(message) {
+      toastMessageEl.textContent = message;
+      toastEl.classList.remove('opacity-0', 'translate-y-3', 'pointer-events-none');
+      toastEl.classList.add('opacity-100', 'translate-y-0');
+
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toastEl.classList.add('opacity-0', 'translate-y-3', 'pointer-events-none');
+        toastEl.classList.remove('opacity-100', 'translate-y-0');
+      }, 2400);
+    }
+
+    /**
+     * Build Single Publication Card HTML
+     */
+    function createPubCard(pub, index, isGrid) {
+      const catMeta = CATEGORY_META[pub.category] || {
+        label: '학술실적',
+        badgeClass: 'bg-sky-50 text-sky-700 border border-sky-200'
+      };
+
+      const newBadge = pub.isNew
+        ? `<span class="badge-new-pulse inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#38bdf8] to-[#84cc16] text-white text-[10px] font-extrabold tracking-wider shadow-xs">
+             NEW
+           </span>`
+        : '';
+
+      const leadBadge = pub.firstOrCorr
+        ? `<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-lime-50 text-[#4d7c0f] border border-lime-200/80 text-[11px] font-bold">
+             주저자
+           </span>`
+        : '';
+
+      const koreanSubHTML = pub.koreanTitle
+        ? `<p class="mt-1.5 text-sm text-slate-500 font-medium leading-relaxed">${escapeHTML(pub.koreanTitle)}</p>`
+        : '';
+
+      const pagesHTML = pub.pages
+        ? `<span class="text-xs font-medium text-slate-400">· ${escapeHTML(pub.pages)}</span>`
+        : '';
+
+      const tagsHTML = (pub.tags || []).map((tag) => `
+        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-sky-50/80 text-[#0369a1]/90 border border-sky-100">
+          #${escapeHTML(tag)}
+        </span>
+      `).join('');
+
+      const topAccentStrip = isGrid
+        ? `<div class="h-1.5 w-full bg-gradient-to-r from-[#38bdf8] via-[#7dd3fc] to-[#a3e635]"></div>`
+        : '';
+
+      return `
+        <article class="animate-card pub-card bg-white rounded-2xl overflow-hidden flex flex-col justify-between" style="animation-delay: ${Math.min(index * 30, 300)}ms">
+          ${topAccentStrip}
+          <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <!-- Top Metadata Row -->
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-sky-50 text-[#0284c7] border border-sky-100 tabular-nums">
+                    ${escapeHTML(pub.dateLabel)}
+                  </span>
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold ${catMeta.badgeClass}">
+                    ${catMeta.label}
+                  </span>
+                  ${leadBadge}
+                  ${newBadge}
+                </div>
+              </div>
+
+              <!-- Title -->
+              <h3 class="text-base sm:text-[17px] font-bold text-[#0f2942] leading-snug">
+                ${escapeHTML(pub.title)}
+              </h3>
+              ${koreanSubHTML}
+
+              <!-- Venue & Pages -->
+              <div class="mt-3 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs sm:text-sm">
+                <svg class="w-4 h-4 text-sky-500/80 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <span class="font-semibold text-[#0369a1]">${escapeHTML(pub.venue)}</span>
+                ${pagesHTML}
+              </div>
+
+              <!-- Authors -->
+              <p class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                ${formatAuthors(pub.authors)}
+              </p>
+            </div>
+
+            <!-- Footer Row: Tags & Copy Citation Button -->
+            <div class="mt-4 pt-3.5 border-t border-sky-100/75 flex flex-wrap items-center justify-between gap-2.5">
+              <div class="flex flex-wrap gap-1.5">
+                ${tagsHTML}
+              </div>
+
+              <button
+                type="button"
+                data-copy-id="${pub.id}"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-sky-50/80 text-[#0284c7] border border-sky-200/80 hover:bg-[#ecfccb] hover:text-[#3f6212] hover:border-lime-300 transition-all cursor-pointer shrink-0"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                <span>인용 복사</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    /**
+     * Render Publications in Timeline (grouped by Year) or Card Grid View
+     */
+    function renderPublications() {
+      const items = getFilteredAndSorted();
+      resultCountEl.textContent = `총 ${items.length}편 표시 중`;
+
+      if (items.length === 0) {
+        publicationsContainerEl.innerHTML = `
+          <div class="text-center py-16 px-4 rounded-2xl bg-white border border-[#e0f2fe] shadow-sky-soft">
+            <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-400 flex items-center justify-center mx-auto mb-3">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <p class="text-slate-600 font-semibold text-sm">검색 또는 필터 조건에 일치하는 연구실적이 없습니다.</p>
+            <p class="text-slate-400 text-xs mt-1">다른 검색어를 입력하거나 필터를 초기화해 보세요.</p>
+          </div>
+        `;
+        return;
+      }
+
+      if (state.view === 'timeline') {
+        // Group items by year while preserving sort order
+        const yearGroups = [];
+        const yearMap = new Map();
+
+        items.forEach((item) => {
+          if (!yearMap.has(item.year)) {
+            const group = { year: item.year, items: [] };
+            yearMap.set(item.year, group);
+            yearGroups.push(group);
+          }
+          yearMap.get(item.year).items.push(item);
+        });
+
+        let runningIndex = 0;
+        publicationsContainerEl.innerHTML = `
+          <div class="space-y-9">
+            ${yearGroups.map((group) => `
+              <section aria-label="${group.year}년 실적">
+                <!-- Year Divider Header -->
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-[#e0f2fe] to-[#ecfccb] border border-sky-200/80 text-sm font-extrabold text-[#0f2942] tabular-nums shadow-xs">
+                    ${group.year}
+                    <span class="text-xs font-bold text-[#0284c7]">(${group.items.length})</span>
+                  </span>
+                  <div class="flex-1 h-px bg-gradient-to-r from-sky-200/80 via-lime-200/60 to-transparent"></div>
+                </div>
+
+                <!-- Vertical Pastel Timeline -->
+                <div class="relative pl-7 sm:pl-10 space-y-4 before:content-[''] before:absolute before:left-[11px] sm:before:left-[15px] before:top-4 before:bottom-4 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-[#38bdf8] before:via-[#7dd3fc] before:to-[#a3e635]">
+                  ${group.items.map((pub) => {
+                    const idx = runningIndex++;
+                    return `
+                      <div class="relative">
+                        <span class="absolute -left-7 sm:-left-10 top-6 flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full ${pub.isNew ? 'bg-lime-200/75' : 'bg-sky-100/90'} shadow-sm">
+                          <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ${pub.isNew ? 'bg-gradient-to-tr from-[#0284c7] to-[#84cc16] ring-4 ring-lime-200/70' : 'bg-[#38bdf8] ring-4 ring-sky-100'}"></span>
+                        </span>
+                        ${createPubCard(pub, idx, false)}
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </section>
+            `).join('')}
+          </div>
+        `;
+      } else {
+        publicationsContainerEl.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            ${items.map((pub, idx) => createPubCard(pub, idx, true)).join('')}
+          </div>
+        `;
+      }
+
+      // Bind Citation Copy Buttons
+      publicationsContainerEl.querySelectorAll('button[data-copy-id]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = Number(btn.getAttribute('data-copy-id'));
+          const pub = PUBLICATIONS_DATA.find((p) => p.id === id);
+          if (pub) {
+            copyToClipboard(buildCitation(pub));
+          }
+        });
+      });
+    }
+
+    // Event Listeners
+    searchInputEl.addEventListener('input', (e) => {
+      state.search = e.target.value;
+      clearSearchBtn.classList.toggle('hidden', state.search.length === 0);
+      renderPublications();
+    });
+
+    clearSearchBtn.addEventListener('click', () => {
+      state.search = '';
+      searchInputEl.value = '';
+      clearSearchBtn.classList.add('hidden');
+      searchInputEl.focus();
+      renderPublications();
+    });
+
+    sortSelectEl.addEventListener('change', (e) => {
+      state.sort = e.target.value;
+      renderPublications();
+    });
+
+    viewTimelineBtn.addEventListener('click', () => {
+      if (state.view !== 'timeline') {
+        state.view = 'timeline';
+        updateViewButtons();
+        renderPublications();
+      }
+    });
+
+    viewGridBtn.addEventListener('click', () => {
+      if (state.view !== 'grid') {
+        state.view = 'grid';
+        updateViewButtons();
+        renderPublications();
+      }
+    });
+
+    // Initialize Application
+    updateKPIs();
+    renderPrimaryTabs();
+    renderSecondaryFilters();
+    updateViewButtons();
+    renderPublications();
+  </script>
+</body>
+</html>
