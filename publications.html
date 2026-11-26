@@ -1,100 +1,942 @@
----
-layout: default
-title: Publications
----
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publications | Research Portfolio</title>
 
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
-    
-    body { 
-        font-family: 'Noto Sans KR', sans-serif !important; 
+  <!-- Pretendard & Inter Webfonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            navy: '#0f2942',
+          },
+          boxShadow: {
+            'sky-soft': '0 8px 24px rgba(14, 116, 144, 0.06)',
+            'sky-hover': '0 14px 32px rgba(2, 132, 199, 0.11)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Bright, airy sky-blue to pastel-lime ambient background */
+    body {
+      background: linear-gradient(160deg, #f4faff 0%, #f8fdf9 52%, #f6fdf2 100%);
+      color: #475569;
     }
 
-    /* 기존 테마가 만드는 'Tony Stark' 제목 숨기기 */
-    .markdown-body > h1:first-of-type {
-        display: none !important;
+    /* Subtle atmospheric dot pattern overlay */
+    .bg-dot-pattern {
+      background-image: radial-gradient(rgba(2, 132, 199, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
     }
-    
-    /* 네비게이션 바가 잘리지 않게 조정 (테마 여백 상쇄) */
-    .nav-wrapper {
-        margin-top: -20px; /* 테마에 따라 조절 필요 */
-        margin-left: -16px;
-        margin-right: -16px;
-        margin-bottom: 2rem;
+
+    /* Hero pastel sky-blue to light-green gradient */
+    .hero-pastel {
+      background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 55%, #ecfccb 100%);
     }
-</style>
 
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    /* Smooth card entrance animation */
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-card {
+      animation: fadeSlideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
 
-<div class="nav-wrapper">
-    <nav class="bg-white border-b border-slate-200 shadow-sm h-14 flex items-center px-4 sticky top-0 z-50 w-full">
-        <a href="index.html" class="flex items-center gap-2 text-slate-700 hover:text-blue-600 font-bold decoration-0">
-            <i class="fa-solid fa-arrow-left"></i> 메인으로 돌아가기
-        </a>
+    /* Publication card styling & hover elevation */
+    .pub-card {
+      border: 1px solid #e0f2fe;
+      box-shadow: 0 8px 24px rgba(14, 116, 144, 0.055);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+    .pub-card:hover {
+      transform: translateY(-3px);
+      border-color: #7dd3fc;
+      box-shadow: 0 14px 30px rgba(2, 132, 199, 0.10), 0 4px 12px rgba(132, 204, 22, 0.08);
+    }
+
+    /* Author highlight style */
+    .author-highlight {
+      color: #0369a1;
+      font-weight: 700;
+      background: linear-gradient(180deg, transparent 58%, #bae6fd 58%, #d9f99d 100%);
+      padding: 0 3px;
+      border-radius: 4px;
+    }
+
+    /* Subtle pulse for NEW badge */
+    @keyframes gentlePulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.72; }
+    }
+    .badge-new-pulse {
+      animation: gentlePulse 2.4s ease-in-out infinite;
+    }
+  </style>
+</head>
+
+<body class="relative min-h-screen flex flex-col antialiased selection:bg-sky-200/70 selection:text-sky-900 overflow-x-hidden">
+
+  <!-- Soft Translucent Organic Pastel Blurs & Atmospheric Dots -->
+  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-dot-pattern" aria-hidden="true">
+    <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-[#bae6fd]/45 blur-3xl"></div>
+    <div class="absolute top-1/4 -right-24 w-[28rem] h-[28rem] rounded-full bg-[#d9f99d]/40 blur-3xl"></div>
+    <div class="absolute bottom-0 left-1/3 w-80 h-80 rounded-full bg-[#bae6fd]/30 blur-3xl"></div>
+  </div>
+
+  <!-- Main Content Container -->
+  <div class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-14">
+
+    <!-- Top Glassmorphic Navigation Bar -->
+    <nav class="flex items-center justify-between gap-3 mb-6">
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/85 backdrop-blur-md border border-sky-100 text-sm font-semibold text-[#0f2942] shadow-sm hover:bg-white hover:border-sky-300 hover:text-sky-700 transition-all">
+        <span aria-hidden="true" class="text-sky-600">←</span>
+        <span>메인으로 돌아가기</span>
+      </a>
+
+      <a href="grants.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-md border border-lime-200/80 text-xs sm:text-sm font-semibold text-[#3f6212] shadow-sm hover:bg-lime-50 hover:border-lime-300 transition-all">
+        <span class="w-2 h-2 rounded-full bg-gradient-to-r from-sky-400 to-lime-500"></span>
+        <span>연구과제 (Grants)</span>
+      </a>
     </nav>
-</div>
 
-<div class="max-w-4xl mx-auto px-4 py-8">
-    
-    <div class="mb-8 text-center">
-        <h1 class="text-3xl font-bold text-slate-800 mb-2">Publications</h1>
-        <p class="text-slate-500 text-base">
-            Selected research papers and articles published in recent 10 years.
-        </p>
-    </div>
+    <!-- Airy Pastel Hero Section -->
+    <header class="relative overflow-hidden hero-pastel rounded-3xl border border-white/90 shadow-sky-soft px-6 py-8 sm:px-10 sm:py-11 mb-8">
+      <!-- Subtle decorative atmospheric contour lines -->
+      <svg class="absolute inset-0 w-full h-full opacity-40 pointer-events-none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 300">
+        <path d="M-50,235 C180,155 380,290 640,180 C840,95 960,190 1080,140" fill="none" stroke="#ffffff" stroke-width="2" />
+        <path d="M-50,185 C200,105 410,240 670,130 C860,50 980,140 1080,90" fill="none" stroke="#ffffff" stroke-width="1.5" />
+        <path d="M-50,130 C230,65 440,185 700,85 C880,20 990,95 1080,55" fill="none" stroke="#ffffff" stroke-width="1" />
+      </svg>
 
-    <div class="space-y-3">
-        
-        {% assign papers = site.data.papers | sort: 'year' | reverse %}
-        
-        {% for paper in papers %}
-        <div class="group bg-white rounded-xl border border-slate-200 p-4 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-300 relative overflow-hidden">
-            
-            <div class="absolute left-0 top-0 bottom-0 w-1 bg-slate-200 group-hover:bg-blue-500 transition-colors"></div>
-
-            <div class="pl-3">
-                <div class="flex items-center gap-2 mb-1.5 text-sm">
-                    <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-semibold text-xs group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                        {{ paper.year }}
-                    </span>
-                    <span class="text-slate-500 font-medium italic text-xs">
-                        {{ paper.journal }}
-                    </span>
-                    {% if paper.year == 2025 %}
-                    <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-[10px] font-bold animate-pulse">
-                        NEW
-                    </span>
-                    {% endif %}
-                </div>
-
-                <h3 class="text-lg font-bold text-slate-800 mb-1.5 leading-snug group-hover:text-blue-700 transition-colors">
-                    {% if paper.link and paper.link != "#" %}
-                        <a href="{{ paper.link }}" target="_blank" rel="noopener noreferrer" class="hover:underline decoration-blue-500 underline-offset-4">
-                            {{ paper.title }} <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1 opacity-50"></i>
-                        </a>
-                    {% else %}
-                        {{ paper.title }}
-                    {% endif %}
-                </h3>
-
-                {% if paper.note and paper.note != "" %}
-                <p class="text-slate-500 text-xs mb-2">
-                    {{ paper.note }}
-                </p>
-                {% endif %}
-
-                <div class="text-slate-600 text-sm mb-0">
-                    <i class="fa-solid fa-users text-slate-400 mr-2 text-xs"></i>
-                    {{ paper.authors 
-                        | replace: "Park, C.", "<strong class='text-slate-900'>Park, C.</strong>"
-                        | replace: "C. Park", "<strong class='text-slate-900'>C. Park</strong>"
-                    }}
-                </div>
-
-            </div>
+      <div class="relative z-10 max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/85 backdrop-blur-sm border border-sky-200/70 text-[#0284c7] text-xs font-bold tracking-wider mb-4">
+          <svg class="w-3.5 h-3.5 text-[#65a30d]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          RESEARCH PUBLICATIONS
         </div>
-        {% endfor %}
 
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0f2942]">
+          Publications
+        </h1>
+        <p class="mt-3 text-base sm:text-lg text-slate-600 leading-relaxed">
+          Selected research papers and articles published in recent 10 years.
+        </p>
+      </div>
+    </header>
+
+    <!-- KPI Summary Bar (4 Cards) -->
+    <section aria-label="논문 실적 요약" class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 mb-9">
+      <!-- KPI 1: Total Papers -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-[#e0f2fe] shadow-sky-soft flex items-start justify-between gap-3">
+        <div>
+          <p class="text-xs font-semibold text-slate-500">총 논문 수</p>
+          <p class="mt-1.5 text-2xl sm:text-3xl font-bold text-[#0f2942] tracking-tight tabular-nums">
+            14<span class="text-base font-semibold text-slate-400 ml-0.5">편</span>
+          </p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-sky-100/90 text-[#0284c7] flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- KPI 2: 1st / Corresponding Author -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-[#e0f2fe] shadow-sky-soft flex items-start justify-between gap-3">
+        <div>
+          <p class="text-xs font-semibold text-slate-500">제1저자 · 교신저자</p>
+          <p class="mt-1.5 text-2xl sm:text-3xl font-bold text-[#4d7c0f] tracking-tight tabular-nums">
+            9<span class="text-base font-semibold text-[#65a30d] ml-0.5">편</span>
+          </p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-[#ecfccb] text-[#65a30d] flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- KPI 3: Publication Span -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-[#e0f2fe] shadow-sky-soft flex items-start justify-between gap-3">
+        <div>
+          <p class="text-xs font-semibold text-slate-500">게재 기간</p>
+          <p class="mt-1.5 text-xl sm:text-2xl font-bold text-[#0f2942] tracking-tight leading-9 tabular-nums">
+            2016 – 2025
+          </p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-sky-100/90 text-[#0284c7] flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- KPI 4: Core Research Fields -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-[#e0f2fe] shadow-sky-soft flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <p class="text-xs font-semibold text-slate-500">주요 연구 분야</p>
+          <p class="mt-2 text-sm sm:text-[15px] font-bold text-[#0f2942] leading-snug">
+            대기탄소 · 기상모델링 · ML
+          </p>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-[#ecfccb] text-[#65a30d] flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Controls Bar -->
+    <section aria-label="논문 검색 및 필터" class="bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-[#e0f2fe] shadow-sky-soft mb-8 space-y-4">
+      <!-- Top Row: Search Input + Sort + View Toggle -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <!-- Live Search Input -->
+        <div class="relative flex-1">
+          <label for="searchInput" class="sr-only">논문 검색</label>
+          <svg class="w-4 h-4 text-sky-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="제목, 저자, 학술지, 연도, 키워드 검색..."
+            class="w-full pl-10 pr-9 py-2.5 rounded-xl text-sm bg-sky-50/55 text-[#0f172a] placeholder:text-slate-400 border border-sky-100 focus:bg-white focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-300/40 transition-all"
+          />
+          <button
+            id="clearSearchBtn"
+            type="button"
+            aria-label="검색어 지우기"
+            class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-lg text-slate-400 hover:text-sky-700 hover:bg-sky-100/70 transition-colors"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Sort & View Toggle -->
+        <div class="flex flex-wrap items-center justify-between sm:justify-end gap-2.5 shrink-0">
+          <!-- Sort Dropdown -->
+          <div class="relative">
+            <label for="sortSelect" class="sr-only">정렬 기준</label>
+            <select id="sortSelect" class="appearance-none pl-3.5 pr-9 py-2 rounded-xl text-sm font-semibold bg-sky-50/70 text-[#0f2942] border border-sky-200/80 hover:border-sky-300 focus:outline-none focus:ring-2 focus:ring-sky-400/40 transition-colors cursor-pointer">
+              <option value="newest">최신순</option>
+              <option value="oldest">오래된순</option>
+            </select>
+            <svg class="w-4 h-4 text-[#0284c7] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+
+          <!-- View Switcher -->
+          <div class="inline-flex p-1 rounded-xl bg-sky-50/90 border border-sky-100" role="group" aria-label="보기 방식 선택">
+            <button id="viewTimelineBtn" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer" aria-pressed="true">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+              </svg>
+              <span>타임라인 뷰</span>
+            </button>
+            <button id="viewGridBtn" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer" aria-pressed="false">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+              </svg>
+              <span>카드 그리드 뷰</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Filter Pills & Result Count -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-sky-100/80">
+        <div id="filterPills" class="flex flex-wrap items-center gap-2" role="group" aria-label="논문 분류 필터">
+          <!-- Populated dynamically by JS -->
+        </div>
+        <div id="resultCount" class="text-xs font-semibold text-slate-500 shrink-0">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Publications List / Grid Container -->
+    <main id="publicationsContainer" aria-live="polite">
+      <!-- Populated dynamically by JS -->
+    </main>
+
+    <!-- Legend Note -->
+    <div class="mt-8 flex items-center justify-end text-xs text-slate-500">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 border border-sky-100">
+        <span class="font-bold text-[#0284c7]">*</span>
+        <span>교신저자 (Corresponding Author)</span>
+      </span>
     </div>
-</div>
+  </div>
+
+  <!-- Minimalist Light Footer -->
+  <footer class="mt-auto border-t border-sky-100/90 bg-white/60 backdrop-blur-sm py-7">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <p>© Research Portfolio · Atmospheric &amp; Environmental Science</p>
+      <div class="flex items-center gap-4">
+        <a href="grants.html" class="font-medium text-[#4d7c0f] hover:text-[#0284c7] transition-colors">
+          연구과제 (Grants)
+        </a>
+        <span class="text-slate-300">|</span>
+        <a href="index.html" class="font-medium text-[#0284c7] hover:text-[#4d7c0f] transition-colors">
+          ← 메인으로 돌아가기
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Gentle Pastel Toast Notification -->
+  <div
+    id="toast"
+    role="status"
+    aria-live="polite"
+    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 translate-y-3 transition-all duration-300"
+  >
+    <div class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-white/95 backdrop-blur-md border border-lime-300 shadow-lg text-sm font-semibold text-[#0f2942]">
+      <span class="w-5 h-5 rounded-full bg-[#ecfccb] text-[#65a30d] flex items-center justify-center shrink-0">
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </span>
+      <span id="toastMessage">인용 정보가 클립보드에 복사되었습니다.</span>
+    </div>
+  </div>
+
+  <!-- Application Script -->
+  <script>
+    /**
+     * Complete Publications Dataset (14 Entries)
+     */
+    const PUBLICATIONS_DATA = [
+      {
+        id: 1,
+        year: 2025,
+        journal: 'Mach. Learn. Knowl. Extr.',
+        type: 'intl',
+        isNew: true,
+        firstOrCorr: true,
+        tags: ['Machine Learning', 'Tall Tower', 'Time-Series'],
+        title: 'Significance of Time-Series Consistency in Evaluating Machine Learning Models for Gap-Filling Multi-Level Very Tall Tower Data',
+        koreanTitle: null,
+        authors: 'Park, C.'
+      },
+      {
+        id: 2,
+        year: 2025,
+        journal: 'Environ. Poll.',
+        type: 'intl',
+        isNew: true,
+        firstOrCorr: false,
+        tags: ['Volcanic Emissions', 'Atmospheric Modeling', 'Sulfur'],
+        title: 'Long-range transport and transformation of volcanic sulfur emissions: A modeling study of the 2020 Nishinoshima event',
+        koreanTitle: null,
+        authors: 'Park, J., W. Jeon, W.-J. Lee, J. Moon, D. Kim, M. Heo, C. Park, Y. Jeong, J.-W. Yoo, H. Choe, C.-Y. Yang'
+      },
+      {
+        id: 3,
+        year: 2023,
+        journal: 'J. Korean Earth Sci. Soc.',
+        type: 'domestic',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['Machine Learning', 'Fog Prediction', 'Visibility'],
+        title: 'Comparison of Machine Learning Model Performance based on Observation Methods using Naked-eye and Visibility-meter',
+        koreanTitle: '머신러닝을 이용한 안개 예측 시 목측과 시정계 계측 방법에 따른 모델 성능 차이 비교',
+        authors: 'Park, C., S.-H. Lee'
+      },
+      {
+        id: 4,
+        year: 2023,
+        journal: 'J. Korean Earth Sci. Soc.',
+        type: 'domestic',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['WRF', 'Fine Dust', 'Topography'],
+        title: 'A Study on the Generation of Fine Dust and Topographical Inflow Characteristics Using Atmospheric Modeling (WRF)',
+        koreanTitle: '대기모델링(WRF)을 이용한 미세먼지의 발생과 지형학적 유입 특성 연구',
+        authors: 'Choi, H.J., C. Park, K. Lee'
+      },
+      {
+        id: 5,
+        year: 2021,
+        journal: 'Atmos. Environ.',
+        type: 'intl',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['CO₂ Flux', 'Source Estimation', 'BSWO'],
+        title: 'Characteristics of atmospheric CO2 fluxes and the estimation of their potential sources around Boseong Standard Weather Observatory (BSWO)',
+        koreanTitle: null,
+        authors: 'Park, C., Y.-T. Lee, S.-H. Lee'
+      },
+      {
+        id: 6,
+        year: 2020,
+        journal: 'PloS ONE',
+        type: 'intl',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['WRF-VPRM', 'CO₂', 'KORUS-AQ'],
+        title: 'Numerical simulation of atmospheric CO2 concentration and flux over the Korean Peninsula using WRF-VPRM model during Korus-AQ 2016 campaign',
+        koreanTitle: null,
+        authors: 'Park, C.*, S.-Y. Park, K.R. Gurney, C. Gerbig, J. P. DiGangi, Y. Choi, and H.W. Lee'
+      },
+      {
+        id: 7,
+        year: 2020,
+        journal: 'J. Environ. Sci. Int.',
+        type: 'domestic',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['Air Pollution', 'Meteorology', 'Public Health'],
+        title: 'Effects of meteorology and air pollution on respiratory disease affecting vulnerable populations',
+        koreanTitle: '기상 및 대기질이 건강취약집단에 미치는 영향',
+        authors: 'Kang, D., C. Park, W.-S. Jung, K.O. Lee and H.W. Lee'
+      },
+      {
+        id: 8,
+        year: 2019,
+        journal: 'Atmos. Environ.',
+        type: 'intl',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['WRF-CMAQ', 'Aerosol Feedback', 'South Korea'],
+        title: 'Investigating the regional difference of aerosol feedback effects over South Korea using the WRF-CMAQ two-way coupled modeling system',
+        koreanTitle: null,
+        authors: 'Yoo, J.-W., W. Jeon, S.-Y. Park, C. Park, J. Jung, S.-H. Lee, H. W. Lee'
+      },
+      {
+        id: 9,
+        year: 2018,
+        journal: 'J. Appl. Meteoro. Climatol.',
+        type: 'intl',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['WRF-VPRM', 'CO₂ Budget', 'CalNex 2010'],
+        title: 'CO2 transport, variability, and budget over the southern California air basin using the high-resolution WRF-VPRM model during the CalNex 2010 campaign',
+        koreanTitle: null,
+        authors: 'Park, C.*, C. Gerbig, S. Newman, R. Ahmadov, S. Feng, K.R. Gurney, G. R. Carmichael, S.-Y. Park, H.-W. Lee, M. Goulden, J. Stutz, J. Peischl, and T. Ryerson'
+      },
+      {
+        id: 10,
+        year: 2018,
+        journal: 'Atmos. Environ.',
+        type: 'intl',
+        isNew: false,
+        firstOrCorr: false,
+        tags: ['Ozone', 'Adjoint Sensitivity', 'Air Quality'],
+        title: 'Adjoint sensitivity of inland ozone to its precursors and meteorological and chemical influences',
+        koreanTitle: null,
+        authors: 'Park, S.-Y., C. Park, J.-W. You, S.-H. Lee and H. W. Lee'
+      },
+      {
+        id: 11,
+        year: 2017,
+        journal: 'J. Environ. Sci. Int.',
+        type: 'domestic',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['CO₂', 'Meteorology-Vegetation', 'Coastal Basin'],
+        title: 'Simulation of atmospheric CO2 over coastal basin areas using meteorology-vegetation model',
+        koreanTitle: null,
+        authors: 'Park, C.* and H.W. Lee'
+      },
+      {
+        id: 12,
+        year: 2017,
+        journal: 'J. Environ. Sci. Int.',
+        type: 'domestic',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['CO₂', 'Aircraft Observations', 'Coastal Basin'],
+        title: 'Comparison of aircraft observations and simulation results of atmospheric CO2 over coastal basin areas',
+        koreanTitle: null,
+        authors: 'Park, C.*, K.O. Lee and W.S. Jung'
+      },
+      {
+        id: 13,
+        year: 2016,
+        journal: 'Atmos. Environ.',
+        type: 'intl',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['Urban Climate', 'Anthropogenic Heat', 'Surface Energy'],
+        title: 'Comparative estimates of anthropogenic heat emission in relation to surface energy balance of a subtropical urban neighborhood',
+        koreanTitle: null,
+        authors: 'Park, C., G.W. Schade*, N.D. Werner, D.J. Sailor, and C.H. Kim'
+      },
+      {
+        id: 14,
+        year: 2016,
+        journal: 'J. Environ. Qual.',
+        type: 'intl',
+        isNew: false,
+        firstOrCorr: true,
+        tags: ['CO₂ Flux', 'Urban', 'Houston'],
+        title: 'Anthropogenic and biogenic features of long-term measured CO2 flux in north downtown Houston, Texas',
+        koreanTitle: null,
+        authors: 'Park, C.* and H.W. Lee'
+      }
+    ];
+
+    // Filter Definitions
+    const FILTERS = [
+      { key: 'all', label: '전체', predicate: () => true },
+      { key: 'firstOrCorr', label: '제1·교신저자', predicate: (p) => p.firstOrCorr },
+      { key: 'intl', label: '국제학술지', predicate: (p) => p.type === 'intl' },
+      { key: 'domestic', label: '국내학술지', predicate: (p) => p.type === 'domestic' },
+      { key: 'recent', label: '최신 (2023+)', predicate: (p) => p.year >= 2023 }
+    ];
+
+    // Application State
+    const state = {
+      search: '',
+      filter: 'all',
+      sort: 'newest',
+      view: 'timeline' // 'timeline' | 'grid'
+    };
+
+    // DOM References
+    const searchInputEl = document.getElementById('searchInput');
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+    const filterPillsEl = document.getElementById('filterPills');
+    const resultCountEl = document.getElementById('resultCount');
+    const sortSelectEl = document.getElementById('sortSelect');
+    const viewTimelineBtn = document.getElementById('viewTimelineBtn');
+    const viewGridBtn = document.getElementById('viewGridBtn');
+    const publicationsContainerEl = document.getElementById('publicationsContainer');
+    const toastEl = document.getElementById('toast');
+    const toastMessageEl = document.getElementById('toastMessage');
+
+    let toastTimer = null;
+
+    /**
+     * Safely escape HTML characters
+     */
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    /**
+     * Highlight Park, C.*, Park, C., and C. Park in author strings
+     */
+    function formatAuthorsHTML(authorsStr) {
+      const escaped = escapeHTML(authorsStr);
+      return escaped.replace(/(Park,\s*C\.\*|Park,\s*C\.|C\.\s*Park)/g, '<span class="author-highlight">$1</span>');
+    }
+
+    /**
+     * Build formatted plain-text citation for clipboard
+     */
+    function buildCitationText(pub) {
+      const cleanAuthors = pub.authors.replace(/\*/g, '');
+      return `${cleanAuthors} (${pub.year}). ${pub.title}. ${pub.journal}.`;
+    }
+
+    /**
+     * Copy text to clipboard with iFrame-safe execCommand fallback
+     */
+    function copyToClipboard(text) {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showToast('인용 정보가 클립보드에 복사되었습니다.');
+      } catch (err) {
+        showToast('복사에 실패했습니다. 다시 시도해 주세요.');
+      }
+    }
+
+    /**
+     * Show gentle pastel toast notification
+     */
+    function showToast(message) {
+      toastMessageEl.textContent = message;
+      toastEl.classList.remove('opacity-0', 'translate-y-3', 'pointer-events-none');
+      toastEl.classList.add('opacity-100', 'translate-y-0');
+
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toastEl.classList.add('opacity-0', 'translate-y-3', 'pointer-events-none');
+        toastEl.classList.remove('opacity-100', 'translate-y-0');
+      }, 2400);
+    }
+
+    /**
+     * Render Filter Pills with Counts
+     */
+    function renderFilters() {
+      filterPillsEl.innerHTML = FILTERS.map((f) => {
+        const count = PUBLICATIONS_DATA.filter(f.predicate).length;
+        const isActive = state.filter === f.key;
+
+        const btnClass = isActive
+          ? 'bg-[#0284c7] text-white border-[#0284c7] shadow-sm'
+          : 'bg-white text-slate-600 border-sky-100 hover:bg-sky-50 hover:border-sky-200 hover:text-sky-800';
+
+        return `
+          <button
+            type="button"
+            data-filter="${f.key}"
+            aria-pressed="${isActive}"
+            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${btnClass}"
+          >
+            <span>${f.label}</span>
+            <span class="${isActive ? 'text-sky-100' : 'text-slate-400'} text-xs font-bold">(${count})</span>
+          </button>
+        `;
+      }).join('');
+
+      filterPillsEl.querySelectorAll('button[data-filter]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.filter = btn.getAttribute('data-filter');
+          renderFilters();
+          renderPublications();
+        });
+      });
+    }
+
+    /**
+     * Update View Toggle Active State
+     */
+    function updateViewButtons() {
+      const activeClasses = ['bg-white', 'text-[#0284c7]', 'shadow-sm'];
+      const inactiveClasses = ['text-slate-500', 'hover:text-[#0f2942]'];
+
+      if (state.view === 'timeline') {
+        viewTimelineBtn.classList.add(...activeClasses);
+        viewTimelineBtn.classList.remove(...inactiveClasses);
+        viewTimelineBtn.setAttribute('aria-pressed', 'true');
+
+        viewGridBtn.classList.remove(...activeClasses);
+        viewGridBtn.classList.add(...inactiveClasses);
+        viewGridBtn.setAttribute('aria-pressed', 'false');
+      } else {
+        viewGridBtn.classList.add(...activeClasses);
+        viewGridBtn.classList.remove(...inactiveClasses);
+        viewGridBtn.setAttribute('aria-pressed', 'true');
+
+        viewTimelineBtn.classList.remove(...activeClasses);
+        viewTimelineBtn.classList.add(...inactiveClasses);
+        viewTimelineBtn.setAttribute('aria-pressed', 'false');
+      }
+    }
+
+    /**
+     * Filter and Sort Publications
+     */
+    function getFilteredPublications() {
+      const activeFilterObj = FILTERS.find((f) => f.key === state.filter) || FILTERS[0];
+      const q = state.search.trim().toLowerCase();
+
+      const filtered = PUBLICATIONS_DATA.filter((pub) => {
+        if (!activeFilterObj.predicate(pub)) return false;
+        if (!q) return true;
+
+        const haystack = [
+          pub.title,
+          pub.koreanTitle || '',
+          pub.authors,
+          pub.journal,
+          String(pub.year),
+          pub.tags.join(' ')
+        ].join(' ').toLowerCase();
+
+        return haystack.includes(q);
+      });
+
+      filtered.sort((a, b) => {
+        if (state.sort === 'newest') {
+          if (b.year !== a.year) return b.year - a.year;
+          return a.id - b.id;
+        }
+        if (state.sort === 'oldest') {
+          if (a.year !== b.year) return a.year - b.year;
+          return a.id - b.id;
+        }
+        return 0;
+      });
+
+      return filtered;
+    }
+
+    /**
+     * Create Single Publication Card HTML
+     */
+    function createPublicationCard(pub, index, isGrid) {
+      const topAccentStrip = isGrid
+        ? `<div class="h-1.5 w-full bg-gradient-to-r from-[#38bdf8] via-[#7dd3fc] to-[#a3e635]"></div>`
+        : '';
+
+      const newBadgeHTML = pub.isNew
+        ? `<span class="badge-new-pulse inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold tracking-wide bg-gradient-to-r from-[#0284c7] to-[#65a30d] text-white shadow-sm">
+             NEW
+           </span>`
+        : '';
+
+      const roleBadgeHTML = pub.firstOrCorr
+        ? `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-sky-100/90 text-[#0369a1] border border-sky-200/80">
+             1st / Corr.
+           </span>`
+        : '';
+
+      const journalBadgeClass = pub.type === 'intl'
+        ? 'bg-[#ecfccb] text-[#4d7c0f] border border-lime-200/90'
+        : 'bg-[#ccfbf1] text-[#0f766e] border border-teal-200/80';
+
+      const koreanSubtitleHTML = pub.koreanTitle
+        ? `<p class="mt-1.5 text-sm text-[#475569] leading-relaxed font-medium">${escapeHTML(pub.koreanTitle)}</p>`
+        : '';
+
+      const tagsHTML = pub.tags.map((tag) => `
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-lg text-xs font-medium bg-sky-50/85 text-sky-700/90 border border-sky-100">
+          #${escapeHTML(tag)}
+        </span>
+      `).join('');
+
+      return `
+        <article class="animate-card pub-card bg-white rounded-2xl overflow-hidden flex flex-col justify-between" style="animation-delay: ${Math.min(index * 35, 280)}ms">
+          ${topAccentStrip}
+          <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <!-- Top Badges Row -->
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <!-- Year Pill -->
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-lg text-xs font-bold bg-[#e0f2fe] text-[#0284c7] border border-sky-200/70 tabular-nums">
+                    ${pub.year}
+                  </span>
+
+                  <!-- Journal Pill -->
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-lg text-xs font-semibold ${journalBadgeClass}">
+                    ${escapeHTML(pub.journal)}
+                  </span>
+
+                  ${newBadgeHTML}
+                </div>
+
+                ${roleBadgeHTML}
+              </div>
+
+              <!-- Paper Title -->
+              <h2 class="text-[15px] sm:text-base font-bold text-[#0f172a] leading-snug">
+                ${escapeHTML(pub.title)}
+              </h2>
+
+              <!-- Optional Korean Subtitle -->
+              ${koreanSubtitleHTML}
+
+              <!-- Authors -->
+              <p class="mt-3 text-xs sm:text-[13px] text-slate-600 leading-relaxed">
+                ${formatAuthorsHTML(pub.authors)}
+              </p>
+            </div>
+
+            <!-- Footer Row: Topic Tags + Copy Citation Button -->
+            <div class="mt-4 pt-3.5 border-t border-sky-100/80 flex flex-wrap items-center justify-between gap-2.5">
+              <div class="flex flex-wrap gap-1.5">
+                ${tagsHTML}
+              </div>
+
+              <button
+                type="button"
+                data-copy-id="${pub.id}"
+                class="copy-citation-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-sky-50/80 text-[#0284c7] border border-sky-200/80 hover:bg-[#ecfccb] hover:text-[#4d7c0f] hover:border-lime-300 transition-all cursor-pointer shrink-0"
+                title="인용 형식 복사"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                <span>인용 복사</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    /**
+     * Render Publications in Timeline (grouped by year) or Card Grid View
+     */
+    function renderPublications() {
+      const pubs = getFilteredPublications();
+
+      // Update result count label
+      resultCountEl.textContent = `검색 결과 ${pubs.length}편 / 전체 ${PUBLICATIONS_DATA.length}편`;
+
+      // Clean empty-state handling
+      if (pubs.length === 0) {
+        publicationsContainerEl.innerHTML = `
+          <div class="text-center py-16 px-6 rounded-3xl bg-white/90 border border-[#e0f2fe] shadow-sky-soft">
+            <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-sky-50 text-sky-500 flex items-center justify-center">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <p class="text-base font-bold text-[#0f2942]">조건에 일치하는 논문이 없습니다.</p>
+            <p class="mt-1 text-sm text-slate-500">다른 검색어나 필터를 선택해 보세요.</p>
+            <button
+              id="resetFiltersBtn"
+              type="button"
+              class="mt-5 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-[#0284c7] text-white hover:bg-sky-700 transition-colors cursor-pointer"
+            >
+              필터 및 검색 초기화
+            </button>
+          </div>
+        `;
+
+        const resetBtn = document.getElementById('resetFiltersBtn');
+        if (resetBtn) {
+          resetBtn.addEventListener('click', () => {
+            state.search = '';
+            state.filter = 'all';
+            searchInputEl.value = '';
+            clearSearchBtn.classList.add('hidden');
+            renderFilters();
+            renderPublications();
+          });
+        }
+        return;
+      }
+
+      if (state.view === 'timeline') {
+        // Group publications by year preserving sorted order
+        const yearGroups = [];
+        const yearMap = new Map();
+        pubs.forEach((pub) => {
+          if (!yearMap.has(pub.year)) {
+            const group = { year: pub.year, items: [] };
+            yearMap.set(pub.year, group);
+            yearGroups.push(group);
+          }
+          yearMap.get(pub.year).items.push(pub);
+        });
+
+        let cardIndex = 0;
+        publicationsContainerEl.innerHTML = `
+          <div class="relative pl-7 sm:pl-12 space-y-8 before:content-[''] before:absolute before:left-[11px] sm:before:left-[15px] before:top-3 before:bottom-3 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-[#38bdf8] before:via-[#7dd3fc] before:to-[#a3e635]">
+            ${yearGroups.map((group) => {
+              const isLatestYear = group.year === 2025;
+              const cardsHTML = group.items.map((pub) => createPublicationCard(pub, cardIndex++, false)).join('');
+              return `
+                <section class="relative" aria-label="${group.year}년 논문">
+                  <!-- Year Node Header -->
+                  <div class="flex items-center gap-3 mb-4">
+                    <span class="absolute -left-7 sm:-left-12 flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full ${isLatestYear ? 'bg-lime-200/80' : 'bg-sky-100'} shadow-sm">
+                      <span class="w-3 h-3 rounded-full ${isLatestYear ? 'bg-gradient-to-tr from-[#0284c7] to-[#84cc16] ring-4 ring-lime-200/70' : 'bg-[#38bdf8] ring-4 ring-sky-100'}"></span>
+                    </span>
+                    <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-sky-200/80 shadow-sm text-sm sm:text-base font-extrabold text-[#0f2942] tabular-nums">
+                      ${group.year}
+                      <span class="text-xs font-semibold text-sky-600 bg-sky-50 px-2 py-0.5 rounded-full">${group.items.length}편</span>
+                    </span>
+                  </div>
+
+                  <!-- Cards for this year -->
+                  <div class="space-y-4">
+                    ${cardsHTML}
+                  </div>
+                </section>
+              `;
+            }).join('')}
+          </div>
+        `;
+      } else {
+        publicationsContainerEl.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            ${pubs.map((pub, idx) => createPublicationCard(pub, idx, true)).join('')}
+          </div>
+        `;
+      }
+
+      // Attach Copy Citation button listeners
+      publicationsContainerEl.querySelectorAll('.copy-citation-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = Number(btn.getAttribute('data-copy-id'));
+          const targetPub = PUBLICATIONS_DATA.find((p) => p.id === id);
+          if (targetPub) {
+            copyToClipboard(buildCitationText(targetPub));
+          }
+        });
+      });
+    }
+
+    // Event Listeners
+    searchInputEl.addEventListener('input', (e) => {
+      state.search = e.target.value;
+      clearSearchBtn.classList.toggle('hidden', state.search.length === 0);
+      renderPublications();
+    });
+
+    clearSearchBtn.addEventListener('click', () => {
+      state.search = '';
+      searchInputEl.value = '';
+      clearSearchBtn.classList.add('hidden');
+      searchInputEl.focus();
+      renderPublications();
+    });
+
+    sortSelectEl.addEventListener('change', (e) => {
+      state.sort = e.target.value;
+      renderPublications();
+    });
+
+    viewTimelineBtn.addEventListener('click', () => {
+      if (state.view !== 'timeline') {
+        state.view = 'timeline';
+        updateViewButtons();
+        renderPublications();
+      }
+    });
+
+    viewGridBtn.addEventListener('click', () => {
+      if (state.view !== 'grid') {
+        state.view = 'grid';
+        updateViewButtons();
+        renderPublications();
+      }
+    });
+
+    // Initial Render
+    renderFilters();
+    updateViewButtons();
+    renderPublications();
+  </script>
+</body>
+</html>
